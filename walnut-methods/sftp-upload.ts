@@ -29,49 +29,62 @@ export async function sftpUpload(ctx: WalnutContext) {
 
   ctx.log('Uploading ' + localFilePath + ' to ' + host + ':' + remotePath + '...');
 
-  // Create SFTP batch file
-  const batchFile = path.join(
-    process.env.TEMP || 'C:\\Temp',
-    'sftp_batch_' + Date.now() + '.txt'
-  );
-  const batchContent = 'put "' + localFilePath.replace(/\\/g, '/') + '" "' + remotePath + '"';
-  fs.writeFileSync(batchFile, batchContent);
+  // Build Python script for SFTP upload using paramiko
+  const pyLines = [
+    'import paramiko',
+    'import sys',
+    '',
+    'host = sys.argv[1]',
+    'port = int(sys.argv[2])',
+    'username = sys.argv[3]',
+    'password = sys.argv[4]',
+    'local_file = sys.argv[5]',
+    'remote_path = sys.argv[6]',
+    '',
+    'transport = paramiko.Transport((host, port))',
+    'transport.connect(username=username, password=password)',
+    'sftp = paramiko.SFTPClient.from_transport(transport)',
+    '',
+    'try:',
+    '    sftp.put(local_file, remote_path)',
+    '    print("Upload successful: " + remote_path)',
+    'finally:',
+    '    sftp.close()',
+    '    transport.close()',
+  ];
+
+  const pyScript = pyLines.join('\n');
+  const tmpScript = path.join(process.env.TEMP || 'C:\\Temp', 'sftp_upload_' + Date.now() + '.py');
 
   try {
-    // Use PowerShell to run sftp with password via environment variable
-    const psCommand = [
-      '$env:SSH_ASKPASS = "' + batchFile.replace(/\\/g, '\\\\') + '";',
-      'echo y |',
-      'sftp -P ' + port,
-      '-oStrictHostKeyChecking=no',
-      '-oUserKnownHostsFile=NUL',
-      '-oBatchMode=no',
-      '-b "' + batchFile.replace(/\\/g, '\\\\') + '"',
-      username + '@' + host
-    ].join(' ');
+    fs.writeFileSync(tmpScript, pyScript);
 
-    const result = spawnSync('powershell', [
-      '-ExecutionPolicy', 'Bypass',
-      '-NoProfile',
-      '-Command', psCommand
+    const result = spawnSync('python', [
+      tmpScript,
+      host,
+      port,
+      username,
+      password,
+      localFilePath,
+      remotePath
     ], {
       timeout: 120000,
       encoding: 'utf-8',
     });
 
     if (result.error) {
-      throw new Error('PowerShell execution error: ' + result.error.message);
+      throw new Error('Python execution error: ' + result.error.message);
     }
 
     if (result.status !== 0) {
-      const errorMsg = result.stderr || result.stdout || 'Unknown error';
-      throw new Error('SFTP upload failed: ' + errorMsg);
+      throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     }
 
     ctx.log('Successfully uploaded file to ' + remotePath);
+    ctx.log(result.stdout);
   } finally {
-    if (fs.existsSync(batchFile)) {
-      fs.unlinkSync(batchFile);
+    if (fs.existsSync(tmpScript)) {
+      fs.unlinkSync(tmpScript);
     }
   }
 }
