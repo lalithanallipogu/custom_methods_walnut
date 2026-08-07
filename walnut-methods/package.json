@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "description": "Custom methods for Walnut test automation",
-  "dependencies": {
-    "ssh2": "^1.16.0"
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0"
   }
 }
