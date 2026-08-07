@@ -4,6 +4,6 @@
   "private": true,
   "description": "Custom methods for Walnut test automation",
   "dependencies": {
-    "ssh2-sftp-client": "^11.0.0"
+    "ssh2": "^1.16.0"
   }
 }

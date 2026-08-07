@@ -1,7 +1,7 @@
 import type { WalnutContext } from './walnut';
 import * as path from 'path';
-import { execSync } from 'child_process';
 import * as fs from 'fs';
+import { Client } from 'ssh2';
 
 /** @walnut_method
  * name: SFTP Upload File
@@ -16,7 +16,7 @@ export async function sftpUpload(ctx: WalnutContext) {
   const remoteDirectory = '/TO_AVER/';
 
   const host = ctx.params.sftpHost || 'altarum.sftp.aver.io';
-  const port = ctx.params.sftpPort || '22';
+  const port = Number(ctx.params.sftpPort || 22);
   const username = ctx.params.sftpUsername || 'altarum_qa';
   const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
 
@@ -29,25 +29,67 @@ export async function sftpUpload(ctx: WalnutContext) {
 
   ctx.log(`Uploading ${localFilePath} to ${host}:${remotePath}...`);
 
-  // Create a temporary batch file for sftp commands
-  const batchContent = `put "${localFilePath}" "${remotePath}"`;
-  const batchFile = path.join(process.env.TEMP || '/tmp', `sftp_batch_${Date.now()}.txt`);
+  return new Promise<void>((resolve, reject) => {
+    const conn = new Client();
 
-  try {
-    fs.writeFileSync(batchFile, batchContent);
+    conn.on('ready', () => {
+      ctx.log('SSH connection established, starting SFTP session...');
+      conn.sftp((err, sftp) => {
+        if (err) {
+          conn.end();
+          return reject(new Error(`SFTP session error: ${err.message}`));
+        }
 
-    // Use sshpass + sftp for password-based authentication
-    const command = `sshpass -p "${password}" sftp -P ${port} -oBatchMode=no -oStrictHostKeyChecking=no -b "${batchFile}" ${username}@${host}`;
+        const readStream = fs.createReadStream(localFilePath);
+        const writeStream = sftp.createWriteStream(remotePath);
 
-    execSync(command, {
-      timeout: 120000,
-      stdio: 'pipe',
+        writeStream.on('close', () => {
+          ctx.log(`Successfully uploaded file to ${remotePath}`);
+          conn.end();
+          resolve();
+        });
+
+        writeStream.on('error', (uploadErr: Error) => {
+          conn.end();
+          reject(new Error(`Upload error: ${uploadErr.message}`));
+        });
+
+        readStream.on('error', (readErr: Error) => {
+          conn.end();
+          reject(new Error(`Read error: ${readErr.message}`));
+        });
+
+        readStream.pipe(writeStream);
+      });
     });
 
-    ctx.log(`Successfully uploaded file to ${remotePath}`);
-  } finally {
-    if (fs.existsSync(batchFile)) {
-      fs.unlinkSync(batchFile);
-    }
-  }
+    conn.on('error', (connErr) => {
+      reject(new Error(`SSH connection error: ${connErr.message}`));
+    });
+
+    conn.connect({
+      host,
+      port,
+      username,
+      password,
+      readyTimeout: 30000,
+      algorithms: {
+        kex: [
+          'ecdh-sha2-nistp256',
+          'ecdh-sha2-nistp384',
+          'ecdh-sha2-nistp521',
+          'diffie-hellman-group-exchange-sha256',
+          'diffie-hellman-group14-sha256',
+          'diffie-hellman-group14-sha1',
+        ],
+        cipher: [
+          'aes128-ctr',
+          'aes192-ctr',
+          'aes256-ctr',
+          'aes128-gcm@openssh.com',
+          'aes256-gcm@openssh.com',
+        ],
+      },
+    });
+  });
 }
