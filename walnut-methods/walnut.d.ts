@@ -40,6 +40,8 @@ export interface WalnutBaseContext {
   readonly args: string[];
   /** Shared variable store across steps (read/write) */
   variableContext: Record<string, any>;
+  /** Test data parameters (credentials, config values) */
+  readonly params: Record<string, any>;
 
   /** Resolve {{variable}} placeholders in a string */
   replacePlaceholders(text: string): string;
