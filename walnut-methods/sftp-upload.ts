@@ -1,5 +1,7 @@
 import type { WalnutContext } from './walnut';
-import SftpClient from 'ssh2-sftp-client';
+import * as path from 'path';
+import { execSync } from 'child_process';
+import * as fs from 'fs';
 
 /** @walnut_method
  * name: SFTP Upload File
@@ -13,56 +15,39 @@ export async function sftpUpload(ctx: WalnutContext) {
   const localFilePath = ctx.args[0];
   const remoteDirectory = '/TO_AVER/';
 
-  const host = 'altarum.sftp.aver.io';
-  const port = 22;
-  const username = 'altarum_qa';
-  const password = 'khq@rtx.crc9jpm*UCZ';
+  const host = ctx.params.sftpHost || 'altarum.sftp.aver.io';
+  const port = ctx.params.sftpPort || '22';
+  const username = ctx.params.sftpUsername || 'altarum_qa';
+  const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
 
-  const sftp = new SftpClient();
+  if (!fs.existsSync(localFilePath)) {
+    throw new Error(`Local file not found: ${localFilePath}`);
+  }
+
+  const fileName = path.basename(localFilePath);
+  const remotePath = `${remoteDirectory}${fileName}`;
+
+  ctx.log(`Uploading ${localFilePath} to ${host}:${remotePath}...`);
+
+  // Create a temporary batch file for sftp commands
+  const batchContent = `put "${localFilePath}" "${remotePath}"`;
+  const batchFile = path.join(process.env.TEMP || '/tmp', `sftp_batch_${Date.now()}.txt`);
 
   try {
-    ctx.log(`Connecting to SFTP server ${host}:${port}...`);
-    await sftp.connect({
-      host,
-      port,
-      username,
-      password,
-      retries: 3,
-      retry_minTimeout: 2000,
-      algorithms: {
-        kex: [
-          'ecdh-sha2-nistp256',
-          'ecdh-sha2-nistp384',
-          'ecdh-sha2-nistp521',
-          'diffie-hellman-group-exchange-sha256',
-          'diffie-hellman-group14-sha256',
-          'diffie-hellman-group14-sha1',
-        ],
-        cipher: [
-          'aes128-ctr',
-          'aes192-ctr',
-          'aes256-ctr',
-          'aes128-gcm@openssh.com',
-          'aes256-gcm@openssh.com',
-        ],
-      },
+    fs.writeFileSync(batchFile, batchContent);
+
+    // Use sshpass + sftp for password-based authentication
+    const command = `sshpass -p "${password}" sftp -P ${port} -oBatchMode=no -oStrictHostKeyChecking=no -b "${batchFile}" ${username}@${host}`;
+
+    execSync(command, {
+      timeout: 120000,
+      stdio: 'pipe',
     });
-
-    ctx.log(`Changing directory to ${remoteDirectory}...`);
-    const remoteExists = await sftp.exists(remoteDirectory);
-    if (!remoteExists) {
-      ctx.log(`Creating remote directory: ${remoteDirectory}`);
-      await sftp.mkdir(remoteDirectory, true);
-    }
-
-    const fileName = localFilePath.replace(/\\/g, '/').split('/').pop();
-    const remotePath = `${remoteDirectory}${fileName}`;
-
-    ctx.log(`Uploading ${localFilePath} to ${remotePath}...`);
-    await sftp.put(localFilePath, remotePath);
 
     ctx.log(`Successfully uploaded file to ${remotePath}`);
   } finally {
-    await sftp.end();
+    if (fs.existsSync(batchFile)) {
+      fs.unlinkSync(batchFile);
+    }
   }
 }
