@@ -11,24 +11,35 @@ import type { WalnutContext, WalnutWebContext } from './walnut';
 export async function extractAverSession(ctx: WalnutContext) {
   const webCtx = ctx as WalnutWebContext;
 
-  // Get all cookies from the browser context for the portal domain
-  const cookies: any[] = await webCtx.page.context().cookies([ctx.testBaseUrl]);
+  // First ensure we are on the portal page
+  const currentUrl: string = webCtx.getUrl();
+  ctx.log('Current URL: ' + currentUrl);
 
-  // Log all cookies found for debugging
-  ctx.log('Found ' + cookies.length + ' cookies for ' + ctx.testBaseUrl);
-  for (const c of cookies) {
-    ctx.log('  Cookie: ' + c.name + ' = ' + c.value + ' (domain: ' + c.domain + ')');
+  // Get ALL cookies from the browser context (no URL filter to avoid issues)
+  const allCookies: any[] = await webCtx.page.context().cookies();
+  ctx.log('Total cookies in browser context: ' + allCookies.length);
+
+  // Log all cookies for debugging
+  for (const c of allCookies) {
+    ctx.log('  ' + c.name + ' = ' + c.value + ' (domain: ' + c.domain + ', path: ' + c.path + ')');
   }
 
-  // Find the AverSessionId cookie
-  const averCookie = cookies.find((c: { name: string; value: string; domain: string }) =>
-    c.name === 'AverSessionId' && c.domain.includes('aver.io')
+  // Find AverSessionId cookie specifically from portal-qa.aver.io domain
+  const averCookie = allCookies.find((c: any) =>
+    c.name === 'AverSessionId' && c.domain.includes('portal-qa')
   );
 
   if (!averCookie) {
-    throw new Error('AverSessionId cookie not found for aver.io domain. Ensure you are logged into portal-qa.aver.io');
+    // Try without domain filter as fallback
+    const anyAverCookie = allCookies.find((c: any) => c.name === 'AverSessionId');
+    if (anyAverCookie) {
+      ctx.log('Found AverSessionId on domain: ' + anyAverCookie.domain + ' value: ' + anyAverCookie.value);
+      ctx.setVariable(ctx.args[0], anyAverCookie.value);
+      return;
+    }
+    throw new Error('AverSessionId cookie not found. Ensure you are logged into portal-qa.aver.io');
   }
 
-  ctx.log('Extracted AverSessionId: ' + averCookie.value);
+  ctx.log('Extracted AverSessionId: ' + averCookie.value + ' from domain: ' + averCookie.domain);
   ctx.setVariable(ctx.args[0], averCookie.value);
 }
