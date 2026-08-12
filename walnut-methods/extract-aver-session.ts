@@ -11,35 +11,38 @@ import type { WalnutContext, WalnutWebContext } from './walnut';
 export async function extractAverSession(ctx: WalnutContext) {
   const webCtx = ctx as WalnutWebContext;
 
-  // First ensure we are on the portal page
-  const currentUrl: string = webCtx.getUrl();
-  ctx.log('Current URL: ' + currentUrl);
+  // Intercept the get_session_user network call to capture the AverSessionId cookie
+  // This is the reliable way since the cookie is HttpOnly and may not be accessible via page.context().cookies()
+  let sessionId = '';
 
-  // Get ALL cookies from the browser context (no URL filter to avoid issues)
-  const allCookies: any[] = await webCtx.page.context().cookies();
-  ctx.log('Total cookies in browser context: ' + allCookies.length);
+  // Set up a request listener to capture the AverSessionId from outgoing requests
+  const capturePromise = new Promise<string>((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Timeout waiting for get_session_user request')), 30000);
 
-  // Log all cookies for debugging
-  for (const c of allCookies) {
-    ctx.log('  ' + c.name + ' = ' + c.value + ' (domain: ' + c.domain + ', path: ' + c.path + ')');
+    webCtx.page.on('request', (request: any) => {
+      const url: string = request.url();
+      if (url.includes('/api/user-management/get_session_user')) {
+        const headers = request.headers();
+        const cookieHeader: string = headers['cookie'] || '';
+        const match = cookieHeader.match(/AverSessionId=([^;]+)/);
+        if (match) {
+          clearTimeout(timeout);
+          resolve(match[1].trim());
+        }
+      }
+    });
+  });
+
+  // Reload the page to trigger the get_session_user API call
+  await webCtx.reload();
+
+  // Wait for the cookie to be captured from the network request
+  sessionId = await capturePromise;
+
+  if (!sessionId) {
+    throw new Error('Could not capture AverSessionId from get_session_user request.');
   }
 
-  // Find AverSessionId cookie specifically from portal-qa.aver.io domain
-  const averCookie = allCookies.find((c: any) =>
-    c.name === 'AverSessionId' && c.domain.includes('portal-qa')
-  );
-
-  if (!averCookie) {
-    // Try without domain filter as fallback
-    const anyAverCookie = allCookies.find((c: any) => c.name === 'AverSessionId');
-    if (anyAverCookie) {
-      ctx.log('Found AverSessionId on domain: ' + anyAverCookie.domain + ' value: ' + anyAverCookie.value);
-      ctx.setVariable(ctx.args[0], anyAverCookie.value);
-      return;
-    }
-    throw new Error('AverSessionId cookie not found. Ensure you are logged into portal-qa.aver.io');
-  }
-
-  ctx.log('Extracted AverSessionId: ' + averCookie.value + ' from domain: ' + averCookie.domain);
-  ctx.setVariable(ctx.args[0], averCookie.value);
+  ctx.log('Extracted AverSessionId from network: ' + sessionId);
+  ctx.setVariable(ctx.args[0], sessionId);
 }
