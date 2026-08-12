@@ -20,9 +20,9 @@ export async function trigger3EtlJobs(ctx: WalnutContext) {
   }
 
   // Set headers for authentication
+  // sessionId is already in format "AverSessionId=<uuid>"
   const headers: Record<string, string> = {
-    'Cookie': `AverSessionId=${sessionId}`,
-    'AverSessionId': sessionId,
+    'Cookie': sessionId,
     'Content-Type': 'application/json',
   };
 
