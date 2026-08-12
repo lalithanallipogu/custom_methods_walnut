@@ -11,38 +11,43 @@ import type { WalnutContext, WalnutWebContext } from './walnut';
 export async function extractAverSession(ctx: WalnutContext) {
   const webCtx = ctx as WalnutWebContext;
 
-  // Intercept the get_session_user network call to capture the AverSessionId cookie
-  // This is the reliable way since the cookie is HttpOnly and may not be accessible via page.context().cookies()
+  // Use JavaScript fetch inside the page to call get_session_user
+  // The browser will automatically attach the HttpOnly AverSessionId cookie
+  // Then we read it from the request headers via Playwright's route interception
   let sessionId = '';
 
-  // Set up a request listener to capture the AverSessionId from outgoing requests
-  const capturePromise = new Promise<string>((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Timeout waiting for get_session_user request')), 30000);
-
-    webCtx.page.on('request', (request: any) => {
-      const url: string = request.url();
-      if (url.includes('/api/user-management/get_session_user')) {
-        const headers = request.headers();
-        const cookieHeader: string = headers['cookie'] || '';
-        const match = cookieHeader.match(/AverSessionId=([^;]+)/);
-        if (match) {
-          clearTimeout(timeout);
-          resolve(match[1].trim());
-        }
-      }
-    });
+  // Set up route interception BEFORE making the request
+  await webCtx.page.route('**/api/user-management/get_session_user', async (route: any) => {
+    const headers = route.request().headers();
+    const cookieHeader: string = headers['cookie'] || '';
+    ctx.log('Intercepted cookie header: ' + cookieHeader);
+    const match = cookieHeader.match(/AverSessionId=([^;]+)/);
+    if (match) {
+      sessionId = match[1].trim();
+    }
+    // Continue the request normally
+    await route.continue();
   });
 
-  // Reload the page to trigger the get_session_user API call
-  await webCtx.reload();
+  // Trigger the get_session_user call using fetch from within the page
+  await webCtx.evaluate(`
+    fetch('/api/user-management/get_session_user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    })
+  `);
 
-  // Wait for the cookie to be captured from the network request
-  sessionId = await capturePromise;
+  // Wait briefly for the route handler to execute
+  await webCtx.wait(2000);
+
+  // Clean up the route interception
+  await webCtx.page.unroute('**/api/user-management/get_session_user');
 
   if (!sessionId) {
     throw new Error('Could not capture AverSessionId from get_session_user request.');
   }
 
-  ctx.log('Extracted AverSessionId from network: ' + sessionId);
+  ctx.log('Extracted AverSessionId: ' + sessionId);
   ctx.setVariable(ctx.args[0], sessionId);
 }
