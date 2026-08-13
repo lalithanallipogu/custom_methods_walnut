@@ -40,6 +40,18 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const downloadUrl = `${apiBase}/projects/${projectId}/data-store/artifacts/${artifactId}/download`;
   ctx.log('Downloading artifact from: ' + downloadUrl);
 
+  // Try multiple possible env var names for the agent's auth token
+  const agentKey = process.env.WALNUT_CLOUD_KEY
+    || process.env.WALNUT_AGENT_KEY
+    || process.env.WALNUT_AUTH_TOKEN
+    || process.env.WALNUT_JWT
+    || '';
+
+  // Log available WALNUT env vars for debugging (names only, not values)
+  const walnutEnvVars = Object.keys(process.env).filter(k => k.toUpperCase().includes('WALNUT'));
+  ctx.log('WALNUT env vars: ' + JSON.stringify(walnutEnvVars));
+  ctx.log('Auth token available: ' + (agentKey.length > 0 ? 'yes (' + agentKey.length + ' chars)' : 'no'));
+
   const localFilePath = path.join(tempDir, `art2_template_${Date.now()}.csv`);
 
   await new Promise<void>((resolve, reject) => {
@@ -49,7 +61,22 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
         return;
       }
 
-      const req = https.get(url, { rejectUnauthorized: false }, (res) => {
+      const parsedUrl = new URL(url);
+      const options: https.RequestOptions = {
+        hostname: parsedUrl.hostname,
+        port: parsedUrl.port || 443,
+        path: parsedUrl.pathname + parsedUrl.search,
+        method: 'GET',
+        rejectUnauthorized: false,
+        headers: {} as Record<string, string>,
+      };
+
+      // Add auth header if token available
+      if (agentKey) {
+        (options.headers as Record<string, string>)['Authorization'] = `Bearer ${agentKey}`;
+      }
+
+      const req = https.request(options, (res) => {
         // Handle redirects
         if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           makeRequest(res.headers.location, redirectCount + 1);
@@ -75,6 +102,7 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
       });
 
       req.on('error', reject);
+      req.end();  // IMPORTANT: must call end() to send the request
     };
 
     makeRequest(downloadUrl, 0);
