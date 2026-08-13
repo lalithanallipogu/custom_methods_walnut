@@ -12,8 +12,8 @@ import { spawnSync } from 'child_process';
  * category: File Transfer
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
-  // For File type Data Store references, ctx.args[0] may be the file name or the resolved local path
-  const argFilePath = ctx.args[0];
+  // For File type Data Store references, ctx.args[0] is the artifact ID (e.g., "ART-2")
+  const artifactId = ctx.args[0];
   const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
 
@@ -23,26 +23,79 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const username = ctx.params.sftpUsername || 'altarum_qa';
   const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
 
-  // Resolve the actual local file path - try params first (File type), then args
-  let localFilePath = argFilePath;
-  if (!fs.existsSync(localFilePath)) {
-    // Try params.localFilePath which may contain the resolved download path
-    if (ctx.params.localFilePath && fs.existsSync(ctx.params.localFilePath)) {
-      localFilePath = ctx.params.localFilePath;
-    } else {
-      // Log all available info for debugging
-      ctx.log('args[0] resolved to: ' + argFilePath);
-      ctx.log('params.localFilePath: ' + (ctx.params.localFilePath || 'undefined'));
-      ctx.log('Available params: ' + JSON.stringify(Object.keys(ctx.params)));
-      throw new Error('Template file not found: ' + argFilePath + '. Ensure the Data Store file is configured as File type and the path resolves correctly.');
-    }
-  }
-
   if (!icmemId) {
     throw new Error('Runtime variable icmemId is empty. Ensure step 1 generated it.');
   }
 
   ctx.log('Using ICMEM ID: ' + icmemId);
+  ctx.log('Artifact ID: ' + artifactId);
+
+  // Resolve the artifact file path - search agent's artifact cache directories
+  let localFilePath = artifactId;
+
+  if (!fs.existsSync(localFilePath)) {
+    // Search common Walnut Agent artifact cache locations
+    const appData = process.env.APPDATA || '';
+    const searchPaths = [
+      path.join(appData, 'WalnutAgent', 'artifacts'),
+      path.join(appData, 'WalnutAgent', 'downloads'),
+      path.join(appData, 'WalnutAgent', 'artifact-cache'),
+      path.join(appData, 'WalnutAgent'),
+      process.env.TEMP || 'C:\\Temp',
+    ];
+
+    let found = false;
+    for (const searchDir of searchPaths) {
+      if (!fs.existsSync(searchDir)) continue;
+
+      // Search recursively for files matching the artifact ID
+      const findFile = (dir: string, depth: number): string | null => {
+        if (depth > 3) return null;
+        try {
+          const entries = fs.readdirSync(dir, { withFileTypes: true });
+          for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isFile() && (entry.name.includes(artifactId) || entry.name.includes('member_eligibility'))) {
+              return fullPath;
+            }
+            if (entry.isDirectory() && depth < 3) {
+              const result = findFile(fullPath, depth + 1);
+              if (result) return result;
+            }
+          }
+        } catch (e) { /* skip inaccessible dirs */ }
+        return null;
+      };
+
+      const result = findFile(searchDir, 0);
+      if (result) {
+        localFilePath = result;
+        found = true;
+        ctx.log('Found artifact file at: ' + localFilePath);
+        break;
+      }
+    }
+
+    if (!found) {
+      // Also try ctx.params which may have a resolved path under any key
+      for (const key of Object.keys(ctx.params)) {
+        const val = ctx.params[key];
+        if (typeof val === 'string' && val.includes(path.sep) && fs.existsSync(val)) {
+          localFilePath = val;
+          found = true;
+          ctx.log('Found file via params.' + key + ': ' + localFilePath);
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      ctx.log('Artifact ID: ' + artifactId);
+      ctx.log('Searched paths: ' + searchPaths.join(', '));
+      ctx.log('Available params: ' + JSON.stringify(ctx.params));
+      throw new Error('Template file not found for artifact: ' + artifactId + '. File not in agent cache.');
+    }
+  }
 
   // Step 1: Read the ART-2 template file and replace {{member_id}} with the ICMEM ID
   if (!fs.existsSync(localFilePath)) {
