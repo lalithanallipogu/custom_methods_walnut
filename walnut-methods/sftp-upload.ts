@@ -5,15 +5,15 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace ICMEM ID in Template and SFTP Upload
- * description: Replace $[icmemId] in template ${localFilePath} and upload to /TO_AVER/ on Altarum SFTP server
+ * description: Replace {{member_id}} in template ${localFilePath} with $[icmemId] and upload to /TO_AVER/ on Altarum SFTP server
  * actionType: custom_sftp_template_upload
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
-  const icmemId = ctx.getVariable(ctx.args[0]);  // args[0] = "icmemId" (from $[icmemId]), read the value
-  const localFilePath = ctx.args[1];              // args[1] = Data Store file path (ART-2 template)
+  const localFilePath = ctx.args[0];              // args[0] = Data Store file path (from ${localFilePath})
+  const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
 
   // SFTP credentials from test data params
