@@ -12,7 +12,8 @@ import { spawnSync } from 'child_process';
  * category: File Transfer
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
-  const localFilePath = ctx.args[0];              // args[0] = Data Store file path (from ${localFilePath})
+  // For File type Data Store references, ctx.args[0] may be the file name or the resolved local path
+  const argFilePath = ctx.args[0];
   const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
 
@@ -21,6 +22,21 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const port = ctx.params.sftpPort || '22';
   const username = ctx.params.sftpUsername || 'altarum_qa';
   const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
+
+  // Resolve the actual local file path - try params first (File type), then args
+  let localFilePath = argFilePath;
+  if (!fs.existsSync(localFilePath)) {
+    // Try params.localFilePath which may contain the resolved download path
+    if (ctx.params.localFilePath && fs.existsSync(ctx.params.localFilePath)) {
+      localFilePath = ctx.params.localFilePath;
+    } else {
+      // Log all available info for debugging
+      ctx.log('args[0] resolved to: ' + argFilePath);
+      ctx.log('params.localFilePath: ' + (ctx.params.localFilePath || 'undefined'));
+      ctx.log('Available params: ' + JSON.stringify(Object.keys(ctx.params)));
+      throw new Error('Template file not found: ' + argFilePath + '. Ensure the Data Store file is configured as File type and the path resolves correctly.');
+    }
+  }
 
   if (!icmemId) {
     throw new Error('Runtime variable icmemId is empty. Ensure step 1 generated it.');
