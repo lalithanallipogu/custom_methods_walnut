@@ -4,32 +4,51 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: SFTP Upload File
- * description: Upload file from ${localFilePath} to /TO_AVER/ on Altarum SFTP server
- * actionType: custom_sftp_upload
+ * name: Replace ICMEM ID in Template and SFTP Upload
+ * description: Replace $[icmemId] in template ${localFilePath} and upload to /TO_AVER/ on Altarum SFTP server
+ * actionType: custom_sftp_template_upload
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
-export async function sftpUpload(ctx: WalnutContext) {
-  const localFilePath = ctx.args[0];
+export async function sftpTemplateUpload(ctx: WalnutContext) {
+  const icmemId = ctx.getVariable(ctx.args[0]);  // args[0] = "icmemId" (from $[icmemId]), read the value
+  const localFilePath = ctx.args[1];              // args[1] = Data Store file path (ART-2 template)
   const remoteDirectory = '/TO_AVER/';
 
+  // SFTP credentials from test data params
   const host = ctx.params.sftpHost || 'altarum.sftp.aver.io';
   const port = ctx.params.sftpPort || '22';
   const username = ctx.params.sftpUsername || 'altarum_qa';
   const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
 
-  if (!fs.existsSync(localFilePath)) {
-    throw new Error('Local file not found: ' + localFilePath);
+  if (!icmemId) {
+    throw new Error('Runtime variable icmemId is empty. Ensure step 1 generated it.');
   }
 
+  ctx.log('Using ICMEM ID: ' + icmemId);
+
+  // Step 1: Read the ART-2 template file and replace {{member_id}} with the ICMEM ID
+  if (!fs.existsSync(localFilePath)) {
+    throw new Error('Template file not found: ' + localFilePath);
+  }
+
+  const templateContent = fs.readFileSync(localFilePath, 'utf-8');
+  // Replace only {{member_id}} placeholders with the generated ICMEM ID
+  const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
+
+  // Write the modified file to a temp location for upload
   const fileName = path.basename(localFilePath);
+  const tempDir = process.env.TEMP || 'C:\\Temp';
+  const modifiedFilePath = path.join(tempDir, 'modified_' + Date.now() + '_' + fileName);
+  fs.writeFileSync(modifiedFilePath, updatedContent, 'utf-8');
+
+  ctx.log('Replaced {{member_id}} with ' + icmemId + ' in ' + fileName);
+
+  // Step 2: Upload modified file via SFTP to /TO_AVER/
   const remotePath = remoteDirectory + fileName;
+  ctx.log('Uploading ' + modifiedFilePath + ' to ' + host + ':' + remotePath + '...');
 
-  ctx.log('Uploading ' + localFilePath + ' to ' + host + ':' + remotePath + '...');
-
-  // Build Python script for SFTP upload using paramiko
   const pyLines = [
     'import paramiko',
     'import sys',
@@ -54,7 +73,7 @@ export async function sftpUpload(ctx: WalnutContext) {
   ];
 
   const pyScript = pyLines.join('\n');
-  const tmpScript = path.join(process.env.TEMP || 'C:\\Temp', 'sftp_upload_' + Date.now() + '.py');
+  const tmpScript = path.join(tempDir, 'sftp_upload_' + Date.now() + '.py');
 
   try {
     fs.writeFileSync(tmpScript, pyScript);
@@ -65,7 +84,7 @@ export async function sftpUpload(ctx: WalnutContext) {
       port,
       username,
       password,
-      localFilePath,
+      modifiedFilePath,
       remotePath
     ], {
       timeout: 120000,
@@ -83,8 +102,12 @@ export async function sftpUpload(ctx: WalnutContext) {
     ctx.log('Successfully uploaded file to ' + remotePath);
     ctx.log(result.stdout);
   } finally {
+    // Cleanup temp files
     if (fs.existsSync(tmpScript)) {
       fs.unlinkSync(tmpScript);
+    }
+    if (fs.existsSync(modifiedFilePath)) {
+      fs.unlinkSync(modifiedFilePath);
     }
   }
 }
