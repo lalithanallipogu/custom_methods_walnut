@@ -4,18 +4,28 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: SFTP Upload File
- * description: Upload file from ${localFilePath} to /TO_AVER/ on Altarum SFTP server, storing ID in $[icmemId]
+ * name: Generate ICMEM ID Replace and Upload
+ * description: Generate ICMEM ID, replace in template ${localFilePath} and upload to /TO_AVER/ storing ID in $[icmemId]
  * actionType: custom_sftp_template_upload
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
-export async function sftpUpload(ctx: WalnutContext) {
+export async function sftpTemplateUpload(ctx: WalnutContext) {
   // ctx.args[0] = file path from ${localFilePath}
+  // ctx.args[1] = "icmemId" (from $[icmemId])
   const localFilePath = ctx.args[0];
-  const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
+
+  // Step 1: Generate a random ICMEM ID
+  const digits = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
+  const letters = Array.from({ length: 4 }, () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return chars.charAt(Math.floor(Math.random() * chars.length));
+  }).join('');
+  const icmemId = 'ICMEM-' + digits + letters;
+  ctx.log('Generated ICMEM ID: ' + icmemId);
+  ctx.setVariable(ctx.args[1], icmemId);  // Store in $[icmemId]
 
   // SFTP credentials from test data params
   const host = ctx.params.sftpHost || 'altarum.sftp.aver.io';
@@ -23,27 +33,22 @@ export async function sftpUpload(ctx: WalnutContext) {
   const username = ctx.params.sftpUsername || 'altarum_qa';
   const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
 
-  if (!icmemId) {
-    throw new Error('Runtime variable icmemId is empty. Ensure step 1 generated it.');
-  }
-
   if (!localFilePath) {
-    throw new Error('localFilePath parameter is empty. Ensure the artifact ID is set in test data.');
+    throw new Error('localFilePath parameter is empty. Ensure the file path is set in test data.');
   }
 
-  ctx.log('Using ICMEM ID: ' + icmemId);
   ctx.log('Template file path: ' + localFilePath);
 
   // Verify the file exists
   if (!fs.existsSync(localFilePath)) {
-    throw new Error('Template file not found at path: ' + localFilePath + '. Ensure the artifact ID resolves to a valid local file path.');
+    throw new Error('Template file not found at path: ' + localFilePath);
   }
 
-  // Step 1: Read the template file and replace {{member_id}} with the ICMEM ID
+  // Step 2: Read the template file and replace {{member_id}} with the ICMEM ID
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-  // Step 2: Generate filename with date shifted 2,670 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
+  // Step 3: Generate filename with date shifted 2,670 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
   const now = new Date();
   const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
@@ -60,9 +65,9 @@ export async function sftpUpload(ctx: WalnutContext) {
   fs.writeFileSync(modifiedFilePath, updatedContent, 'utf-8');
 
   ctx.log('Replaced {{member_id}} with ' + icmemId + ' in template');
-  ctx.log('Generated filename: ' + fileName);
+  ctx.log('Generated timestamp filename: ' + fileName);
 
-  // Step 3: Upload modified file via SFTP to /TO_AVER/
+  // Step 4: Upload modified file via SFTP to /TO_AVER/
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
