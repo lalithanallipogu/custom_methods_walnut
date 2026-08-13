@@ -1,6 +1,7 @@
 import type { WalnutContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as https from 'https';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
@@ -12,7 +13,7 @@ import { spawnSync } from 'child_process';
  * category: File Transfer
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
-  // For File type Data Store references, ctx.args[0] is the artifact ID (e.g., "ART-2")
+  // ctx.args[0] = artifact ID (e.g., "ART-2") from ${localFilePath}
   const artifactId = ctx.args[0];
   const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
@@ -28,95 +29,78 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   }
 
   ctx.log('Using ICMEM ID: ' + icmemId);
-  ctx.log('Artifact ID: ' + artifactId);
+  ctx.log('Artifact reference: ' + artifactId);
 
-  // Resolve the artifact file path - search agent's artifact cache directories
-  let localFilePath = artifactId;
+  // --- Download ART-2 file from Walnut Data Store API ---
+  const apiBase = 'https://app.walnutai-poc.enlacehealth.com/api';
+  const projectId = '69d4cbdea9876ab3eca8a583';
+  const tempDir = process.env.TEMP || 'C:\\Temp';
 
-  if (!fs.existsSync(localFilePath)) {
-    // Search common Walnut Agent artifact cache locations
-    const appData = process.env.APPDATA || '';
-    const searchPaths = [
-      path.join(appData, 'WalnutAgent', 'artifacts'),
-      path.join(appData, 'WalnutAgent', 'downloads'),
-      path.join(appData, 'WalnutAgent', 'artifact-cache'),
-      path.join(appData, 'WalnutAgent'),
-      process.env.TEMP || 'C:\\Temp',
-    ];
+  // Download the artifact file using the Data Store API
+  const downloadUrl = `${apiBase}/projects/${projectId}/data-store/artifacts/${artifactId}/download`;
+  ctx.log('Downloading artifact from: ' + downloadUrl);
 
-    let found = false;
-    for (const searchDir of searchPaths) {
-      if (!fs.existsSync(searchDir)) continue;
+  const localFilePath = path.join(tempDir, `art2_template_${Date.now()}.csv`);
 
-      // Search recursively for files matching the artifact ID
-      const findFile = (dir: string, depth: number): string | null => {
-        if (depth > 3) return null;
-        try {
-          const entries = fs.readdirSync(dir, { withFileTypes: true });
-          for (const entry of entries) {
-            const fullPath = path.join(dir, entry.name);
-            if (entry.isFile() && (entry.name.includes(artifactId) || entry.name.includes('member_eligibility'))) {
-              return fullPath;
-            }
-            if (entry.isDirectory() && depth < 3) {
-              const result = findFile(fullPath, depth + 1);
-              if (result) return result;
-            }
-          }
-        } catch (e) { /* skip inaccessible dirs */ }
-        return null;
-      };
-
-      const result = findFile(searchDir, 0);
-      if (result) {
-        localFilePath = result;
-        found = true;
-        ctx.log('Found artifact file at: ' + localFilePath);
-        break;
+  await new Promise<void>((resolve, reject) => {
+    const makeRequest = (url: string, redirectCount: number) => {
+      if (redirectCount > 5) {
+        reject(new Error('Too many redirects'));
+        return;
       }
-    }
 
-    if (!found) {
-      // Also try ctx.params which may have a resolved path under any key
-      for (const key of Object.keys(ctx.params)) {
-        const val = ctx.params[key];
-        if (typeof val === 'string' && val.includes(path.sep) && fs.existsSync(val)) {
-          localFilePath = val;
-          found = true;
-          ctx.log('Found file via params.' + key + ': ' + localFilePath);
-          break;
+      const req = https.get(url, { rejectUnauthorized: false }, (res) => {
+        // Handle redirects
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          makeRequest(res.headers.location, redirectCount + 1);
+          return;
         }
-      }
-    }
 
-    if (!found) {
-      ctx.log('Artifact ID: ' + artifactId);
-      ctx.log('Searched paths: ' + searchPaths.join(', '));
-      ctx.log('Available params: ' + JSON.stringify(ctx.params));
-      throw new Error('Template file not found for artifact: ' + artifactId + '. File not in agent cache.');
-    }
-  }
+        if (res.statusCode !== 200) {
+          let body = '';
+          res.on('data', (chunk) => body += chunk);
+          res.on('end', () => {
+            reject(new Error(`Failed to download artifact ${artifactId}: HTTP ${res.statusCode} - ${body.substring(0, 200)}`));
+          });
+          return;
+        }
 
-  // Step 1: Read the ART-2 template file and replace {{member_id}} with the ICMEM ID
+        const fileStream = fs.createWriteStream(localFilePath);
+        res.pipe(fileStream);
+        fileStream.on('finish', () => {
+          fileStream.close();
+          resolve();
+        });
+        fileStream.on('error', reject);
+      });
+
+      req.on('error', reject);
+    };
+
+    makeRequest(downloadUrl, 0);
+  });
+
   if (!fs.existsSync(localFilePath)) {
-    throw new Error('Template file not found: ' + localFilePath);
+    throw new Error('Downloaded artifact file not found at: ' + localFilePath);
   }
 
+  const fileSize = fs.statSync(localFilePath).size;
+  ctx.log('Downloaded artifact to: ' + localFilePath + ' (' + fileSize + ' bytes)');
+
+  // Step 1: Read the template and replace {{member_id}} with the ICMEM ID
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
-  // Replace only {{member_id}} placeholders with the generated ICMEM ID
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
   // Write the modified file to a temp location for upload
-  const fileName = path.basename(localFilePath);
-  const tempDir = process.env.TEMP || 'C:\\Temp';
-  const modifiedFilePath = path.join(tempDir, 'modified_' + Date.now() + '_' + fileName);
+  const fileName = 'member_eligibility_audit_' + icmemId + '.csv';
+  const modifiedFilePath = path.join(tempDir, fileName);
   fs.writeFileSync(modifiedFilePath, updatedContent, 'utf-8');
 
-  ctx.log('Replaced {{member_id}} with ' + icmemId + ' in ' + fileName);
+  ctx.log('Replaced {{member_id}} with ' + icmemId + ' in template');
 
   // Step 2: Upload modified file via SFTP to /TO_AVER/
   const remotePath = remoteDirectory + fileName;
-  ctx.log('Uploading ' + modifiedFilePath + ' to ' + host + ':' + remotePath + '...');
+  ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
   const pyLines = [
     'import paramiko',
@@ -172,11 +156,8 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
     ctx.log(result.stdout);
   } finally {
     // Cleanup temp files
-    if (fs.existsSync(tmpScript)) {
-      fs.unlinkSync(tmpScript);
-    }
-    if (fs.existsSync(modifiedFilePath)) {
-      fs.unlinkSync(modifiedFilePath);
-    }
+    if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
+    if (fs.existsSync(modifiedFilePath)) fs.unlinkSync(modifiedFilePath);
+    if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath);
   }
 }
