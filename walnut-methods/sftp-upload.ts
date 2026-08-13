@@ -4,9 +4,9 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Replace ICMEM ID in Template and SFTP Upload
- * description: Replace {{member_id}} in template ${localFilePath} with $[icmemId] and upload to /TO_AVER/ on Altarum SFTP server
- * actionType: custom_sftp_template_upload
+ * name: SFTP Upload File
+ * description: Upload file from ${localFilePath} to /TO_AVER/ on Altarum SFTP with timestamp filename, storing ID in $[icmemId]
+ * actionType: custom_sftp_timestamp_upload
  * context: shared
  * needsLocator: false
  * category: File Transfer
