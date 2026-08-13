@@ -6,7 +6,7 @@ import { spawnSync } from 'child_process';
 /** @walnut_method
  * name: SFTP Upload File
  * description: Upload file from ${localFilePath} to /TO_AVER/ on Altarum SFTP with timestamp filename, storing ID in $[icmemId]
- * actionType: custom_sftp_template_upload
+ * actionType: custom_sftp_template_upload_v1
  * context: shared
  * needsLocator: false
  * category: File Transfer
