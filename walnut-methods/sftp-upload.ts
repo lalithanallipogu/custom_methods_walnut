@@ -1,7 +1,6 @@
 import type { WalnutContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as https from 'https';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
@@ -13,8 +12,8 @@ import { spawnSync } from 'child_process';
  * category: File Transfer
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
-  // ctx.args[0] = artifact ID (e.g., "ART-2") from ${localFilePath}
-  const artifactId = ctx.args[0];
+  // ctx.args[0] = file path (resolved from artifact ID by the agent) from ${localFilePath}
+  const localFilePath = ctx.args[0];
   const icmemId = ctx.getVariable(ctx.args[1]);  // args[1] = "icmemId" (from $[icmemId]), read the value
   const remoteDirectory = '/TO_AVER/';
 
@@ -28,99 +27,25 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
     throw new Error('Runtime variable icmemId is empty. Ensure step 1 generated it.');
   }
 
-  ctx.log('Using ICMEM ID: ' + icmemId);
-  ctx.log('Artifact reference: ' + artifactId);
-
-  // --- Download ART-2 file from Walnut Data Store API ---
-  const apiBase = 'https://app.walnutai-poc.enlacehealth.com/api';
-  const projectId = '69d4cbdea9876ab3eca8a583';
-  const tempDir = process.env.TEMP || 'C:\\Temp';
-
-  // Download the artifact file using the Data Store API
-  const downloadUrl = `${apiBase}/projects/${projectId}/data-store/artifacts/${artifactId}/download`;
-  ctx.log('Downloading artifact from: ' + downloadUrl);
-
-  // Try multiple possible env var names for the agent's auth token
-  const agentKey = process.env.WALNUT_CLOUD_KEY
-    || process.env.WALNUT_AGENT_KEY
-    || process.env.WALNUT_AUTH_TOKEN
-    || process.env.WALNUT_JWT
-    || '';
-
-  // Log available WALNUT env vars for debugging (names only, not values)
-  const walnutEnvVars = Object.keys(process.env).filter(k => k.toUpperCase().includes('WALNUT'));
-  ctx.log('WALNUT env vars: ' + JSON.stringify(walnutEnvVars));
-  ctx.log('Auth token available: ' + (agentKey.length > 0 ? 'yes (' + agentKey.length + ' chars)' : 'no'));
-
-  const localFilePath = path.join(tempDir, `art2_template_${Date.now()}.csv`);
-
-  await new Promise<void>((resolve, reject) => {
-    const makeRequest = (url: string, redirectCount: number) => {
-      if (redirectCount > 5) {
-        reject(new Error('Too many redirects'));
-        return;
-      }
-
-      const parsedUrl = new URL(url);
-      const options: https.RequestOptions = {
-        hostname: parsedUrl.hostname,
-        port: parsedUrl.port || 443,
-        path: parsedUrl.pathname + parsedUrl.search,
-        method: 'GET',
-        rejectUnauthorized: false,
-        headers: {} as Record<string, string>,
-      };
-
-      // Add auth header if token available
-      if (agentKey) {
-        (options.headers as Record<string, string>)['Authorization'] = `Bearer ${agentKey}`;
-      }
-
-      const req = https.request(options, (res) => {
-        // Handle redirects
-        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          makeRequest(res.headers.location, redirectCount + 1);
-          return;
-        }
-
-        if (res.statusCode !== 200) {
-          let body = '';
-          res.on('data', (chunk) => body += chunk);
-          res.on('end', () => {
-            reject(new Error(`Failed to download artifact ${artifactId}: HTTP ${res.statusCode} - ${body.substring(0, 200)}`));
-          });
-          return;
-        }
-
-        const fileStream = fs.createWriteStream(localFilePath);
-        res.pipe(fileStream);
-        fileStream.on('finish', () => {
-          fileStream.close();
-          resolve();
-        });
-        fileStream.on('error', reject);
-      });
-
-      req.on('error', reject);
-      req.end();  // IMPORTANT: must call end() to send the request
-    };
-
-    makeRequest(downloadUrl, 0);
-  });
-
-  if (!fs.existsSync(localFilePath)) {
-    throw new Error('Downloaded artifact file not found at: ' + localFilePath);
+  if (!localFilePath) {
+    throw new Error('localFilePath parameter is empty. Ensure the artifact ID is set in test data.');
   }
 
-  const fileSize = fs.statSync(localFilePath).size;
-  ctx.log('Downloaded artifact to: ' + localFilePath + ' (' + fileSize + ' bytes)');
+  ctx.log('Using ICMEM ID: ' + icmemId);
+  ctx.log('Template file path: ' + localFilePath);
 
-  // Step 1: Read the template and replace {{member_id}} with the ICMEM ID
+  // Verify the file exists
+  if (!fs.existsSync(localFilePath)) {
+    throw new Error('Template file not found at path: ' + localFilePath + '. Ensure the artifact ID resolves to a valid local file path.');
+  }
+
+  // Step 1: Read the template file and replace {{member_id}} with the ICMEM ID
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
   // Write the modified file to a temp location for upload
   const fileName = 'member_eligibility_audit_' + icmemId + '.csv';
+  const tempDir = process.env.TEMP || 'C:\\Temp';
   const modifiedFilePath = path.join(tempDir, fileName);
   fs.writeFileSync(modifiedFilePath, updatedContent, 'utf-8');
 
@@ -186,6 +111,5 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
     // Cleanup temp files
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
     if (fs.existsSync(modifiedFilePath)) fs.unlinkSync(modifiedFilePath);
-    if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath);
   }
 }
