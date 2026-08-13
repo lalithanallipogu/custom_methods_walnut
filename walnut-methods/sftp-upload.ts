@@ -44,7 +44,18 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
   // Write the modified file to a temp location for upload
-  const fileName = 'member_eligibility_audit_' + icmemId + '.csv';
+  // Generate filename with date shifted 2,670 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
+  const now = new Date();
+  const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
+  const yyyy = shifted.getFullYear().toString();
+  const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
+  const dd = shifted.getDate().toString().padStart(2, '0');
+  const HH = shifted.getHours().toString().padStart(2, '0');
+  const mm = shifted.getMinutes().toString().padStart(2, '0');
+  const ss = shifted.getSeconds().toString().padStart(2, '0');
+  const dateStamp = yyyy + MM + dd + HH + mm + ss;
+  const millis = now.getTime().toString();
+  const fileName = 'member_eligibility_audit_' + dateStamp + '_' + millis + '.csv';
   const tempDir = process.env.TEMP || 'C:\\Temp';
   const modifiedFilePath = path.join(tempDir, fileName);
   fs.writeFileSync(modifiedFilePath, updatedContent, 'utf-8');
