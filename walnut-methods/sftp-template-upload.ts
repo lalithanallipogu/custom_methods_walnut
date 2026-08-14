@@ -48,9 +48,9 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-  // Step 3: Generate filename with date shifted 2,670 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
+  // Step 3: Generate filename with date shifted 2,671 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2671 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
