@@ -27,11 +27,15 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   ctx.log('Generated ICMEM ID: ' + icmemId);
   ctx.setVariable(ctx.args[1], icmemId);  // Store in $[icmemId]
 
-  // SFTP credentials from test data params
-  const host = ctx.params.sftpHost || 'altarum.sftp.aver.io';
+  // SFTP credentials from test data params (no hardcoded fallbacks)
+  const host = ctx.params.sftpHost;
   const port = ctx.params.sftpPort || '22';
-  const username = ctx.params.sftpUsername || 'altarum_qa';
-  const password = ctx.params.sftpPassword || 'khq@rtx.crc9jpm*UCZ';
+  const username = ctx.params.sftpUsername;
+  const password = ctx.params.sftpPassword;
+
+  if (!host || !username || !password) {
+    throw new Error('SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data params.');
+  }
 
   if (!localFilePath) {
     throw new Error('localFilePath parameter is empty. Ensure the file path is set in test data.');
