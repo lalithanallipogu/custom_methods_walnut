@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate ICMEM ID Replace and Upload
- * description: Generate ICMEM ID, replace in template ${localFilePath} and upload to /TO_AVER/ storing ID in $[icmemId]
+ * description: Generate ICMEM ID, replace in template ${localFilePath} with SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} and upload to /TO_AVER/ storing ID in $[icmemId]
  * actionType: custom_sftp_template_upload
  * context: shared
  * needsLocator: false
@@ -13,7 +13,11 @@ import { spawnSync } from 'child_process';
  */
 export async function sftpTemplateUpload(ctx: WalnutContext) {
   // ctx.args[0] = file path from ${localFilePath}
-  // ctx.args[1] = "icmemId" (from $[icmemId])
+  // ctx.args[1] = SFTP host from ${sftpHost}
+  // ctx.args[2] = SFTP port from ${sftpPort}
+  // ctx.args[3] = SFTP username from ${sftpUsername}
+  // ctx.args[4] = SFTP password from ${sftpPassword}
+  // ctx.args[5] = "icmemId" (from $[icmemId])
   const localFilePath = ctx.args[0];
   const remoteDirectory = '/TO_AVER/';
 
@@ -25,16 +29,16 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   }).join('');
   const icmemId = 'ICMEM-' + digits + letters;
   ctx.log('Generated ICMEM ID: ' + icmemId);
-  ctx.setVariable(ctx.args[1], icmemId);  // Store in $[icmemId]
+  ctx.setVariable(ctx.args[5], icmemId);  // Store in $[icmemId]
 
-  // SFTP credentials from test data params (no hardcoded fallbacks)
-  const host = ctx.params.sftpHost;
-  const port = ctx.params.sftpPort || '22';
-  const username = ctx.params.sftpUsername;
-  const password = ctx.params.sftpPassword;
+  // SFTP credentials from description placeholders
+  const host = ctx.args[1];
+  const port = ctx.args[2] || '22';
+  const username = ctx.args[3];
+  const password = ctx.args[4];
 
   if (!host || !username || !password) {
-    throw new Error('SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data params.');
+    throw new Error('SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data.');
   }
 
   if (!localFilePath) {
