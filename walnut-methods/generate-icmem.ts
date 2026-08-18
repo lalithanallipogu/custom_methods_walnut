@@ -48,6 +48,18 @@ export async function generateIcmem(ctx: WalnutContext) {
   const tempFiles: string[] = [];
   const uploadPairs: { local: string; remote: string }[] = [];
 
+  // Generate batch timestamp ONCE (shared across all 4 files as batch ID)
+  const now = new Date();
+  const shifted = new Date(now.getTime() + 2672 * 24 * 60 * 60 * 1000);
+  const yyyy = shifted.getFullYear().toString();
+  const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
+  const dd = shifted.getDate().toString().padStart(2, '0');
+  const HH = shifted.getHours().toString().padStart(2, '0');
+  const mm = shifted.getMinutes().toString().padStart(2, '0');
+  const ss = shifted.getSeconds().toString().padStart(2, '0');
+  const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
+  const millis = now.getTime().toString();
+
   // Step 2: For each file, read template, replace {{member_id}}, write to temp, prepare for upload
   for (let i = 0; i < filePaths.length; i++) {
     const filePath = filePaths[i];
@@ -69,7 +81,7 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Generate filename: baseName_YYYYMMDD_epochMillis (date shifted 2,672 days forward)
+    // Generate filename: baseName_YYYYMMDDhhmmss_epochMillis (same batch ID for all files)
     const originalExt = path.extname(filePath) || '.csv';
     const originalBase = path.basename(filePath, originalExt);
     // Strip ALL trailing _digits groups from filename (e.g. _20321101_081997 or _20321101081997)
@@ -78,16 +90,6 @@ export async function generateIcmem(ctx: WalnutContext) {
       baseName = baseName.replace(/_\d+$/, '');
     }
 
-    const now = new Date();
-    const shifted = new Date(now.getTime() + 2672 * 24 * 60 * 60 * 1000);
-    const yyyy = shifted.getFullYear().toString();
-    const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
-    const dd = shifted.getDate().toString().padStart(2, '0');
-    const HH = shifted.getHours().toString().padStart(2, '0');
-    const mm = shifted.getMinutes().toString().padStart(2, '0');
-    const ss = shifted.getSeconds().toString().padStart(2, '0');
-    const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
-    const millis = now.getTime().toString();
     const fileName = baseName + '_' + dateTimeStamp + '_' + millis + originalExt;
 
     // Write modified content to temp file (original stays untouched)
