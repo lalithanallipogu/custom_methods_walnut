@@ -52,13 +52,16 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-  // Generate filename: baseName_YYYYMMDD_epochMillis (date shifted 2,672 days forward)
+  // Generate filename: baseName_YYYYMMDDhhmmss_epochMillis (date shifted 2,672 days forward)
   const now = new Date();
   const shifted = new Date(now.getTime() + 2672 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
-  const dateStamp = yyyy + MM + dd;
+  const HH = shifted.getHours().toString().padStart(2, '0');
+  const mm = shifted.getMinutes().toString().padStart(2, '0');
+  const ss = shifted.getSeconds().toString().padStart(2, '0');
+  const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
   const millis = now.getTime().toString();
   const originalExt = path.extname(localFilePath) || '.csv';
   const originalBase = path.basename(localFilePath, originalExt);
@@ -67,7 +70,7 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   while (/_\d+$/.test(baseName)) {
     baseName = baseName.replace(/_\d+$/, '');
   }
-  const fileName = baseName + '_' + dateStamp + '_' + millis + originalExt;
+  const fileName = baseName + '_' + dateTimeStamp + '_' + millis + originalExt;
   const tempDir = process.env.TEMP || '/tmp';
   const modifiedFilePath = path.join(tempDir, fileName);
 

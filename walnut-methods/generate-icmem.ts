@@ -83,9 +83,12 @@ export async function generateIcmem(ctx: WalnutContext) {
     const yyyy = shifted.getFullYear().toString();
     const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
     const dd = shifted.getDate().toString().padStart(2, '0');
-    const dateStamp = yyyy + MM + dd;
+    const HH = shifted.getHours().toString().padStart(2, '0');
+    const mm = shifted.getMinutes().toString().padStart(2, '0');
+    const ss = shifted.getSeconds().toString().padStart(2, '0');
+    const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
     const millis = now.getTime().toString();
-    const fileName = baseName + '_' + dateStamp + '_' + millis + originalExt;
+    const fileName = baseName + '_' + dateTimeStamp + '_' + millis + originalExt;
 
     // Write modified content to temp file (original stays untouched)
     const modifiedFilePath = path.join(tempDir, fileName);
