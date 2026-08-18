@@ -65,7 +65,9 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const millis = now.getTime().toString();
   const originalExt = path.extname(localFilePath) || '.csv';
   const originalBase = path.basename(localFilePath, originalExt);
-  const fileName = originalBase + '_' + dateStamp + '_' + millis + originalExt;
+  // Strip existing timestamp from filename (trailing _digits block, e.g. _20321101081997)
+  const baseName = originalBase.replace(/_\d+$/, '');
+  const fileName = baseName + '_' + dateStamp + '_' + millis + originalExt;
   const tempDir = process.env.TEMP || '/tmp';
   const modifiedFilePath = path.join(tempDir, fileName);
 

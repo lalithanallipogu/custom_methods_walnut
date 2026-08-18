@@ -69,9 +69,11 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Generate filename with date shifted 2,671 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
+    // Generate filename with date shifted 2,672 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
     const originalExt = path.extname(filePath) || '.csv';
     const originalBase = path.basename(filePath, originalExt);
+    // Strip existing timestamp from filename (trailing _digits block, e.g. _20321101081997)
+    const baseName = originalBase.replace(/_\d+$/, '');
 
     const now = new Date();
     const shifted = new Date(now.getTime() + 2672 * 24 * 60 * 60 * 1000);
@@ -83,7 +85,7 @@ export async function generateIcmem(ctx: WalnutContext) {
     const ss = shifted.getSeconds().toString().padStart(2, '0');
     const dateStamp = yyyy + MM + dd + HH + mm + ss;
     const millis = now.getTime().toString();
-    const fileName = originalBase + '_' + dateStamp + '_' + millis + originalExt;
+    const fileName = baseName + '_' + dateStamp + '_' + millis + originalExt;
 
     // Write modified content to temp file (original stays untouched)
     const modifiedFilePath = path.join(tempDir, fileName);
