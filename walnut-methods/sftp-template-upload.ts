@@ -52,21 +52,21 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-  // Generate filename with date shifted 2,672 days forward in YYYYMMDDHHMMSS format + milliseconds timestamp
+  // Generate filename: baseName_YYYYMMDD_epochMillis (date shifted 2,672 days forward)
   const now = new Date();
   const shifted = new Date(now.getTime() + 2672 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
-  const HH = shifted.getHours().toString().padStart(2, '0');
-  const mm = shifted.getMinutes().toString().padStart(2, '0');
-  const ss = shifted.getSeconds().toString().padStart(2, '0');
-  const dateStamp = yyyy + MM + dd + HH + mm + ss;
+  const dateStamp = yyyy + MM + dd;
   const millis = now.getTime().toString();
   const originalExt = path.extname(localFilePath) || '.csv';
   const originalBase = path.basename(localFilePath, originalExt);
-  // Strip existing timestamp from filename (trailing _digits block, e.g. _20321101081997)
-  const baseName = originalBase.replace(/_\d+$/, '');
+  // Strip ALL trailing _digits groups from filename (e.g. _20321101_081997 or _20321101081997)
+  let baseName = originalBase;
+  while (/_\d+$/.test(baseName)) {
+    baseName = baseName.replace(/_\d+$/, '');
+  }
   const fileName = baseName + '_' + dateStamp + '_' + millis + originalExt;
   const tempDir = process.env.TEMP || '/tmp';
   const modifiedFilePath = path.join(tempDir, fileName);
