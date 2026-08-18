@@ -69,20 +69,8 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Generate timestamped filename
-    const now = new Date();
-    const shifted = new Date(now.getTime() + 2671 * 24 * 60 * 60 * 1000);
-    const yyyy = shifted.getFullYear().toString();
-    const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
-    const dd = shifted.getDate().toString().padStart(2, '0');
-    const HH = shifted.getHours().toString().padStart(2, '0');
-    const mm = shifted.getMinutes().toString().padStart(2, '0');
-    const ss = shifted.getSeconds().toString().padStart(2, '0');
-    const dateStamp = yyyy + MM + dd + HH + mm + ss;
-    const millis = (now.getTime() + i).toString(); // +i to ensure unique names
-    const originalExt = path.extname(filePath) || '.csv';
-    const originalBase = path.basename(filePath, originalExt);
-    const fileName = originalBase + '_' + dateStamp + '_' + millis + originalExt;
+    // Use the original filename as-is (it already contains YYYYMMDD_epochMillis timestamp)
+    const fileName = path.basename(filePath);
 
     // Write modified content to temp file (original stays untouched)
     const modifiedFilePath = path.join(tempDir, fileName);
