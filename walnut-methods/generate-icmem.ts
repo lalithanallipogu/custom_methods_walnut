@@ -69,8 +69,20 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Use the original filename as-is (it already contains YYYYMMDD_epochMillis timestamp)
-    const fileName = path.basename(filePath);
+    // Generate timestamped filename: baseName_YYYYMMDD_epochMillis.csv (2671 days forward from today)
+    const originalExt = path.extname(filePath) || '.csv';
+    const originalBase = path.basename(filePath, originalExt);
+    // Strip any existing timestamp from the filename (pattern: _YYYYMMDD_digits)
+    const baseName = originalBase.replace(/_\d{8}(_\d+)?$/, '');
+
+    const now = new Date();
+    const shifted = new Date(now.getTime() + 2671 * 24 * 60 * 60 * 1000);
+    const yyyy = shifted.getFullYear().toString();
+    const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
+    const dd = shifted.getDate().toString().padStart(2, '0');
+    const dateStamp = yyyy + MM + dd;  // YYYYMMDD
+    const epochMillis = shifted.getTime().toString();  // epoch millis of the shifted date
+    const fileName = baseName + '_' + dateStamp + '_' + epochMillis + originalExt;
 
     // Write modified content to temp file (original stays untouched)
     const modifiedFilePath = path.join(tempDir, fileName);
