@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with $[dummyId] in temp copies, and upload to /To_AVER/ via SFTP
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /To_AVER/ via SFTP
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -16,19 +16,17 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[1] = filePath2 (from ${filePath2})
   // ctx.args[2] = filePath3 (from ${filePath3})
   // ctx.args[3] = filePath4 (from ${filePath4})
-  // ctx.args[4] = "dummyId" (from $[dummyId]) — runtime variable name set in Step 1
+  // ctx.args[4] = dummyId value (from ${dummyId}) — local variable from test data
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
-  const dummyIdVarName = ctx.args[4];
+  const dummyId = ctx.args[4];
 
-  // Read the dummy ID from the runtime variable created in Step 1
-  const dummyId = ctx.getVariable(dummyIdVarName);
   if (!dummyId) {
     throw new Error(
-      'Runtime variable "' + dummyIdVarName + '" not found. Ensure Step 1 set this variable before running this step.'
+      'dummyId is empty. Ensure it is configured as a local variable in WalnutAI test data management.'
     );
   }
-  ctx.log('Using dummy ID from Step 1: ' + dummyId);
+  ctx.log('Using dummy ID from test data: ' + dummyId);
 
   // SFTP credentials from WalnutAI test data management (ctx.params)
   const host = ctx.params.sftpHost;
