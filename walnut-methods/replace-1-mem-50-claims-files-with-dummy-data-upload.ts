@@ -6,7 +6,7 @@ import { spawnSync } from 'child_process';
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
  * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /To_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword}
- * actionType: custom_replace_dummy_upload_sftp
+ * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
  * category: File Transfer
