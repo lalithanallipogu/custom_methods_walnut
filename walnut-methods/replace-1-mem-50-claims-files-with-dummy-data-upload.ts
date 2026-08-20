@@ -104,7 +104,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     throw new Error('No valid file paths provided. Nothing to upload.');
   }
 
-  // Upload all temp files via SFTP to /To_AVER/
+  // Upload all temp files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
   // Python script reads credentials from command-line args (never written to disk)
