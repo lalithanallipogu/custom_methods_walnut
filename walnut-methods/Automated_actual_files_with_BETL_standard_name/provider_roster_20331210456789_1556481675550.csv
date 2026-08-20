@@ -1,0 +1,484 @@
+﻿1,2,3,4,5,6,Header_to_be_stripped,,,,,,,,,,,,,,,,,,,,
+37749,PROV122808311,1216385911,122420011,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+37751,PROV122808311,1216385911,122421911,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+37760,PROV122808311,1216385911,122438811,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+37761,PROV122808311,1216385911,122439311,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+37773,PROV122808311,1216385911,122466511,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37775,PROV122808311,1216385911,122468011,Mcmillan,Nanette,null,null,null,null,null,Cleveland,OH,44109,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+37794,PROV122808361,1216386361,122466511,Leonard,Dwight,101Y00000X,null,null,null,null,Cleveland,OH,44120,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37811,PROV122808461,1216387261,122421911,Dalton,Miranda,101YM0800X,null,null,null,null,Painesville,OH,44077,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+37822,PROV122808461,1216387261,122466511,Dalton,Miranda,101YM0800X,null,null,null,null,Painesville,OH,44077,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37843,PROV122808561,1216388161,122466511,Hernandez,Salvatore,101YP2500X,null,null,null,null,Olmsted Falls,OH,44138,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37850,PROV122808761,1216389961,122466511,Bernal,Tyrone,103G00000X,null,null,null,null,Columbia Station,OH,44028,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37859,PROV122808861,1216390861,122420011,Flowers,Humberto,103T00000X,null,null,null,null,Cleveland,OH,44120,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+37860,PROV122808861,1216390861,122421911,Flowers,Humberto,103T00000X,null,null,null,null,Cleveland,OH,44120,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+37874,PROV122808861,1216390861,122466511,Flowers,Humberto,103T00000X,null,null,null,null,Cleveland,OH,44120,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37888,PROV122809111,1216393111,122466511,Fletcher,Celia,103TC1900X,null,null,null,null,Cleveland,OH,44102,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37916,PROV122809761,1216398961,122466511,Davila,Tommy,104100000X,null,null,null,null,Montville,OH,44064,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37932,PROV122809811,1216399411,122421911,York,Glenn,1041C0700X,null,null,null,null,Amherst,OH,44001,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+37945,PROV122809811,1216399411,122466511,York,Glenn,1041C0700X,null,null,null,null,Amherst,OH,44001,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37985,PROV122810661,1216407061,122466511,Mercado,Nelda,122300000X,null,null,null,null,Euclid,OH,44123,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+37996,PROV122810861,1216408861,122466511,Mcconnell,Gerry,1223G0001X,null,null,null,null,Cleveland,OH,44113,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38006,PROV122810911,1216409311,122468011,Pennington,Earline,1223P0106X,null,null,null,null,Newbury,OH,44065,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38014,PROV122811061,1216410661,122466511,Dawson,Aidan,1223P0700X,null,null,null,null,Cleveland,OH,44124,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38021,PROV122811111,1216411111,122466511,Mosley,Wade,1223S0112X,null,null,null,null,Berea,OH,44017,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38023,PROV122811711,1216416511,122466511,Mckenzie,Trenton,133NN1002X,null,null,null,null,Cleveland,OH,44113,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38030,PROV122811761,1216416961,122421911,Allison,Marquita,133V00000X,null,null,null,null,Parkman,OH,44080,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38037,PROV122811761,1216416961,122428411,Allison,Marquita,133V00000X,null,null,null,null,Parkman,OH,44080,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38038,PROV122811761,1216416961,122439311,Allison,Marquita,133V00000X,null,null,null,null,Parkman,OH,44080,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38042,PROV122811761,1216416961,122466511,Allison,Marquita,133V00000X,null,null,null,null,Parkman,OH,44080,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38052,PROV122811811,1216417411,122421911,Garcia,Jaime,133VN1004X,null,null,null,null,Cleveland,OH,44108,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38061,PROV122811911,1216418311,122421911,Atkinson,Phoebe,133VN1006X,null,null,null,null,Middlefield,OH,44062,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38073,PROV122812211,1216421011,122421911,Alvarado,Frieda,152W00000X,null,null,null,null,Olmsted Falls,OH,44138,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38076,PROV122812211,1216421011,122466511,Alvarado,Frieda,152W00000X,null,null,null,null,Olmsted Falls,OH,44138,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38079,PROV122812211,1216421011,122472011,Alvarado,Frieda,152W00000X,null,null,null,null,Olmsted Falls,OH,44138,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+38100,PROV122813061,1216428661,122420011,Hayes,Gale,163W00000X,null,null,null,null,North Ridgeville,OH,44039,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38101,PROV122813061,1216428661,122421911,Hayes,Gale,163W00000X,null,null,null,null,North Ridgeville,OH,44039,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38104,PROV122813061,1216428661,122428411,Hayes,Gale,163W00000X,null,null,null,null,North Ridgeville,OH,44039,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38106,PROV122813061,1216428661,122466511,Hayes,Gale,163W00000X,null,null,null,null,North Ridgeville,OH,44039,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38111,PROV122813561,1216433161,122421911,Richards,Tammy,163WD0400X,null,null,null,null,Cleveland,OH,44110,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38131,PROV122816761,1216461961,122466511,Herman,Kingston,173000000X,null,null,null,null,Kipton,OH,44049,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38136,PROV122816961,1216463761,122420011,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38139,PROV122816961,1216463761,122421911,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38147,PROV122816961,1216463761,122428411,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38158,PROV122816961,1216463761,122438811,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38159,PROV122816961,1216463761,122439311,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38176,PROV122816961,1216463761,122466511,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38179,PROV122816961,1216463761,122468011,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38181,PROV122816961,1216463761,122472011,Graves,Bernice,174400000X,null,null,null,null,Avon,OH,44011,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+38193,PROV122817661,1216470061,122421911,Branch,Herbert,176B00000X,null,null,null,null,Cleveland,OH,44130,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38198,PROV122817661,1216470061,122466511,Branch,Herbert,176B00000X,null,null,null,null,Cleveland,OH,44130,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38211,PROV122818661,1216479061,122428411,Cardenas,Judah,204C00000X,null,null,null,null,Beachwood,OH,44122,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38221,PROV122818811,1216480411,122466511,Wheeler,Stephen,204F00000X,null,null,null,null,Avon,OH,44011,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38226,PROV122818961,1216481761,122421911,Mcconnell,Marcie,207KA0200X,null,null,null,null,Cleveland,OH,44108,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38229,PROV122818961,1216481761,122466511,Mcconnell,Marcie,207KA0200X,null,null,null,null,Cleveland,OH,44108,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38234,PROV122819061,1216482661,122420011,Mcmillan,Lorena,207L00000X,null,null,null,null,Avon,OH,44011,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38237,PROV122819061,1216482661,122421911,Mcmillan,Lorena,207L00000X,null,null,null,null,Avon,OH,44011,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38246,PROV122819061,1216482661,122439311,Mcmillan,Lorena,207L00000X,null,null,null,null,Avon,OH,44011,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38252,PROV122819061,1216482661,122466511,Mcmillan,Lorena,207L00000X,null,null,null,null,Avon,OH,44011,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38268,PROV122819261,1216484461,122420011,Farley,Hazel,207LP2900X,null,null,null,null,Cleveland,OH,44143,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38270,PROV122819261,1216484461,122421911,Farley,Hazel,207LP2900X,null,null,null,null,Cleveland,OH,44143,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38277,PROV122819261,1216484461,122466511,Farley,Hazel,207LP2900X,null,null,null,null,Cleveland,OH,44143,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38281,PROV122819311,1216484911,122420011,Payne,Dana,207LP3000X,null,null,null,null,Solon,OH,44139,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38292,PROV122819361,1216485361,122421911,Thomas,Otto,207N00000X,null,null,null,null,North Royalton,OH,44133,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38296,PROV122819361,1216485361,122438811,Thomas,Otto,207N00000X,null,null,null,null,North Royalton,OH,44133,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38297,PROV122819361,1216485361,122439311,Thomas,Otto,207N00000X,null,null,null,null,North Royalton,OH,44133,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38301,PROV122819361,1216485361,122466511,Thomas,Otto,207N00000X,null,null,null,null,North Royalton,OH,44133,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38316,PROV122819411,1216485811,122421911,Stephens,Damion,207ND0101X,null,null,null,null,Spencer,OH,44275,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38319,PROV122819411,1216485811,122466511,Stephens,Damion,207ND0101X,null,null,null,null,Spencer,OH,44275,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38329,PROV122819461,1216486261,122466511,Gallegos,Lucile,207ND0900X,null,null,null,null,Avon Lake,OH,44012,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38342,PROV122819661,1216488061,122420011,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38346,PROV122819661,1216488061,122421911,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38353,PROV122819661,1216488061,122428411,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38357,PROV122819661,1216488061,122438811,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38359,PROV122819661,1216488061,122439311,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38368,PROV122819661,1216488061,122466511,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38371,PROV122819661,1216488061,122468011,Park,Dwayne,207P00000X,null,null,null,null,Cleveland,OH,44105,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38387,PROV122819711,1216488511,122421911,Camacho,Delmar,207PE0004X,null,null,null,null,Wickliffe,OH,44092,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38389,PROV122819711,1216488511,122428411,Camacho,Delmar,207PE0004X,null,null,null,null,Wickliffe,OH,44092,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38392,PROV122819711,1216488511,122466511,Camacho,Delmar,207PE0004X,null,null,null,null,Wickliffe,OH,44092,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38411,PROV122820011,1216491211,122420011,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38415,PROV122820011,1216491211,122421911,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38430,PROV122820011,1216491211,122428411,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,1222158961|122428411|PROV123449761,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38441,PROV122820011,1216491211,122438811,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,1222205761|122438811|PROV123454961,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38442,PROV122820011,1216491211,122439311,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,1222208011|122439311|PROV123455211,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38461,PROV122820011,1216491211,122466511,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38465,PROV122820011,1216491211,122468011,Harrison,Jace,207Q00000X,null,null,null,null,North Royalton,OH,44133,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38483,PROV122820161,1216492561,122421911,Daniels,Benjamin,207QA0505X,null,null,null,null,Cleveland,OH,44118,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38490,PROV122820161,1216492561,122466511,Daniels,Benjamin,207QA0505X,null,null,null,null,Cleveland,OH,44118,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38499,PROV122820261,1216493461,122421911,Barnes,Denise,207QG0300X,null,null,null,null,Chagrin Falls,OH,44023,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38505,PROV122820261,1216493461,122466511,Barnes,Denise,207QG0300X,null,null,null,null,Chagrin Falls,OH,44023,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38512,PROV122820361,1216494361,122421911,Rose,Connor,207QS0010X,null,null,null,null,Sharon Center,OH,44274,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38516,PROV122820361,1216494361,122428411,Rose,Connor,207QS0010X,null,null,null,null,Sharon Center,OH,44274,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38518,PROV122820361,1216494361,122439311,Rose,Connor,207QS0010X,null,null,null,null,Sharon Center,OH,44274,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38522,PROV122820361,1216494361,122466511,Rose,Connor,207QS0010X,null,null,null,null,Sharon Center,OH,44274,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38541,PROV122820461,1216495261,122420011,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38545,PROV122820461,1216495261,122421911,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38567,PROV122820461,1216495261,122428411,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38579,PROV122820461,1216495261,122438811,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,1222205761|122438811|PROV123454961,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38580,PROV122820461,1216495261,122439311,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38597,PROV122820461,1216495261,122466511,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38600,PROV122820461,1216495261,122468011,Figueroa,Eve,207R00000X,null,null,null,null,Cleveland,OH,44134,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38620,PROV122820561,1216496161,122466511,Reyna,Raquel,207RA0001X,null,null,null,null,Cleveland,OH,44112,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38622,PROV122820611,1216496611,122421911,Miller,Gary,207RA0201X,null,null,null,null,Cleveland,OH,44143,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38626,PROV122820611,1216496611,122466511,Miller,Gary,207RA0201X,null,null,null,null,Cleveland,OH,44143,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38630,PROV122820661,1216497061,122421911,Delgado,Chuck,207RA0401X,null,null,null,null,Chagrin Falls,OH,44023,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38638,PROV122820761,1216497961,122420011,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+38642,PROV122820761,1216497961,122421911,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38650,PROV122820761,1216497961,122428411,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38654,PROV122820761,1216497961,122438811,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38655,PROV122820761,1216497961,122439311,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38661,PROV122820761,1216497961,122466511,Huber,Mary,207RC0000X,null,null,null,null,Cleveland,OH,44105,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38676,PROV122820811,1216498411,122421911,Blanchard,Mai,207RC0001X,null,null,null,null,Independence,OH,44131,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38683,PROV122820811,1216498411,122466511,Blanchard,Mai,207RC0001X,null,null,null,null,Independence,OH,44131,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38684,PROV122820811,1216498411,122468011,Blanchard,Mai,207RC0001X,null,null,null,null,Independence,OH,44131,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38693,PROV122820861,1216498861,122421911,Leblanc,Lupe,207RC0200X,null,null,null,null,Cleveland,OH,44108,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38699,PROV122820861,1216498861,122428411,Leblanc,Lupe,207RC0200X,null,null,null,null,Cleveland,OH,44108,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38702,PROV122820861,1216498861,122466511,Leblanc,Lupe,207RC0200X,null,null,null,null,Cleveland,OH,44108,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38710,PROV122820911,1216499311,122421911,Tang,Dee,207RE0101X,null,null,null,null,Chagrin Falls,OH,44023,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38715,PROV122820911,1216499311,122428411,Tang,Dee,207RE0101X,null,null,null,null,Chagrin Falls,OH,44023,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38719,PROV122820911,1216499311,122466511,Tang,Dee,207RE0101X,null,null,null,null,Chagrin Falls,OH,44023,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38727,PROV122820961,1216499761,122421911,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38733,PROV122820961,1216499761,122428411,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38735,PROV122820961,1216499761,122438811,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38736,PROV122820961,1216499761,122439311,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38741,PROV122820961,1216499761,122466511,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38744,PROV122820961,1216499761,122468011,Powell,Edna,207RG0100X,null,null,null,null,Eastlake,OH,44095,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+38755,PROV122821011,1216500211,122421911,Murillo,Sanford,207RG0300X,null,null,null,null,Cleveland,OH,44119,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38759,PROV122821011,1216500211,122439311,Murillo,Sanford,207RG0300X,null,null,null,null,Cleveland,OH,44119,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38764,PROV122821011,1216500211,122466511,Murillo,Sanford,207RG0300X,null,null,null,null,Cleveland,OH,44119,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38776,PROV122821061,1216500661,122466511,Molina,Beulah,207RH0000X,null,null,null,null,Valley City,OH,44280,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38781,PROV122821411,1216503811,122421911,Carey,Marsha,207RI0200X,null,null,null,null,Olmsted Falls,OH,44138,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38785,PROV122821411,1216503811,122439311,Carey,Marsha,207RI0200X,null,null,null,null,Olmsted Falls,OH,44138,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38790,PROV122821411,1216503811,122466511,Carey,Marsha,207RI0200X,null,null,null,null,Olmsted Falls,OH,44138,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38796,PROV122821461,1216504261,122438811,Joseph,Kathy,207RM1200X,null,null,null,null,Broadview Heights,OH,44147,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38800,PROV122821511,1216504711,122421911,Chang,Dominick,207RN0300X,null,null,null,null,Cleveland,OH,44120,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38805,PROV122821511,1216504711,122466511,Chang,Dominick,207RN0300X,null,null,null,null,Cleveland,OH,44120,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38815,PROV122821561,1216505161,122421911,Kelley,Madge,207RP1001X,null,null,null,null,Grafton,OH,44044,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38821,PROV122821561,1216505161,122428411,Kelley,Madge,207RP1001X,null,null,null,null,Grafton,OH,44044,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38828,PROV122821561,1216505161,122466511,Kelley,Madge,207RP1001X,null,null,null,null,Grafton,OH,44044,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38838,PROV122821611,1216505611,122421911,Morton,Cassie,207RR0500X,null,null,null,null,Cleveland,OH,44112,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38847,PROV122821611,1216505611,122466511,Morton,Cassie,207RR0500X,null,null,null,null,Cleveland,OH,44112,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38855,PROV122821711,1216506511,122466511,Solomon,Heidi,207RS0012X,null,null,null,null,Euclid,OH,44123,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38859,PROV122821811,1216507411,122421911,Burnett,Lamar,207RX0202X,null,null,null,null,Valley City,OH,44280,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38866,PROV122821811,1216507411,122466511,Burnett,Lamar,207RX0202X,null,null,null,null,Valley City,OH,44280,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38876,PROV122821911,1216508311,122466511,Alexander,Jean,207SG0201X,null,null,null,null,Cleveland,OH,44128,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38879,PROV122822161,1216510561,122421911,Hester,Chadwick,207T00000X,null,null,null,null,Cleveland,OH,44134,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38885,PROV122822161,1216510561,122438811,Hester,Chadwick,207T00000X,null,null,null,null,Cleveland,OH,44134,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38886,PROV122822161,1216510561,122439311,Hester,Chadwick,207T00000X,null,null,null,null,Cleveland,OH,44134,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38893,PROV122822161,1216510561,122466511,Hester,Chadwick,207T00000X,null,null,null,null,Cleveland,OH,44134,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38903,PROV122822211,1216511011,122438811,Landry,Celina,207U00000X,null,null,null,null,Lorain,OH,44053,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38904,PROV122822211,1216511011,122466511,Landry,Celina,207U00000X,null,null,null,null,Lorain,OH,44053,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38911,PROV122822261,1216511461,122466511,Berg,Katrina,207UN0901X,null,null,null,null,Lorain,OH,44052,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38918,PROV122822311,1216511911,122438811,Willis,Maura,207UN0902X,null,null,null,null,Independence,OH,44131,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+38938,PROV122822661,1216515061,122421911,Ramsey,Jana,207VG0400X,null,null,null,null,Medina,OH,44256,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38947,PROV122822661,1216515061,122466511,Ramsey,Jana,207VG0400X,null,null,null,null,Medina,OH,44256,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38953,PROV122822761,1216515961,122421911,Doyle,Nina,207VM0101X,null,null,null,null,Grafton,OH,44044,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38958,PROV122822761,1216515961,122439311,Doyle,Nina,207VM0101X,null,null,null,null,Grafton,OH,44044,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38962,PROV122822761,1216515961,122466511,Doyle,Nina,207VM0101X,null,null,null,null,Grafton,OH,44044,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38969,PROV122822811,1216516411,122466511,Donaldson,Lincoln,207VX0000X,null,null,null,null,Burton,OH,44021,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38971,PROV122822861,1216516861,122421911,Pratt,Orion,207VX0201X,null,null,null,null,Perry,OH,44081,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38976,PROV122822861,1216516861,122439311,Pratt,Orion,207VX0201X,null,null,null,null,Perry,OH,44081,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38978,PROV122822861,1216516861,122466511,Pratt,Orion,207VX0201X,null,null,null,null,Perry,OH,44081,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38985,PROV122822911,1216517311,122421911,Carrillo,Sidney,207W00000X,null,null,null,null,Middlefield,OH,44062,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+38988,PROV122822911,1216517311,122428411,Carrillo,Sidney,207W00000X,null,null,null,null,Middlefield,OH,44062,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+38991,PROV122822911,1216517311,122439311,Carrillo,Sidney,207W00000X,null,null,null,null,Middlefield,OH,44062,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+38995,PROV122822911,1216517311,122466511,Carrillo,Sidney,207W00000X,null,null,null,null,Middlefield,OH,44062,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+38997,PROV122822911,1216517311,122472011,Carrillo,Sidney,207W00000X,null,null,null,null,Middlefield,OH,44062,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+39015,PROV122823011,1216518211,122466511,Avila,Bernadette,207WX0107X,null,null,null,null,North Olmsted,OH,44070,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39021,PROV122823211,1216520011,122472011,Mathis,Emilio,207WX0200X,null,null,null,null,Sharon Center,OH,44274,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+39025,PROV122823261,1216520461,122420011,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39028,PROV122823261,1216520461,122421911,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39035,PROV122823261,1216520461,122428411,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39039,PROV122823261,1216520461,122438811,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39040,PROV122823261,1216520461,122439311,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39047,PROV122823261,1216520461,122466511,Mclaughlin,Sonya,207X00000X,null,null,null,null,Cleveland,OH,44109,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39061,PROV122823311,1216520911,122421911,Conrad,George,207XP3100X,null,null,null,null,Grand River,OH,44045,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39063,PROV122823311,1216520911,122428411,Conrad,George,207XP3100X,null,null,null,null,Grand River,OH,44045,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39069,PROV122823361,1216521361,122421911,House,Kurt,207XS0106X,null,null,null,null,Sharon Center,OH,44274,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39072,PROV122823361,1216521361,122428411,House,Kurt,207XS0106X,null,null,null,null,Sharon Center,OH,44274,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39077,PROV122823361,1216521361,122466511,House,Kurt,207XS0106X,null,null,null,null,Sharon Center,OH,44274,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39086,PROV122823411,1216521811,122428411,York,Emil,207XS0114X,null,null,null,null,Broadview Heights,OH,44147,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39094,PROV122823461,1216522261,122421911,Tang,Simone,207XS0117X,null,null,null,null,Spencer,OH,44275,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39096,PROV122823461,1216522261,122428411,Tang,Simone,207XS0117X,null,null,null,null,Spencer,OH,44275,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39100,PROV122823461,1216522261,122466511,Tang,Simone,207XS0117X,null,null,null,null,Spencer,OH,44275,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39106,PROV122823561,1216523161,122421911,Lyons,Jackson,207XX0005X,null,null,null,null,Maple Heights,OH,44137,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39108,PROV122823561,1216523161,122428411,Lyons,Jackson,207XX0005X,null,null,null,null,Maple Heights,OH,44137,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39112,PROV122823561,1216523161,122439311,Lyons,Jackson,207XX0005X,null,null,null,null,Maple Heights,OH,44137,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39115,PROV122823561,1216523161,122466511,Lyons,Jackson,207XX0005X,null,null,null,null,Maple Heights,OH,44137,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39123,PROV122823661,1216524061,122421911,Chapman,Jolene,207Y00000X,null,null,null,null,Cleveland,OH,44102,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39134,PROV122823661,1216524061,122466511,Chapman,Jolene,207Y00000X,null,null,null,null,Cleveland,OH,44102,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39150,PROV122823861,1216525861,122466511,Swanson,Nick,207YX0007X,null,null,null,null,Maple Heights,OH,44137,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39156,PROV122824011,1216527211,122438811,Sherman,Adeline,207YX0905X,null,null,null,null,Maple Heights,OH,44137,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39158,PROV122824011,1216527211,122466511,Sherman,Adeline,207YX0905X,null,null,null,null,Maple Heights,OH,44137,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39161,PROV122824111,1216528111,122466511,Ramos,Beckett,207ZC0006X,null,null,null,null,Berea,OH,44017,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39167,PROV122824261,1216529461,122466511,Leblanc,Eric,207ZD0900X,null,null,null,null,Hinckley,OH,44233,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39168,PROV122824261,1216529461,122468011,Leblanc,Eric,207ZD0900X,null,null,null,null,Hinckley,OH,44233,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+39177,PROV122824361,1216530361,122466511,Miles,Isabella,207ZH0000X,null,null,null,null,Cleveland,OH,44120,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39181,PROV122824511,1216531711,122466511,Mccarthy,Darcy,207ZN0500X,null,null,null,null,Cleveland,OH,44128,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39182,PROV122824561,1216532161,122468011,Calhoun,Nona,207ZP0007X,null,null,null,null,Madison,OH,44057,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+39195,PROV122824611,1216532611,122466511,Garner,Celia,207ZP0101X,null,null,null,null,Cleveland,OH,44135,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39204,PROV122824661,1216533061,122421911,Zamora,Stefan,207ZP0102X,null,null,null,null,Sheffield Lake,OH,44054,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39216,PROV122824661,1216533061,122438811,Zamora,Stefan,207ZP0102X,null,null,null,null,Sheffield Lake,OH,44054,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39217,PROV122824661,1216533061,122439311,Zamora,Stefan,207ZP0102X,null,null,null,null,Sheffield Lake,OH,44054,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39222,PROV122824661,1216533061,122466511,Zamora,Stefan,207ZP0102X,null,null,null,null,Sheffield Lake,OH,44054,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39225,PROV122824661,1216533061,122468011,Zamora,Stefan,207ZP0102X,null,null,null,null,Sheffield Lake,OH,44054,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+39236,PROV122824761,1216533961,122466511,Hanson,Kelly,207ZP0105X,null,null,null,null,Perry,OH,44081,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39246,PROV122824861,1216534861,122420011,Fowler,Tommie,208000000X,null,null,null,null,Parkman,OH,44080,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39248,PROV122824861,1216534861,122421911,Fowler,Tommie,208000000X,null,null,null,null,Parkman,OH,44080,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39254,PROV122824861,1216534861,122428411,Fowler,Tommie,208000000X,null,null,null,null,Parkman,OH,44080,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39262,PROV122824861,1216534861,122438811,Fowler,Tommie,208000000X,null,null,null,null,Parkman,OH,44080,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39269,PROV122824861,1216534861,122466511,Fowler,Tommie,208000000X,null,null,null,null,Parkman,OH,44080,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39284,PROV122824911,1216535311,122421911,Poole,Braxton,2080A0000X,null,null,null,null,Sharon Center,OH,44274,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39289,PROV122824911,1216535311,122466511,Poole,Braxton,2080A0000X,null,null,null,null,Sharon Center,OH,44274,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39306,PROV122825361,1216539361,122421911,Kerr,Claudine,2080P0202X,null,null,null,null,Lorain,OH,44053,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39310,PROV122825361,1216539361,122466511,Kerr,Claudine,2080P0202X,null,null,null,null,Lorain,OH,44053,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39316,PROV122825411,1216539811,122466511,Cannon,Trisha,2080P0203X,null,null,null,null,Avon,OH,44011,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39322,PROV122825511,1216540711,122466511,Shepherd,Rosanne,2080P0205X,null,null,null,null,Cleveland,OH,44126,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39325,PROV122825561,1216541161,122421911,Rocha,Socorro,2080P0206X,null,null,null,null,Cleveland,OH,44129,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39328,PROV122825561,1216541161,122466511,Rocha,Socorro,2080P0206X,null,null,null,null,Cleveland,OH,44129,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39333,PROV122825611,1216541611,122466511,Page,Casey,2080P0207X,null,null,null,null,Cleveland,OH,44114,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39336,PROV122825661,1216542061,122421911,Nichols,King,2080P0208X,null,null,null,null,Cleveland,OH,44119,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39342,PROV122825711,1216542511,122438811,Dixon,Irene,2080P0210X,null,null,null,null,Cleveland,OH,44129,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39361,PROV122826061,1216545661,122421911,Payne,Veronica,208100000X,null,null,null,null,Cleveland,OH,44144,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39364,PROV122826061,1216545661,122428411,Payne,Veronica,208100000X,null,null,null,null,Cleveland,OH,44144,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39371,PROV122826061,1216545661,122438811,Payne,Veronica,208100000X,null,null,null,null,Cleveland,OH,44144,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39379,PROV122826061,1216545661,122466511,Payne,Veronica,208100000X,null,null,null,null,Cleveland,OH,44144,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39385,PROV122826111,1216546111,122466511,Hicks,Graciela,2081H0002X,null,null,null,null,Grafton,OH,44044,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39396,PROV122826361,1216548361,122428411,Hayes,Zelma,2081P2900X,null,null,null,null,Chagrin Falls,OH,44022,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39400,PROV122826361,1216548361,122466511,Hayes,Zelma,2081P2900X,null,null,null,null,Chagrin Falls,OH,44022,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39407,PROV122826461,1216549261,122421911,Boyd,Casey,208200000X,null,null,null,null,Wellington,OH,44090,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39409,PROV122826461,1216549261,122428411,Boyd,Casey,208200000X,null,null,null,null,Wellington,OH,44090,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39415,PROV122826461,1216549261,122466511,Boyd,Casey,208200000X,null,null,null,null,Wellington,OH,44090,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39419,PROV122826811,1216552411,122466511,Clay,Carmella,2083P0500X,null,null,null,null,Cleveland,OH,44126,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39423,PROV122826861,1216552861,122466511,Shepherd,Wilmer,2083P0901X,null,null,null,null,Wickliffe,OH,44092,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39428,PROV122827011,1216554211,122466511,Vo,Fletcher,2083X0100X,null,null,null,null,Painesville,OH,44077,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39444,PROV122827461,1216558261,122421911,Hammond,Elsa,2084N0400X,null,null,null,null,Cleveland,OH,44112,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39449,PROV122827461,1216558261,122428411,Hammond,Elsa,2084N0400X,null,null,null,null,Cleveland,OH,44112,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39454,PROV122827461,1216558261,122439311,Hammond,Elsa,2084N0400X,null,null,null,null,Cleveland,OH,44112,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39461,PROV122827461,1216558261,122466511,Hammond,Elsa,2084N0400X,null,null,null,null,Cleveland,OH,44112,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39482,PROV122827511,1216558711,122466511,Maxwell,Latasha,2084N0402X,null,null,null,null,Cleveland,OH,44134,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39492,PROV122827761,1216560961,122421911,Hardin,Loraine,2084P0800X,null,null,null,null,Cleveland,OH,44121,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39501,PROV122827761,1216560961,122438811,Hardin,Loraine,2084P0800X,null,null,null,null,Cleveland,OH,44121,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39502,PROV122827761,1216560961,122439311,Hardin,Loraine,2084P0800X,null,null,null,null,Cleveland,OH,44121,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39514,PROV122827761,1216560961,122466511,Hardin,Loraine,2084P0800X,null,null,null,null,Cleveland,OH,44121,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39518,PROV122827761,1216560961,122470211,Hardin,Loraine,2084P0800X,null,null,null,null,Cleveland,OH,44121,null,1222347061,null,null,null,null,null,null,null,null,null,null,null
+39528,PROV122827811,1216561411,122421911,Berry,Weldon,2084P0802X,null,null,null,null,Lorain,OH,44055,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39529,PROV122827811,1216561411,122466511,Berry,Weldon,2084P0802X,null,null,null,null,Lorain,OH,44055,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39533,PROV122827861,1216561861,122421911,Romero,Annette,2084P0804X,null,null,null,null,Independence,OH,44131,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39539,PROV122827861,1216561861,122466511,Romero,Annette,2084P0804X,null,null,null,null,Independence,OH,44131,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39552,PROV122827911,1216562311,122466511,Leach,Jaxson,2084P0805X,null,null,null,null,Cleveland,OH,44108,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39557,PROV122828061,1216563661,122421911,Mckinney,Lydia,2084S0012X,null,null,null,null,Huntsburg,OH,44046,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39564,PROV122828061,1216563661,122466511,Mckinney,Lydia,2084S0012X,null,null,null,null,Huntsburg,OH,44046,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39568,PROV122828111,1216564111,122466511,Mullen,Lucia,2084V0102X,null,null,null,null,Cleveland,OH,44110,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39571,PROV122828211,1216565011,122438811,Castro,Owen,2085D0003X,null,null,null,null,Lorain,OH,44053,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39573,PROV122828211,1216565011,122466511,Castro,Owen,2085D0003X,null,null,null,null,Lorain,OH,44053,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39581,PROV122828461,1216567261,122466511,Hayes,Ernestine,2085R0001X,null,null,null,null,Independence,OH,44131,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39587,PROV122828511,1216567711,122420011,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39591,PROV122828511,1216567711,122421911,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39598,PROV122828511,1216567711,122428411,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39604,PROV122828511,1216567711,122438811,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39606,PROV122828511,1216567711,122439311,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39615,PROV122828511,1216567711,122466511,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39618,PROV122828511,1216567711,122468011,Farrell,Simone,2085R0202X,null,null,null,null,Medina,OH,44256,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+39633,PROV122828561,1216568161,122438811,Vang,Cory,2085R0203X,null,null,null,null,Kipton,OH,44049,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39640,PROV122828611,1216568611,122421911,Robbins,Iva,2085R0204X,null,null,null,null,Montville,OH,44064,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39643,PROV122828611,1216568611,122438811,Robbins,Iva,2085R0204X,null,null,null,null,Montville,OH,44064,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39646,PROV122828611,1216568611,122439311,Robbins,Iva,2085R0204X,null,null,null,null,Montville,OH,44064,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39650,PROV122828611,1216568611,122466511,Robbins,Iva,2085R0204X,null,null,null,null,Montville,OH,44064,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39658,PROV122828711,1216569511,122438811,Sutton,Meagan,2085U0001X,null,null,null,null,Brookpark,OH,44142,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39663,PROV122828761,1216569961,122420011,Sosa,Homer,208600000X,null,null,null,null,Euclid,OH,44132,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39665,PROV122828761,1216569961,122421911,Sosa,Homer,208600000X,null,null,null,null,Euclid,OH,44132,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39671,PROV122828761,1216569961,122428411,Sosa,Homer,208600000X,null,null,null,null,Euclid,OH,44132,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39674,PROV122828761,1216569961,122439311,Sosa,Homer,208600000X,null,null,null,null,Euclid,OH,44132,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39681,PROV122828761,1216569961,122466511,Sosa,Homer,208600000X,null,null,null,null,Euclid,OH,44132,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39693,PROV122828861,1216570861,122421911,Bennett,Bobbi,2086S0102X,null,null,null,null,Cleveland,OH,44120,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39695,PROV122828861,1216570861,122439311,Bennett,Bobbi,2086S0102X,null,null,null,null,Cleveland,OH,44120,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39699,PROV122828861,1216570861,122466511,Bennett,Bobbi,2086S0102X,null,null,null,null,Cleveland,OH,44120,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39704,PROV122828961,1216571761,122439311,Herrera,Sherman,2086S0120X,null,null,null,null,Elyria,OH,44035,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39709,PROV122829011,1216572211,122421911,Rice,Junior,2086S0122X,null,null,null,null,Cleveland,OH,44106,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39713,PROV122829011,1216572211,122438811,Rice,Junior,2086S0122X,null,null,null,null,Cleveland,OH,44106,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39715,PROV122829011,1216572211,122466511,Rice,Junior,2086S0122X,null,null,null,null,Cleveland,OH,44106,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39719,PROV122829061,1216572661,122421911,Davis,Marsha,2086S0127X,null,null,null,null,Euclid,OH,44123,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39720,PROV122829061,1216572661,122439311,Davis,Marsha,2086S0127X,null,null,null,null,Euclid,OH,44123,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39723,PROV122829061,1216572661,122466511,Davis,Marsha,2086S0127X,null,null,null,null,Euclid,OH,44123,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39727,PROV122829111,1216573111,122421911,Richmond,Whitney,2086S0129X,null,null,null,null,Grand River,OH,44045,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39731,PROV122829111,1216573111,122439311,Richmond,Whitney,2086S0129X,null,null,null,null,Grand River,OH,44045,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39735,PROV122829111,1216573111,122466511,Richmond,Whitney,2086S0129X,null,null,null,null,Grand River,OH,44045,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39747,PROV122829161,1216573561,122439311,Ramirez,Mateo,2086X0206X,null,null,null,null,Strongsville,OH,44149,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39751,PROV122829161,1216573561,122466511,Ramirez,Mateo,2086X0206X,null,null,null,null,Strongsville,OH,44149,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39756,PROV122829211,1216574011,122420011,Heath,Matias,208800000X,null,null,null,null,Grand River,OH,44045,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39758,PROV122829211,1216574011,122421911,Heath,Matias,208800000X,null,null,null,null,Grand River,OH,44045,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39764,PROV122829211,1216574011,122439311,Heath,Matias,208800000X,null,null,null,null,Grand River,OH,44045,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39769,PROV122829211,1216574011,122466511,Heath,Matias,208800000X,null,null,null,null,Grand River,OH,44045,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39782,PROV122829361,1216575361,122421911,Enriquez,Sue,208C00000X,null,null,null,null,Medina,OH,44256,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39785,PROV122829361,1216575361,122439311,Enriquez,Sue,208C00000X,null,null,null,null,Medina,OH,44256,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39789,PROV122829361,1216575361,122466511,Enriquez,Sue,208C00000X,null,null,null,null,Medina,OH,44256,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39795,PROV122829411,1216575811,122420011,Johnston,Della,208D00000X,null,null,null,null,Cleveland,OH,44103,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39798,PROV122829411,1216575811,122421911,Johnston,Della,208D00000X,null,null,null,null,Cleveland,OH,44103,1222129711|122421911|PROV123446511,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39801,PROV122829411,1216575811,122438811,Johnston,Della,208D00000X,null,null,null,null,Cleveland,OH,44103,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+39805,PROV122829411,1216575811,122466511,Johnston,Della,208D00000X,null,null,null,null,Cleveland,OH,44103,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39815,PROV122829461,1216576261,122421911,Gallagher,Mark,208G00000X,null,null,null,null,Huntsburg,OH,44046,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39818,PROV122829461,1216576261,122439311,Gallagher,Mark,208G00000X,null,null,null,null,Huntsburg,OH,44046,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39823,PROV122829461,1216576261,122466511,Gallagher,Mark,208G00000X,null,null,null,null,Huntsburg,OH,44046,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39829,PROV122829511,1216576711,122420011,Mayo,Leona,208M00000X,null,null,null,null,Chardon,OH,44024,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39831,PROV122829511,1216576711,122421911,Mayo,Leona,208M00000X,null,null,null,null,Chardon,OH,44024,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39837,PROV122829511,1216576711,122439311,Mayo,Leona,208M00000X,null,null,null,null,Chardon,OH,44024,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39846,PROV122829511,1216576711,122466511,Mayo,Leona,208M00000X,null,null,null,null,Chardon,OH,44024,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39854,PROV122829611,1216577611,122420011,Davila,Preston,208VP0000X,null,null,null,null,Cleveland,OH,44143,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39856,PROV122829611,1216577611,122428411,Davila,Preston,208VP0000X,null,null,null,null,Cleveland,OH,44143,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39859,PROV122829611,1216577611,122466511,Davila,Preston,208VP0000X,null,null,null,null,Cleveland,OH,44143,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39864,PROV122829661,1216578061,122420011,Rodriguez,Byron,208VP0014X,null,null,null,null,Grand River,OH,44045,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39867,PROV122829661,1216578061,122428411,Rodriguez,Byron,208VP0014X,null,null,null,null,Grand River,OH,44045,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39871,PROV122829661,1216578061,122466511,Rodriguez,Byron,208VP0014X,null,null,null,null,Grand River,OH,44045,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39878,PROV122829811,1216579411,122420011,Hanna,Gage,213E00000X,null,null,null,null,Cleveland,OH,44115,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+39879,PROV122829811,1216579411,122421911,Hanna,Gage,213E00000X,null,null,null,null,Cleveland,OH,44115,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39882,PROV122829811,1216579411,122428411,Hanna,Gage,213E00000X,null,null,null,null,Cleveland,OH,44115,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39889,PROV122829811,1216579411,122466511,Hanna,Gage,213E00000X,null,null,null,null,Cleveland,OH,44115,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39905,PROV122829961,1216580761,122466511,Mcguire,Cora,213EP1101X,null,null,null,null,Chardon,OH,44024,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39912,PROV122830111,1216582111,122421911,Wood,Margaret,213ES0103X,null,null,null,null,Broadview Heights,OH,44147,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39914,PROV122830111,1216582111,122428411,Wood,Margaret,213ES0103X,null,null,null,null,Broadview Heights,OH,44147,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39922,PROV122830111,1216582111,122466511,Wood,Margaret,213ES0103X,null,null,null,null,Broadview Heights,OH,44147,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39935,PROV122830161,1216582561,122466511,Esquivel,Gwendolyn,213ES0131X,null,null,null,null,Sheffield Lake,OH,44054,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39945,PROV122830861,1216588861,122421911,Phillips,Edmond,225100000X,null,null,null,null,Sheffield Lake,OH,44054,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+39948,PROV122830861,1216588861,122428411,Phillips,Edmond,225100000X,null,null,null,null,Sheffield Lake,OH,44054,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39951,PROV122830861,1216588861,122439311,Phillips,Edmond,225100000X,null,null,null,null,Sheffield Lake,OH,44054,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+39964,PROV122830861,1216588861,122466511,Phillips,Edmond,225100000X,null,null,null,null,Sheffield Lake,OH,44054,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39979,PROV122832111,1216600111,122428411,Wiley,Janelle,225X00000X,null,null,null,null,Cleveland,OH,44125,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39988,PROV122832111,1216600111,122466511,Wiley,Janelle,225X00000X,null,null,null,null,Cleveland,OH,44125,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+39993,PROV122832361,1216602361,122428411,Valenzuela,Jewel,225XH1200X,null,null,null,null,Cleveland,OH,44105,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+39999,PROV122834311,1216619911,122421911,Sanchez,Johnny,231H00000X,null,null,null,null,Brunswick,OH,44212,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40009,PROV122834311,1216619911,122466511,Sanchez,Johnny,231H00000X,null,null,null,null,Brunswick,OH,44212,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40018,PROV122834611,1216622611,122421911,Keller,Kayla,235Z00000X,null,null,null,null,Cleveland,OH,44135,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40029,PROV122834611,1216622611,122466511,Keller,Kayla,235Z00000X,null,null,null,null,Cleveland,OH,44135,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40039,PROV122834861,1216624861,122466511,Frost,Pauline,246Q00000X,null,null,null,null,Valley City,OH,44280,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40044,PROV122838061,1216653661,122466511,Perez,Anita,251B00000X,null,null,null,null,Cleveland,OH,44130,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40052,PROV122839211,1216664011,122466511,Byrd,Brian,261QC1500X,null,null,null,null,Cleveland,OH,44101,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40065,PROV122842261,1216691461,122428411,Preston,Christina,282N00000X,null,null,null,null,Euclid,OH,44123,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40068,PROV122842261,1216691461,122466511,Preston,Christina,282N00000X,null,null,null,null,Euclid,OH,44123,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40070,PROV122842911,1216697311,122468011,Gillespie,Annmarie,291U00000X,null,null,null,null,Cleveland,OH,44135,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40083,PROV122846161,1216726561,122420011,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40090,PROV122846161,1216726561,122421911,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40106,PROV122846161,1216726561,122428411,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40123,PROV122846161,1216726561,122438811,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40125,PROV122846161,1216726561,122439311,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40144,PROV122846161,1216726561,122466511,Romero,Sandy,363A00000X,null,null,null,null,Avon Lake,OH,44012,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40169,PROV122846311,1216727911,122420011,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40173,PROV122846311,1216727911,122421911,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40188,PROV122846311,1216727911,122428411,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40195,PROV122846311,1216727911,122438811,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40196,PROV122846311,1216727911,122439311,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40209,PROV122846311,1216727911,122466511,Erickson,Hugh,363L00000X,null,null,null,null,Cleveland,OH,44113,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40233,PROV122846411,1216728811,122421911,Lloyd,Matt,363LA2200X,null,null,null,null,North Royalton,OH,44133,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40243,PROV122846411,1216728811,122428411,Lloyd,Matt,363LA2200X,null,null,null,null,North Royalton,OH,44133,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40248,PROV122846411,1216728811,122438811,Lloyd,Matt,363LA2200X,null,null,null,null,North Royalton,OH,44133,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40250,PROV122846411,1216728811,122439311,Lloyd,Matt,363LA2200X,null,null,null,null,North Royalton,OH,44133,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40261,PROV122846411,1216728811,122466511,Lloyd,Matt,363LA2200X,null,null,null,null,North Royalton,OH,44133,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40276,PROV122846461,1216729261,122421911,Rivers,Benita,363LC0200X,null,null,null,null,Solon,OH,44139,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40278,PROV122846461,1216729261,122466511,Rivers,Benita,363LC0200X,null,null,null,null,Solon,OH,44139,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40280,PROV122846511,1216729711,122421911,Person,Sarah,363LC1500X,null,null,null,null,Cleveland,OH,44110,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40288,PROV122846561,1216730161,122420011,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40293,PROV122846561,1216730161,122421911,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40311,PROV122846561,1216730161,122428411,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40324,PROV122846561,1216730161,122438811,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40325,PROV122846561,1216730161,122439311,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40341,PROV122846561,1216730161,122466511,Hurley,Simon,363LF0000X,null,null,null,null,Chagrin Falls,OH,44022,1222330411|122466511|PROV123468811,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40363,PROV122846661,1216731061,122466511,Truong,Olga,363LN0000X,null,null,null,null,Avon Lake,OH,44012,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40366,PROV122846711,1216731511,122466511,Barrera,Myron,363LN0005X,null,null,null,null,Avon,OH,44011,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40374,PROV122846861,1216732861,122421911,Alvarado,Julian,363LP0808X,null,null,null,null,Cleveland,OH,44104,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40380,PROV122846861,1216732861,122439311,Alvarado,Julian,363LP0808X,null,null,null,null,Cleveland,OH,44104,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40389,PROV122846861,1216732861,122466511,Alvarado,Julian,363LP0808X,null,null,null,null,Cleveland,OH,44104,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40398,PROV122846961,1216733761,122421911,Cox,Susan,363LP2300X,null,null,null,null,Cleveland,OH,44106,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40400,PROV122846961,1216733761,122439311,Cox,Susan,363LP2300X,null,null,null,null,Cleveland,OH,44106,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40402,PROV122846961,1216733761,122466511,Cox,Susan,363LP2300X,null,null,null,null,Cleveland,OH,44106,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40407,PROV122847011,1216734211,122466511,Velazquez,Jewell,363LS0200X,null,null,null,null,Medina,OH,44256,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40411,PROV122847061,1216734661,122421911,Miranda,Josefa,363LW0102X,null,null,null,null,Independence,OH,44131,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40420,PROV122847061,1216734661,122466511,Miranda,Josefa,363LW0102X,null,null,null,null,Independence,OH,44131,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40430,PROV122847111,1216735111,122421911,Webb,Shannon,363LX0001X,null,null,null,null,Westlake,OH,44145,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40438,PROV122847111,1216735111,122466511,Webb,Shannon,363LX0001X,null,null,null,null,Westlake,OH,44145,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40442,PROV122847211,1216736011,122421911,Barrera,Mark,364S00000X,null,null,null,null,Avon Lake,OH,44012,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40444,PROV122847211,1216736011,122466511,Barrera,Mark,364S00000X,null,null,null,null,Avon Lake,OH,44012,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40448,PROV122847511,1216738711,122466511,Dixon,Bennie,364SE0003X,null,null,null,null,Wellington,OH,44090,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40450,PROV122847611,1216739611,122421911,Truong,Adrian,364SF0001X,null,null,null,null,Cleveland,OH,44112,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40457,PROV122848811,1216750411,122466511,Arroyo,Ron,364SX0200X,null,null,null,null,North Royalton,OH,44133,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40460,PROV122848961,1216751761,122421911,Daniel,Colt,367A00000X,null,null,null,null,Lorain,OH,44053,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40464,PROV122848961,1216751761,122428411,Daniel,Colt,367A00000X,null,null,null,null,Lorain,OH,44053,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40468,PROV122848961,1216751761,122466511,Daniel,Colt,367A00000X,null,null,null,null,Lorain,OH,44053,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40476,PROV122849011,1216752211,122420011,Tucker,Amparo,367H00000X,null,null,null,null,Independence,OH,44131,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40489,PROV122849961,1216760761,122420011,Jennings,Tate,390200000X,null,null,null,null,Parkman,OH,44080,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40493,PROV122849961,1216760761,122421911,Jennings,Tate,390200000X,null,null,null,null,Parkman,OH,44080,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40508,PROV122849961,1216760761,122438811,Jennings,Tate,390200000X,null,null,null,null,Parkman,OH,44080,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40509,PROV122849961,1216760761,122439311,Jennings,Tate,390200000X,null,null,null,null,Parkman,OH,44080,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40519,PROV122849961,1216760761,122466511,Jennings,Tate,390200000X,null,null,null,null,Parkman,OH,44080,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40531,PROV122850061,1216761661,122420011,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40534,PROV122850061,1216761661,122421911,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40546,PROV122850061,1216761661,122438811,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40547,PROV122850061,1216761661,122439311,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40560,PROV122850061,1216761661,122466511,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40563,PROV122850061,1216761661,122468011,Graves,Melvin,null,null,null,null,null,Solon,OH,44139,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40579,PROV122891811,1217137411,122420011,Krueger,Adriana,null,null,null,null,null,Perry,OH,44081,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40582,PROV122891811,1217137411,122421911,Krueger,Adriana,null,null,null,null,null,Perry,OH,44081,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40588,PROV122891811,1217137411,122428411,Krueger,Adriana,null,null,null,null,null,Perry,OH,44081,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40591,PROV122891811,1217137411,122438811,Krueger,Adriana,null,null,null,null,null,Perry,OH,44081,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40602,PROV122891811,1217137411,122466511,Krueger,Adriana,null,null,null,null,null,Perry,OH,44081,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40617,PROV122933561,1217513161,122420011,Pham,Kris,null,null,null,null,null,Cleveland,OH,44126,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40621,PROV122933561,1217513161,122421911,Pham,Kris,null,null,null,null,null,Cleveland,OH,44126,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40630,PROV122933561,1217513161,122438811,Pham,Kris,null,null,null,null,null,Cleveland,OH,44126,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40644,PROV122933561,1217513161,122466511,Pham,Kris,null,null,null,null,null,Cleveland,OH,44126,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40647,PROV122933561,1217513161,122468011,Pham,Kris,null,null,null,null,null,Cleveland,OH,44126,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40664,PROV122975311,1217888911,122420011,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40666,PROV122975311,1217888911,122421911,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40672,PROV122975311,1217888911,122428411,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40674,PROV122975311,1217888911,122438811,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40687,PROV122975311,1217888911,122466511,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40691,PROV122975311,1217888911,122468011,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40692,PROV122975311,1217888911,122472011,Lugo,Lacy,null,null,null,null,null,Berea,OH,44017,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+40705,PROV123017061,1218264661,122420011,Booth,Juanita,null,null,null,null,null,Cleveland,OH,44102,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40708,PROV123017061,1218264661,122421911,Booth,Juanita,null,null,null,null,null,Cleveland,OH,44102,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40717,PROV123017061,1218264661,122438811,Booth,Juanita,null,null,null,null,null,Cleveland,OH,44102,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40731,PROV123017061,1218264661,122466511,Booth,Juanita,null,null,null,null,null,Cleveland,OH,44102,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40746,PROV123058811,1218640411,122420011,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40748,PROV123058811,1218640411,122421911,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40752,PROV123058811,1218640411,122428411,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40753,PROV123058811,1218640411,122438811,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40754,PROV123058811,1218640411,122439311,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40762,PROV123058811,1218640411,122466511,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40765,PROV123058811,1218640411,122468011,Torres,Keenan,null,null,null,null,null,Cleveland,OH,44126,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40778,PROV123100561,1219016161,122420011,Lam,Buddy,null,null,null,null,null,North Royalton,OH,44133,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40781,PROV123100561,1219016161,122421911,Lam,Buddy,null,null,null,null,null,North Royalton,OH,44133,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40789,PROV123100561,1219016161,122438811,Lam,Buddy,null,null,null,null,null,North Royalton,OH,44133,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40790,PROV123100561,1219016161,122439311,Lam,Buddy,null,null,null,null,null,North Royalton,OH,44133,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40800,PROV123100561,1219016161,122466511,Lam,Buddy,null,null,null,null,null,North Royalton,OH,44133,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40815,PROV123142311,1219391911,122420011,Freeman,Issac,null,null,null,null,null,Lodi,OH,44254,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40817,PROV123142311,1219391911,122421911,Freeman,Issac,null,null,null,null,null,Lodi,OH,44254,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40827,PROV123142311,1219391911,122438811,Freeman,Issac,null,null,null,null,null,Lodi,OH,44254,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40838,PROV123142311,1219391911,122466511,Freeman,Issac,null,null,null,null,null,Lodi,OH,44254,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40841,PROV123142311,1219391911,122468011,Freeman,Issac,null,null,null,null,null,Lodi,OH,44254,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40858,PROV123184061,1219767661,122420011,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40861,PROV123184061,1219767661,122421911,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40865,PROV123184061,1219767661,122428411,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+40870,PROV123184061,1219767661,122438811,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40871,PROV123184061,1219767661,122439311,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+40885,PROV123184061,1219767661,122466511,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40888,PROV123184061,1219767661,122468011,Hayden,Freddy,null,null,null,null,null,Cleveland,OH,44126,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40904,PROV123225811,1220143411,122420011,Mendoza,Emilio,null,null,null,null,null,Lorain,OH,44053,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40906,PROV123225811,1220143411,122421911,Mendoza,Emilio,null,null,null,null,null,Lorain,OH,44053,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40913,PROV123225811,1220143411,122438811,Mendoza,Emilio,null,null,null,null,null,Lorain,OH,44053,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40923,PROV123225811,1220143411,122466511,Mendoza,Emilio,null,null,null,null,null,Lorain,OH,44053,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40926,PROV123225811,1220143411,122468011,Mendoza,Emilio,null,null,null,null,null,Lorain,OH,44053,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+40941,PROV123267561,1220519161,122420011,Ramirez,Brianna,null,null,null,null,null,Brecksville,OH,44141,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40945,PROV123267561,1220519161,122421911,Ramirez,Brianna,null,null,null,null,null,Brecksville,OH,44141,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40957,PROV123267561,1220519161,122438811,Ramirez,Brianna,null,null,null,null,null,Brecksville,OH,44141,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+40972,PROV123267561,1220519161,122466511,Ramirez,Brianna,null,null,null,null,null,Brecksville,OH,44141,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+40976,PROV123267561,1220519161,122472011,Ramirez,Brianna,null,null,null,null,null,Brecksville,OH,44141,null,1222355161,null,null,null,null,null,null,null,null,null,null,null
+40990,PROV123309311,1220894911,122420011,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+40993,PROV123309311,1220894911,122421911,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+40998,PROV123309311,1220894911,122428411,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+41001,PROV123309311,1220894911,122438811,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+41002,PROV123309311,1220894911,122439311,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+41014,PROV123309311,1220894911,122466511,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+41018,PROV123309311,1220894911,122468011,Johnston,Messiah,null,null,null,null,null,Brecksville,OH,44141,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+41029,PROV123351061,1221270661,122420011,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+41031,PROV123351061,1221270661,122421911,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+41039,PROV123351061,1221270661,122438811,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+41040,PROV123351061,1221270661,122439311,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+41052,PROV123351061,1221270661,122466511,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+41055,PROV123351061,1221270661,122468011,Summers,Jeffrey,null,null,null,null,null,Chagrin Falls,OH,44022,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+41071,PROV123392811,1221646411,122420011,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222121161,null,null,null,null,null,null,null,null,null,null,null
+41074,PROV123392811,1221646411,122421911,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222129711,null,null,null,null,null,null,null,null,null,null,null
+41078,PROV123392811,1221646411,122428411,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222158961,null,null,null,null,null,null,null,null,null,null,null
+41082,PROV123392811,1221646411,122438811,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222205761,null,null,null,null,null,null,null,null,null,null,null
+41083,PROV123392811,1221646411,122439311,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222208011,null,null,null,null,null,null,null,null,null,null,null
+41091,PROV123392811,1221646411,122466511,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222330411,null,null,null,null,null,null,null,null,null,null,null
+41094,PROV123392811,1221646411,122468011,Jennings,Jeremiah,null,null,null,null,null,Cleveland,OH,44121,null,1222337161,null,null,null,null,null,null,null,null,null,null,null
+41162,PROV123445561,1222121161,122420011,Brownlee Park Physician Group,null,207L00000X,null,null,null,null,Cleveland,OH,44104,null,null,null,null,null,null,null,null,null,null,null,null,null
+41170,PROV123446511,1222129711,122421911,Elm Springs Physician Group,null,207Q00000X,null,null,null,null,Chagrin Falls,OH,44022,null,null,null,null,null,null,null,null,null,null,null,null,null
+41203,PROV123449761,1222158961,122428411,Needham Physician Group,null,207X00000X,null,null,null,null,Middlefield,OH,44062,null,null,null,null,null,null,null,null,null,null,null,null,null
+41242,PROV123454961,1222205761,122438811,Bright Physician Group,null,2085R0202X,null,null,null,null,Madison,OH,44057,null,null,null,null,null,null,null,null,null,null,null,null,null
+41245,PROV123455211,1222208011,122439311,Rising Star Physician Group,null,208600000X,null,null,null,null,Painesville,OH,44077,null,null,null,null,null,null,null,null,null,null,null,null,null
+41317,PROV123468811,1222330411,122466511,Beaulieu Medical Group,null,282N00000X,null,null,null,null,Beachwood,OH,44122,null,null,null,null,null,null,null,null,null,null,null,null,null
+41323,PROV123469561,1222337161,122468011,Belle Fourche Techologies Inc,null,291U00000X,null,null,null,null,Cleveland,OH,44124,null,null,null,null,null,null,null,null,null,null,null,null,null
+41330,PROV123470661,1222347061,122470211,Narragansett Group,null,320800000X,null,null,null,null,Montville,OH,44064,null,null,null,null,null,null,null,null,null,null,null,null,null
+41337,PROV123471561,1222355161,122472011,Copiague Medical Inc,null,332H00000X,null,null,null,null,Lagrange,OH,44050,null,null,null,null,null,null,null,null,null,null,null,null,null
+41403,PROV123838511,1225657711,123205911,Jarrell Clinic,null,261Q00000X,null,null,null,null,Westlake,OH,44145,null,null,null,null,null,null,null,null,null,null,null,null,null
+41425,PROV123842111,1225690111,123213111,Northvue Hospital,null,282N00000X,null,null,null,null,Cleveland,OH,44114,null,null,null,null,null,null,null,null,null,null,null,null,null
