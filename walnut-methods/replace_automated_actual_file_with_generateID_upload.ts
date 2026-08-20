@@ -5,16 +5,16 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate Member ID Replace and Upload
- * description: Generate unique member ID, replace {{member_id}} in 3 files ${filePath1} ${filePath2} ${filePath3} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword} storing ID in $[memberId]
+ * description: Generate unique member ID, replace {{member_id}} in 3 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword} storing ID in $[memberId]
  * actionType: custom_generate_member_replace_upload
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
 export async function generateMemberReplaceUpload(ctx: WalnutContext) {
-  // ctx.args[0] = filePath1 (from ${filePath1})
-  // ctx.args[1] = filePath2 (from ${filePath2})
-  // ctx.args[2] = filePath3 (from ${filePath3})
+  // ctx.args[0] = actualfilePath1 (from ${actualfilePath1})
+  // ctx.args[1] = actualfilePath2 (from ${actualfilePath2})
+  // ctx.args[2] = actualfilePath3 (from ${actualfilePath3})
   // ctx.args[3] = SFTP host (from ${sftpHost})
   // ctx.args[4] = SFTP port (from ${sftpPort})
   // ctx.args[5] = SFTP username (from ${sftpUsername})
