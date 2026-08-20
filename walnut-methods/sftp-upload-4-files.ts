@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: SFTP Upload 4 Files
+ * name: SFTP Upload 4 Original Files
  * description: Upload 4 files ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
  * actionType: custom_sftp_upload_4_files
  * context: shared
