@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate Member ID Replace and Upload
- * description: Generate unique member ID, replace {{member_id}} in 3 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} and upload to /TO_AVER/ via SFTP storing ID in $[memberId]
+ * description: Generate unique member ID, replace {{member_id}} in 3 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword} storing ID in $[memberId]
  * actionType: custom_generate_member_replace_upload
  * context: shared
  * needsLocator: false
@@ -18,11 +18,11 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[3] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2]];
-  const memberIdVarName = ctx.args[3];
-  const host = ctx.params.sftpHost;
-  const port = ctx.params.sftpPort || '22';
-  const username = ctx.params.sftpUsername;
-  const password = ctx.params.sftpPassword;
+  const host = ctx.args[3];
+  const port = ctx.args[4] || '22';
+  const username = ctx.args[5];
+  const password = ctx.args[6];
+  const memberIdVarName = ctx.args[7];
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
