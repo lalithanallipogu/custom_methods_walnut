@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate Member ID Replace and Upload
- * description: Generate unique member ID, replace {{member_id}} in 3 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing ID in $[memberId]
+ * description: Generate unique member ID, replace {{member_id}} in 4 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} ${actualfilePath4} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing ID in $[memberId]
  * actionType: custom_generate_member_replace_upload
  * context: shared
  * needsLocator: false
@@ -15,14 +15,19 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[0] = actualfilePath1 (from ${actualfilePath1})
   // ctx.args[1] = actualfilePath2 (from ${actualfilePath2})
   // ctx.args[2] = actualfilePath3 (from ${actualfilePath3})
-  // ctx.args[3] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
+  // ctx.args[3] = actualfilePath4 (from ${actualfilePath4})
+  // ctx.args[4] = SFTP host (from ${sftpHost})
+  // ctx.args[5] = SFTP port (from ${sftpPort})
+  // ctx.args[6] = SFTP username (from ${sftpUsername})
+  // ctx.args[7] = SFTP password (from ${sftpPassword})
+  // ctx.args[8] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
 
-  const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2]];
-  const host = ctx.args[3];
-  const port = ctx.args[4] || '22';
-  const username = ctx.args[5];
-  const password = ctx.args[6];
-  const memberIdVarName = ctx.args[7];
+  const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
+  const host = ctx.args[4];
+  const port = ctx.args[5] || '22';
+  const username = ctx.args[6];
+  const password = ctx.args[7];
+  const memberIdVarName = ctx.args[8];
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
@@ -49,19 +54,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   const tempFiles: string[] = [];
   const uploadPairs: { local: string; remote: string }[] = [];
 
-  // Generate timestamp: current date shifted 2670 days forward (YYYYMMDDHHmmss) + epoch millis
-  const now = new Date();
-  const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
-  const yyyy = shifted.getFullYear().toString();
-  const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
-  const dd = shifted.getDate().toString().padStart(2, '0');
-  const HH = shifted.getHours().toString().padStart(2, '0');
-  const mm = shifted.getMinutes().toString().padStart(2, '0');
-  const ss = shifted.getSeconds().toString().padStart(2, '0');
-  const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
-  const epochMillis = now.getTime().toString();
-
-  // Step 2: Process each of the 3 original files
+  // Step 2: Process each of the 4 original files
   for (let i = 0; i < filePaths.length; i++) {
     const filePath = filePaths[i];
 
@@ -83,7 +76,18 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
     const updatedContent = originalContent.replace(/\{\{member_id\}\}/g, memberId);
 
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
-    // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext
+    // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
+    const fileNow = new Date();
+    const fileShifted = new Date(fileNow.getTime() + 2670 * 24 * 60 * 60 * 1000);
+    const fYyyy = fileShifted.getFullYear().toString();
+    const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
+    const fdd = fileShifted.getDate().toString().padStart(2, '0');
+    const fHH = fileShifted.getHours().toString().padStart(2, '0');
+    const fmm = fileShifted.getMinutes().toString().padStart(2, '0');
+    const fss = fileShifted.getSeconds().toString().padStart(2, '0');
+    const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
+    const fileEpochMillis = fileNow.getTime().toString();
+
     const originalExt = path.extname(filePath);
     const originalBase = path.basename(filePath, originalExt);
     // Strip ALL trailing _digits groups from the original filename (remove old timestamps)
@@ -91,7 +95,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
     while (/_\d+$/.test(baseName)) {
       baseName = baseName.replace(/_\d+$/, '');
     }
-    const fileName = baseName + '_' + dateTimeStamp + '_' + epochMillis + originalExt;
+    const fileName = baseName + '_' + fileDateTimeStamp + '_' + fileEpochMillis + originalExt;
 
     // Write modified content to temp file (original stays untouched)
     const tempFilePath = path.join(tempDir, fileName);
@@ -102,6 +106,9 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
     uploadPairs.push({ local: tempFilePath, remote: remotePath });
 
     ctx.log('Created temp file: ' + fileName);
+
+    // Small delay to ensure unique epoch millis per file
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
 
   if (uploadPairs.length === 0) {
