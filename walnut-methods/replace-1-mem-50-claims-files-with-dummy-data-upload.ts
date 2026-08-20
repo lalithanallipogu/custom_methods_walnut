@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /To_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -24,7 +24,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const port = ctx.args[6] || '22';
   const username = ctx.args[7];
   const password = ctx.args[8];
-  const remoteDirectory = '/To_AVER/';
+  const remoteDirectory = '/TO_AVER/';
 
   if (!dummyId) {
     throw new Error(
