@@ -50,7 +50,7 @@ export async function generateIcmem(ctx: WalnutContext) {
 
   // Generate batch timestamp ONCE (shared across all 4 files as batch ID)
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2674 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2675 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
