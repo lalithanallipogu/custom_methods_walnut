@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /To_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword}
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /To_AVER/ via SFTP
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -17,17 +17,13 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[2] = filePath3 (from ${filePath3})
   // ctx.args[3] = filePath4 (from ${filePath4})
   // ctx.args[4] = dummyId value (from ${dummyId}) — local variable from test data
-  // ctx.args[5] = SFTP host (from ${sftpHost})
-  // ctx.args[6] = SFTP port (from ${sftpPort})
-  // ctx.args[7] = SFTP username (from ${sftpUsername})
-  // ctx.args[8] = SFTP password (from ${sftpPassword})
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const dummyId = ctx.args[4];
-  const host = ctx.args[5];
-  const port = ctx.args[6] || '22';
-  const username = ctx.args[7];
-  const password = ctx.args[8];
+  const host = ctx.params.sftpHost;
+  const port = ctx.params.sftpPort || '22';
+  const username = ctx.params.sftpUsername;
+  const password = ctx.params.sftpPassword;
   const remoteDirectory = '/To_AVER/';
 
   if (!dummyId) {
