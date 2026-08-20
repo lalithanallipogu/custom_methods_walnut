@@ -6,7 +6,7 @@ import { spawnSync } from 'child_process';
 /** @walnut_method
  * name: Generate Member ID Replace and Upload
  * description: Generate unique member ID, replace {{member_id}} in 3 files ${actualfilePath1} ${actualfilePath2} ${actualfilePath3} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} pass ${sftpPassword} storing ID in $[memberId]
- * actionType: custom_generate_member_replace_upload
+ * actionType: custom_generate_id_replace_upload_sftp
  * context: shared
  * needsLocator: false
  * category: File Transfer
