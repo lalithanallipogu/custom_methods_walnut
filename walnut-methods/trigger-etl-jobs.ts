@@ -2,7 +2,7 @@ import type { WalnutContext } from './walnut';
 
 /** @walnut_method
  * name: Trigger 3 ETL Jobs Sequentially
- * description: Post 3 ETL jobs sequentially to ${url} with ${request_body1} and ${request_body2} and ${request_body3} using session $[averSessionId]
+ * description: Post 3 ETL jobs sequentially to ${url} with ${request_body1} and ${request_body2} and ${request_body3} using session $[averSessionId] and batch $[batch]
  * actionType: custom_trigger_3_etl_jobs
  * context: api
  * needsLocator: false
@@ -14,10 +14,16 @@ export async function trigger3EtlJobs(ctx: WalnutContext) {
   const body2 = ctx.args[2];
   const body3 = ctx.args[3];
   const sessionId = ctx.getVariable(ctx.args[4]); // reads runtime variable $[averSessionId]
+  const batch = ctx.getVariable(ctx.args[5]); // reads runtime variable $[batch]
 
   if (!sessionId) {
     throw new Error('AverSessionId not found in runtime variables. Run "Extract Aver Session Cookie" step first.');
   }
+
+  if (!batch) {
+    throw new Error('Batch not found in runtime variables. Ensure the file upload step ran first.');
+  }
+  ctx.log('Using runtime batch: ' + batch);
 
   // Set headers for authentication
   // sessionId is already in format "AverSessionId=<uuid>"
@@ -39,6 +45,11 @@ export async function trigger3EtlJobs(ctx: WalnutContext) {
     { label: 'ETL Job 2', data: parseBody(body2) },
     { label: 'ETL Job 3', data: parseBody(body3) },
   ];
+
+  // Replace batch field in each body with runtime batch value
+  for (const job of bodies) {
+    job.data.batch = batch;
+  }
 
   // Run jobs one by one — each must complete before the next starts
   for (let i = 0; i < bodies.length; i++) {
