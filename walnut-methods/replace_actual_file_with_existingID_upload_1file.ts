@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Member ID in 1 File and Upload
- * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
+ * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing batch in $[batch]
  * actionType: custom_replace_existing_member_upload_1file
  * context: shared
  * needsLocator: false
@@ -18,6 +18,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   // ctx.args[3] = SFTP port (from ${sftpPort})
   // ctx.args[4] = SFTP username (from ${sftpUsername})
   // ctx.args[5] = SFTP password (from ${sftpPassword})
+  // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
   const memberIdVarName = ctx.args[0];
   const filePath = ctx.args[1];
@@ -25,6 +26,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   const port = ctx.args[3] || '22';
   const username = ctx.args[4];
   const password = ctx.args[5];
+  const batchVarName = ctx.args[6];
 
   // Step 1: Retrieve the previously generated member ID from runtime variables
   const memberId = ctx.getVariable(memberIdVarName);
@@ -73,6 +75,13 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   const fss = fileShifted.getSeconds().toString().padStart(2, '0');
   const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
   const fileEpochMillis = fileNow.getTime().toString();
+
+  // Store batch (YYYYMMDD) from this file's timestamp for API jobs
+  if (batchVarName) {
+    const batchValue = fYyyy + fMM + fdd;
+    ctx.setVariable(batchVarName, batchValue);
+    ctx.log('Stored batch: ' + batchValue);
+  }
 
   const originalExt = path.extname(filePath);
   const originalBase = path.basename(filePath, originalExt);

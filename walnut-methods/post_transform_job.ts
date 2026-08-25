@@ -2,29 +2,27 @@ import type { WalnutContext } from './walnut';
 
 /** @walnut_method
  * name: POST Transform Job API
- * description: Generate batch from date shift and POST transform job to ${url} storing batch in $[batch]
+ * description: Read batch from $[batch] and POST transform job to ${url}
  * actionType: custom_post_transform_job
  * context: api
  * needsLocator: false
  * category: API Testing
  */
 export async function postTransformJob(ctx: WalnutContext) {
-  // ctx.args[0] = API URL (from ${url})
-  // ctx.args[1] = "batch" (from $[batch]) — runtime variable name to store generated batch
+  // ctx.args[0] = "batch" (from $[batch]) — runtime variable name to READ the batch from file upload step
+  // ctx.args[1] = API URL (from ${url})
 
-  const url = ctx.args[0];
-  const batchVarName = ctx.args[1];
+  const batchVarName = ctx.args[0];
+  const url = ctx.args[1];
 
-  // Generate batch using date shift logic (current date + 2684 days → YYYYMMDD)
-  const now = new Date();
-  const shifted = new Date(now.getTime() + 2684 * 24 * 60 * 60 * 1000);
-  const yyyy = shifted.getFullYear().toString();
-  const mm = (shifted.getMonth() + 1).toString().padStart(2, '0');
-  const dd = shifted.getDate().toString().padStart(2, '0');
-  const batch = yyyy + mm + dd;
-
-  ctx.log('Generated batch: ' + batch);
-  ctx.setVariable(batchVarName, batch);
+  // Read batch from runtime variable (captured by the file upload method)
+  const batch = ctx.getVariable(batchVarName);
+  if (!batch) {
+    throw new Error(
+      'Batch not found in runtime variable "' + batchVarName + '". Ensure the file upload step ran first.'
+    );
+  }
+  ctx.log('Using batch from file upload: ' + batch);
 
   // Build request body
   const body = {

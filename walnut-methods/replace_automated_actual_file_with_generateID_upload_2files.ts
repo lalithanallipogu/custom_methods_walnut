@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate Member ID Replace and Upload 2 Files
- * description: Generate unique member ID, replace {{member_id}} in 2 files ${memberfilepath} ${claim1path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing ID in $[memberId]
+ * description: Generate unique member ID, replace {{member_id}} in 2 files ${memberfilepath} ${claim1path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing ID in $[memberId] and batch in $[batch]
  * actionType: custom_generate_member_replace_upload_2files
  * context: shared
  * needsLocator: false
@@ -19,6 +19,7 @@ export async function generateMemberReplaceUpload2Files(ctx: WalnutContext) {
   // ctx.args[4] = SFTP username (from ${sftpUsername})
   // ctx.args[5] = SFTP password (from ${sftpPassword})
   // ctx.args[6] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
+  // ctx.args[7] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
   const filePaths = [ctx.args[0], ctx.args[1]];
   const host = ctx.args[2];
@@ -26,6 +27,7 @@ export async function generateMemberReplaceUpload2Files(ctx: WalnutContext) {
   const username = ctx.args[4];
   const password = ctx.args[5];
   const memberIdVarName = ctx.args[6];
+  const batchVarName = ctx.args[7];
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
@@ -85,6 +87,13 @@ export async function generateMemberReplaceUpload2Files(ctx: WalnutContext) {
     const fss = fileShifted.getSeconds().toString().padStart(2, '0');
     const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
     const fileEpochMillis = fileNow.getTime().toString();
+
+    // Store batch (YYYYMMDD) from first file's timestamp for API jobs
+    if (i === 0 && batchVarName) {
+      const batchValue = fYyyy + fMM + fdd;
+      ctx.setVariable(batchVarName, batchValue);
+      ctx.log('Stored batch: ' + batchValue);
+    }
 
     const originalExt = path.extname(filePath);
     const originalBase = path.basename(filePath, originalExt);
