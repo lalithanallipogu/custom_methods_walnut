@@ -4,7 +4,7 @@ import type { WalnutContext } from './walnut';
  * name: POST CDC-BBM Job API
  * description: Read batch from $[batch] and POST cdc-bbm job to ${url}
  * actionType: custom_post_cdc_bbm_job
- * context: api
+ * context: shared
  * needsLocator: false
  * category: API Testing
  */
