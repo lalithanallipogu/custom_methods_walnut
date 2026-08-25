@@ -4,7 +4,7 @@ import type { WalnutContext } from './walnut';
  * name: POST Transform Job API
  * description: Read batch from $[batch] and POST transform job to ${url}
  * actionType: custom_post_transform_job
- * context: shared
+ * context: api
  * needsLocator: false
  * category: API Testing
  */

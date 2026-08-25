@@ -4,7 +4,7 @@ import type { WalnutContext } from './walnut';
  * name: POST Validate Job API
  * description: Read batch from $[batch] and POST validate job to ${url}
  * actionType: custom_post_validate_job
- * context: shared
+ * context: api
  * needsLocator: false
  * category: API Testing
  */
