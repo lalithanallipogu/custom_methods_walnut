@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Member ID in 1 File and Upload
- * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing batch in $[batch]
+ * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
  * actionType: custom_replace_existing_member_upload_1file
  * context: shared
  * needsLocator: false
@@ -14,10 +14,10 @@ import { spawnSync } from 'child_process';
 export async function replaceMemberUpload1File(ctx: WalnutContext) {
   // ctx.args[0] = "memberId" (from $[memberId]) — runtime variable name to READ the previously generated ID
   // ctx.args[1] = claim2path (from ${claim2path})
-  // ctx.args[2] = SFTP host (from ${sftpHost})
-  // ctx.args[3] = SFTP port (from ${sftpPort})
-  // ctx.args[4] = SFTP username (from ${sftpUsername})
-  // ctx.args[5] = SFTP password (from ${sftpPassword})
+  // ctx.args[2] = SFTP host (from ${sftphost})
+  // ctx.args[3] = SFTP port (from ${sftpport})
+  // ctx.args[4] = SFTP username (from ${sftpusername})
+  // ctx.args[5] = SFTP password (from ${sftppassword})
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
   const memberIdVarName = ctx.args[0];
