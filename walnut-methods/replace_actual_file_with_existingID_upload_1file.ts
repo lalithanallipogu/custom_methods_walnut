@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Replace Member ID in 1 File and Upload
+ * name: Replace Member ID Claim2 Upload
  * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
  * actionType: custom_replace_existing_member_upload_1file
  * context: shared
