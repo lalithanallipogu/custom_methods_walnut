@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: SFTP Upload 4 Original Files
- * description: Upload 4 files ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
+ * description: Upload 4 files ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword}
  * actionType: custom_sftp_upload_4_files
  * context: shared
  * needsLocator: false
@@ -16,10 +16,10 @@ export async function sftpUpload4Files(ctx: WalnutContext) {
   // ctx.args[1] = localFilePath2 (from ${localFilePath2})
   // ctx.args[2] = localFilePath3 (from ${localFilePath3})
   // ctx.args[3] = localFilePath4 (from ${localFilePath4})
-  // ctx.args[4] = SFTP host (from ${sftpHost})
-  // ctx.args[5] = SFTP port (from ${sftpPort})
-  // ctx.args[6] = SFTP username (from ${sftpUsername})
-  // ctx.args[7] = SFTP password (from ${sftpPassword})
+  // ctx.args[4] = SFTP host (from ${sftphost})
+  // ctx.args[5] = SFTP port (from ${sftpport})
+  // ctx.args[6] = SFTP username (from ${sftpusername})
+  // ctx.args[7] = SFTP password (from ${sftppassword})
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const host = ctx.args[4];
@@ -30,7 +30,7 @@ export async function sftpUpload4Files(ctx: WalnutContext) {
 
   if (!host || !username || !password) {
     throw new Error(
-      'SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data.'
+      'SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.'
     );
   }
 

@@ -41,7 +41,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
 
   if (!host || !username || !password) {
     throw new Error(
-      'SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data.'
+      'SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.'
     );
   }
 

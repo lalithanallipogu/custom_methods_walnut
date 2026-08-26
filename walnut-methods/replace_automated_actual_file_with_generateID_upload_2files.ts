@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate Member ID Replace and Upload 2 Files
- * description: Generate unique member ID, replace {{member_id}} in 2 files ${memberfilepath} ${claim1path} and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword} storing ID in $[memberId] and batch in $[batch]
+ * description: Generate unique member ID, replace {{member_id}} in 2 files ${memberfilepath} ${claim1path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch]
  * actionType: custom_generate_member_replace_upload_2files
  * context: shared
  * needsLocator: false
@@ -14,10 +14,10 @@ import { spawnSync } from 'child_process';
 export async function generateMemberReplaceUpload2Files(ctx: WalnutContext) {
   // ctx.args[0] = memberfilepath (from ${memberfilepath})
   // ctx.args[1] = claim1path (from ${claim1path})
-  // ctx.args[2] = SFTP host (from ${sftpHost})
-  // ctx.args[3] = SFTP port (from ${sftpPort})
-  // ctx.args[4] = SFTP username (from ${sftpUsername})
-  // ctx.args[5] = SFTP password (from ${sftpPassword})
+  // ctx.args[2] = SFTP host (from ${sftphost})
+  // ctx.args[3] = SFTP port (from ${sftpport})
+  // ctx.args[4] = SFTP username (from ${sftpusername})
+  // ctx.args[5] = SFTP password (from ${sftppassword})
   // ctx.args[6] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
   // ctx.args[7] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
@@ -46,7 +46,7 @@ export async function generateMemberReplaceUpload2Files(ctx: WalnutContext) {
 
   if (!host || !username || !password) {
     throw new Error(
-      'SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data.'
+      'SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.'
     );
   }
 

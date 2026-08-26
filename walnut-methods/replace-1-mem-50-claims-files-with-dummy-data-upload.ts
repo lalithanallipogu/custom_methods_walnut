@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /TO_AVER/ via SFTP host ${sftpHost} port ${sftpPort} user ${sftpUsername} password ${sftpPassword}
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword}
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -35,7 +35,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
 
   if (!host || !username || !password) {
     throw new Error(
-      'SFTP credentials missing. Ensure sftpHost, sftpUsername, and sftpPassword are set in test data.'
+      'SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.'
     );
   }
 
