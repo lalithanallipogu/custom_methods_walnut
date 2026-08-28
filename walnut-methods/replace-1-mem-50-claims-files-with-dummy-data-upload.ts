@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword}
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch]
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -17,6 +17,11 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[2] = filePath3 (from ${filePath3})
   // ctx.args[3] = filePath4 (from ${filePath4})
   // ctx.args[4] = dummyId value (from ${dummyId}) — local variable from test data
+  // ctx.args[5] = sftphost (from ${sftphost})
+  // ctx.args[6] = sftpport (from ${sftpport})
+  // ctx.args[7] = sftpusername (from ${sftpusername})
+  // ctx.args[8] = sftppassword (from ${sftppassword})
+  // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store the batch value
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const dummyId = ctx.args[4];
@@ -24,6 +29,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const port = ctx.args[6] || '22';
   const username = ctx.args[7];
   const password = ctx.args[8];
+  const batchVarName = ctx.args[9]; // "batch" from $[batch]
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyId) {
@@ -42,6 +48,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const tempDir = process.env.TEMP || '/tmp';
   const tempFiles: string[] = [];
   const uploadPairs: { local: string; remote: string }[] = [];
+  let batchValue = '';
 
   // Process each of the 4 original files
   for (let i = 0; i < filePaths.length; i++) {
@@ -67,7 +74,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2684 * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + 2685 * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');
@@ -76,6 +83,11 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     const fss = fileShifted.getSeconds().toString().padStart(2, '0');
     const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
     const fileEpochMillis = fileNow.getTime().toString();
+
+    // Capture the batch value (YYYYMMDD) from the first file processed
+    if (!batchValue) {
+      batchValue = fYyyy + fMM + fdd;
+    }
 
     const originalExt = path.extname(filePath);
     const originalBase = path.basename(filePath, originalExt);
@@ -165,6 +177,12 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
 
     ctx.log('All files uploaded successfully to ' + remoteDirectory);
     ctx.log(result.stdout);
+
+    // Store the batch value (YYYYMMDD) as a runtime variable for use in subsequent steps
+    if (batchVarName && batchValue) {
+      ctx.setVariable(batchVarName, batchValue);
+      ctx.log('Stored batch value: ' + batchValue + ' in variable: ' + batchVarName);
+    }
   } finally {
     // Cleanup: remove temp Python script and temp data files
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
