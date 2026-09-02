@@ -9,9 +9,9 @@ import type { WalnutContext } from './walnut';
  * category: API Testing
  */
 export async function postValidateJob(ctx: WalnutContext) {
-  // ctx.args[0] = "batch" (from $[batch]) — runtime variable name to READ the batch
+  // ctx.args[0] = "batch" (from $[batch]) — runtime variable name
   // ctx.args[1] = API URL (from ${url})
-  // ctx.args[2] = "averSessionId" (from $[averSessionId]) — runtime variable name for session cookie
+  // ctx.args[2] = "averSessionId" (from $[averSessionId]) — runtime variable name
 
   const batchVarName = ctx.args[0];
   const url = ctx.args[1];
