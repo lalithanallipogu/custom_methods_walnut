@@ -4,7 +4,7 @@ import type { WalnutContext } from './walnut';
  * name: Trigger 3 ETL Jobs Sequentially
  * description: Post 3 ETL jobs sequentially to ${url} with ${request_body1} and ${request_body2} and ${request_body3} using session $[averSessionId] and batch $[batch]
  * actionType: custom_trigger_3_etl_jobs
- * context: api
+ * context: shared
  * needsLocator: false
  * category: ETL Processing
  */
@@ -25,8 +25,6 @@ export async function trigger3EtlJobs(ctx: WalnutContext) {
   }
   ctx.log('Using runtime batch: ' + batch);
 
-  // Set headers for authentication
-  // sessionId is already in format "AverSessionId=<uuid>"
   const headers: Record<string, string> = {
     'Cookie': sessionId,
     'Content-Type': 'application/json',
@@ -57,11 +55,24 @@ export async function trigger3EtlJobs(ctx: WalnutContext) {
     ctx.log(`[${i + 1}/3] Triggering ${job.label}...`);
     ctx.log(`Request body: ${JSON.stringify(job.data)}`);
 
-    const response = await ctx.post(url, job.data, { headers });
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(job.data),
+    });
+
+    const responseBody = await response.text();
+    let parsedBody: any;
+    try {
+      parsedBody = JSON.parse(responseBody);
+    } catch {
+      parsedBody = responseBody;
+    }
+
     ctx.log(`[${i + 1}/3] ${job.label} completed - Status: ${response.status} ${response.statusText}`);
 
     if (response.status >= 500) {
-      throw new Error(`${job.label} failed with server error: ${response.status} ${response.statusText}. Stopping execution.`);
+      throw new Error(`${job.label} failed with server error: ${response.status} ${response.statusText}. Response: ${JSON.stringify(parsedBody)}`);
     }
 
     ctx.log(`[${i + 1}/3] ${job.label} finished. ${i < 2 ? 'Proceeding to next job...' : 'All jobs done.'}`);
