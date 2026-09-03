@@ -43,4 +43,6 @@ export async function getMember(ctx: WalnutContext) {
   }
 
   ctx.log('Get Member completed successfully.');
+
+  return response;
 }

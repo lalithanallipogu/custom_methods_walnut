@@ -39,4 +39,6 @@ export async function postCdcBbmJob(ctx: WalnutContext) {
 
   ctx.log('POST successful. Status: ' + response.status);
   ctx.log('Response body: ' + JSON.stringify(response.body));
+
+  return response;
 }
