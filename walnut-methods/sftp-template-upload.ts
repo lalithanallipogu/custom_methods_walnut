@@ -54,7 +54,7 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
 
   // Generate filename: baseName_YYYYMMDDhhmmss_epochMillis (date shifted 2,672 days forward)
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2089 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2689 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
