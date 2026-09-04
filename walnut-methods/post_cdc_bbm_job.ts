@@ -2,20 +2,22 @@ import type { WalnutContext } from './walnut';
 
 /** @walnut_method
  * name: POST CDC-BBM Job API
- * description: POST cdc-bbm job with ${request_body3} to ${url} using batch $[batch]
+ * description: POST cdc-bbm job with ${request_body3} to ${url} using batch $[batch] and session $[averSessionId]
  * actionType: custom_post_cdc_bbm_job
  * context: api
  * needsLocator: false
  * category: API Testing
  */
 export async function postCdcBbmJob(ctx: WalnutContext) {
-  // ctx.args[0] = request body JSON string (from ${request_body})
+  // ctx.args[0] = request body JSON string (from ${request_body3})
   // ctx.args[1] = API URL (from ${url})
   // ctx.args[2] = "batch" (from $[batch]) — runtime variable name
+  // ctx.args[3] = "averSessionId" (from $[averSessionId]) — runtime variable name
 
   const requestBodyRaw = ctx.args[0];
   const url = ctx.args[1];
   const batchVarName = ctx.args[2];
+  const sessionId = ctx.getVariable(ctx.args[3]); // reads runtime variable $[averSessionId]
 
   // Read batch from runtime variable
   const batch = ctx.getVariable(batchVarName);
@@ -25,6 +27,10 @@ export async function postCdcBbmJob(ctx: WalnutContext) {
     );
   }
   ctx.log('Using existing batch: ' + batch);
+
+  if (!sessionId) {
+    throw new Error('AverSessionId not found in runtime variables. Run "Extract Aver Session Cookie" step first.');
+  }
 
   // Parse request body from test data
   let body: any;
@@ -37,9 +43,14 @@ export async function postCdcBbmJob(ctx: WalnutContext) {
   // Override batch with the runtime variable value
   body.batch = batch;
 
+  const headers: Record<string, string> = {
+    'Cookie': sessionId,
+    'Content-Type': 'application/json',
+  };
+
   ctx.log('POST ' + url + ' with body: ' + JSON.stringify(body));
 
-  const response = await ctx.post(url, body);
+  const response = await ctx.post(url, body, { headers });
   ctx.assertStatus(response, 200);
 
   ctx.log('POST successful. Status: ' + response.status);
