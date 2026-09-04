@@ -2,18 +2,20 @@ import type { WalnutContext } from './walnut';
 
 /** @walnut_method
  * name: POST Transform Job API
- * description: Read batch from $[batch] and POST transform job to ${url}
+ * description: POST transform job with ${request_body} to ${url} using batch $[batch]
  * actionType: custom_post_transform_job
  * context: api
  * needsLocator: false
  * category: API Testing
  */
 export async function postTransformJob(ctx: WalnutContext) {
-  // ctx.args[0] = "batch" (from $[batch]) — runtime variable name to READ the batch from file upload step
+  // ctx.args[0] = request body JSON string (from ${request_body})
   // ctx.args[1] = API URL (from ${url})
+  // ctx.args[2] = "batch" (from $[batch]) — runtime variable name
 
-  const batchVarName = ctx.args[0];
+  const requestBodyRaw = ctx.args[0];
   const url = ctx.args[1];
+  const batchVarName = ctx.args[2];
 
   // Read batch from runtime variable (captured by the file upload method)
   const batch = ctx.getVariable(batchVarName);
@@ -24,12 +26,16 @@ export async function postTransformJob(ctx: WalnutContext) {
   }
   ctx.log('Using batch from file upload: ' + batch);
 
-  // Build request body
-  const body = {
-    batch: batch,
-    mode: 'individual',
-    job_type: 'transform',
-  };
+  // Parse request body from test data
+  let body: any;
+  try {
+    body = typeof requestBodyRaw === 'string' ? JSON.parse(requestBodyRaw) : requestBodyRaw;
+  } catch (e) {
+    throw new Error('Failed to parse request_body: ' + requestBodyRaw);
+  }
+
+  // Override batch with the runtime variable value
+  body.batch = batch;
 
   ctx.log('POST ' + url + ' with body: ' + JSON.stringify(body));
 
