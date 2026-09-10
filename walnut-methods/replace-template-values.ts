@@ -5,7 +5,7 @@ import * as path from 'path';
 
 /** @walnut_method
  * name: Replace Template Values in File
- * description: Replace ${{key}} placeholders in artifact file ${filePath} storing result in $[outputFilePath] with ${key1} ${val1} ${key2} ${val2} ${key3} ${val3} ${key4} ${val4} ${key5} ${val5} ${key6} ${val6} ${key7} ${val7} ${key8} ${val8} ${key9} ${val9} ${key10} ${val10}
+ * description: Replace template placeholders in artifact file ${filePath} storing result in $[outputFilePath] with ${key1} ${val1} ${key2} ${val2} ${key3} ${val3} ${key4} ${val4} ${key5} ${val5} ${key6} ${val6} ${key7} ${val7} ${key8} ${val8} ${key9} ${val9} ${key10} ${val10}
  * actionType: custom_replace_template_values
  * context: shared
  * needsLocator: false
