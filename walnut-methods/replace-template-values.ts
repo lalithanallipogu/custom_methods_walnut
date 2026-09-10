@@ -1,5 +1,6 @@
 import type { WalnutContext } from './walnut';
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 
 /** @walnut_method
@@ -23,13 +24,16 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
     throw new Error('File path or artifact reference is required as the first argument.');
   }
 
-  // Resolve artifact references (e.g. "ART-13" or a 24-char MongoDB ObjectId)
-  // to a local file path, or use as-is if it's already a file system path.
+  // Resolve artifact references ("ART-13", or a legacy 24-hex Mongo id) to a local
+  // file path, or use as-is if it's already a file system path. Mirrors walnut-agent's
+  // isArtifactRef — kept local since custom methods can't import agent internals directly.
   const isArtifactRef = /^ART-\d+$/i.test(fileRef) || /^[a-f0-9]{24}$/i.test(fileRef);
   let filePath: string;
   if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
-    filePath = await ctx.resolveArtifact(fileRef);
+    // Cast: resolveArtifact is injected on every ctx at runtime (custom-method.handler.ts),
+    // but not every project's cached walnut.d.ts declares it yet.
+    filePath = await (ctx as any).resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
   } else {
     filePath = fileRef;
@@ -82,7 +86,7 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   }
 
   // Write modified content to a temp file (original artifact is never modified)
-  const tempDir = process.env.TEMP || '/tmp';
+  const tempDir = os.tmpdir();
   const ext = path.extname(filePath);
   const base = path.basename(filePath, ext);
   const tempFilePath = path.join(tempDir, base + '_' + Date.now() + ext);
@@ -92,3 +96,4 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   // Store temp file path as a runtime variable for subsequent steps (e.g., upload)
   ctx.setVariable(outputVarName, tempFilePath);
 }
+ 
