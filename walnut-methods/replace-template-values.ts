@@ -31,9 +31,7 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   let filePath: string;
   if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
-    // Cast: resolveArtifact is injected on every ctx at runtime (custom-method.handler.ts),
-    // but not every project's cached walnut.d.ts declares it yet.
-    filePath = await (ctx as any).resolveArtifact(fileRef);
+    filePath = await ctx.resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
   } else {
     filePath = fileRef;
