@@ -6,12 +6,12 @@ import { spawnSync } from 'child_process';
 /** @walnut_method
  * name: Artifact Generate Member ID Replace Template and Upload
  * description: Artifact Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ storing member ID in $[memberId] and batch in $[batch]
- * actionType: custom_generate_member_replace_upload
+ * actionType: custom_artifact_generate_member_replace_upload
  * context: shared
  * needsLocator: false
  * category: Data Processing
  */
-export async function generateMemberReplaceUpload(ctx: WalnutContext) {
+export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[0] = filePath or artifact ref (from ${filePath})
   // ctx.args[1] = "memberId" (from $[memberId]) — runtime variable name to store generated ICMEM ID
   // ctx.args[2] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
