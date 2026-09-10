@@ -16,11 +16,22 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   // ctx.args[2..N] = key/value pairs: args[2]=key1, args[3]=val1, args[4]=key2, args[5]=val2, ...
   // Unused pairs will be empty strings — we skip them.
 
-  const filePath = ctx.args[0];
+  const fileRef = ctx.args[0];
   const outputVarName = ctx.args[1];
 
-  if (!filePath) {
-    throw new Error('File path is required as the first argument.');
+  if (!fileRef) {
+    throw new Error('File path or artifact reference is required as the first argument.');
+  }
+
+  // Resolve artifact references (e.g. "ART-13") to a local file path,
+  // or use as-is if it's already a file system path.
+  let filePath: string;
+  if (/^ART-\d+$/i.test(fileRef)) {
+    ctx.log('Resolving artifact reference: ' + fileRef);
+    filePath = await ctx.resolveArtifact(fileRef);
+    ctx.log('Resolved to: ' + filePath);
+  } else {
+    filePath = fileRef;
   }
 
   if (!fs.existsSync(filePath)) {
