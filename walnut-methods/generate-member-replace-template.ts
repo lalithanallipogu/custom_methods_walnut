@@ -51,7 +51,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   let filePath: string;
   if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
-    filePath = await ctx.resolveArtifact(fileRef);
+    filePath = await (ctx as any).resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
   } else {
     filePath = fileRef;
