@@ -23,10 +23,11 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
     throw new Error('File path or artifact reference is required as the first argument.');
   }
 
-  // Resolve artifact references (e.g. "ART-13") to a local file path,
-  // or use as-is if it's already a file system path.
+  // Resolve artifact references (e.g. "ART-13" or a 24-char MongoDB ObjectId)
+  // to a local file path, or use as-is if it's already a file system path.
+  const isArtifactRef = /^ART-\d+$/i.test(fileRef) || /^[a-f0-9]{24}$/i.test(fileRef);
   let filePath: string;
-  if (/^ART-\d+$/i.test(fileRef)) {
+  if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
     filePath = await ctx.resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
