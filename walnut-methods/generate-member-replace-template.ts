@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Artifact Generate Member ID Replace Template and Upload
- * description: Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ storing member ID in $[memberId] and batch in $[batch]
+ * description: Artifact Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ storing member ID in $[memberId] and batch in $[batch]
  * actionType: custom_generate_member_replace_upload
  * context: shared
  * needsLocator: false
