@@ -86,7 +86,7 @@ export async function artifactExistingMemberReplaceUpload(ctx: WalnutContext) {
   // Step 6: Write modified content to a temp file with timestamp filename
   const tempDir = process.env.TEMP || '/tmp';
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2693 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2694 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
@@ -150,10 +150,10 @@ export async function artifactExistingMemberReplaceUpload(ctx: WalnutContext) {
 
     const result = spawnSync('python', [
       tmpScript,
-      host.trim(),
-      port.toString().trim(),
-      username.trim(),
-      password.trim(),
+      host,
+      port,
+      username,
+      password,
       tempFilePath,
       remotePath,
     ], {
