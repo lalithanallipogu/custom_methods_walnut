@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Artifact Generate Member ID Replace Template and Upload
- * description: Artifact Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing member ID in $[memberId] and batch in $[batch]
+ * description: Artifact Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing member ID in $[memberId] and batch in $[batch] with ${forwardDays} days forward
  * actionType: custom_artifact_generate_member_replace_upload
  * context: shared
  * needsLocator: false
@@ -19,7 +19,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[4] = SFTP password (from ${sftppassword})
   // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ICMEM ID
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
-  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
+  // ctx.args[7] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const fileRef = ctx.args[0];
   const host = ctx.args[1];
@@ -28,7 +28,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   const password = ctx.args[4];
   const memberIdVarName = ctx.args[5];
   const batchVarName = ctx.args[6];
-  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
+  const forwardDays = parseInt(ctx.args[7], 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!fileRef) {

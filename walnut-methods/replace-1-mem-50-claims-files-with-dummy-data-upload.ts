@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch]
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch] with ${forwardDays} days forward
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -22,7 +22,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[7] = sftpusername (from ${sftpusername})
   // ctx.args[8] = sftppassword (from ${sftppassword})
   // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store the batch value
-  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
+  // ctx.args[10] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const dummyId = ctx.args[4];
@@ -31,7 +31,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const username = ctx.args[7];
   const password = ctx.args[8];
   const batchVarName = ctx.args[9]; // "batch" from $[batch]
-  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
+  const forwardDays = parseInt(ctx.args[10], 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyId) {

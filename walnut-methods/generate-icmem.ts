@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate ICMEM ID and Upload All Files
- * description: Generate a random ICMEM ID, replace {{member_id}} in templates ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/ storing ID in $[icmemId]
+ * description: Generate a random ICMEM ID, replace {{member_id}} in templates ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/ storing ID in $[icmemId] with ${forwardDays} days forward
  * actionType: custom_generate_icmem
  * context: shared
  * needsLocator: false
@@ -21,14 +21,14 @@ export async function generateIcmem(ctx: WalnutContext) {
   // ctx.args[6] = SFTP username (from ${sftpusername})
   // ctx.args[7] = SFTP password (from ${sftppassword})
   // ctx.args[8] = "icmemId" (from $[icmemId])
-  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
+  // ctx.args[9] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const host = ctx.args[4];
   const port = ctx.args[5] || '22';
   const username = ctx.args[6];
   const password = ctx.args[7];
-  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
+  const forwardDays = parseInt(ctx.args[9], 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   // Step 1: Generate a random ICMEM ID (format: ICMEM-{4 digits}{4 letters})

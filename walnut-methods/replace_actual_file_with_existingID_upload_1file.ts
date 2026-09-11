@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Member ID Claim2 Upload
- * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
+ * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch] with ${forwardDays} days forward
  * actionType: custom_replace_existing_member_upload_1file
  * context: shared
  * needsLocator: false
@@ -19,7 +19,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   // ctx.args[4] = SFTP username (from ${sftpusername})
   // ctx.args[5] = SFTP password (from ${sftppassword})
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
-  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
+  // ctx.args[7] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const memberIdVarName = ctx.args[0];
   const filePath = ctx.args[1];
@@ -28,7 +28,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   const username = ctx.args[4];
   const password = ctx.args[5];
   const batchVarName = ctx.args[6];
-  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
+  const forwardDays = parseInt(ctx.args[7], 10) || 2695;
 
   // Step 1: Retrieve the previously generated member ID from runtime variables
   const memberId = ctx.getVariable(memberIdVarName);
