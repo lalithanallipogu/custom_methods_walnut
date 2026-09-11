@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Member ID Claim2 Upload
- * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch] with ${forwardDays} days forward
+ * description: Use existing member ID from $[memberId] to replace {{member_id}} in 1 file ${claim2path} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
  * actionType: custom_replace_existing_member_upload_1file
  * context: shared
  * needsLocator: false
@@ -19,7 +19,6 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   // ctx.args[4] = SFTP username (from ${sftpusername})
   // ctx.args[5] = SFTP password (from ${sftppassword})
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
-  // ctx.args[7] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const memberIdVarName = ctx.args[0];
   const filePath = ctx.args[1];
@@ -28,7 +27,6 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   const username = ctx.args[4];
   const password = ctx.args[5];
   const batchVarName = ctx.args[6];
-  const forwardDays = parseInt(ctx.args[7], 10) || 2695;
 
   // Step 1: Retrieve the previously generated member ID from runtime variables
   const memberId = ctx.getVariable(memberIdVarName);
@@ -68,7 +66,7 @@ export async function replaceMemberUpload1File(ctx: WalnutContext) {
   // Build filename: strip any existing timestamp from original, append new shifted timestamp
   // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext
   const fileNow = new Date();
-  const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
+  const fileShifted = new Date(fileNow.getTime() + 2670 * 24 * 60 * 60 * 1000);
   const fYyyy = fileShifted.getFullYear().toString();
   const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
   const fdd = fileShifted.getDate().toString().padStart(2, '0');

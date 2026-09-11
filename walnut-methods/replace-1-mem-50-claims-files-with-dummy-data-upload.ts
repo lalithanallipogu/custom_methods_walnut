@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch] with ${forwardDays} days forward
+ * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch]
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
  * needsLocator: false
@@ -22,7 +22,6 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[7] = sftpusername (from ${sftpusername})
   // ctx.args[8] = sftppassword (from ${sftppassword})
   // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store the batch value
-  // ctx.args[10] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const dummyId = ctx.args[4];
@@ -31,7 +30,6 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const username = ctx.args[7];
   const password = ctx.args[8];
   const batchVarName = ctx.args[9]; // "batch" from $[batch]
-  const forwardDays = parseInt(ctx.args[10], 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyId) {
@@ -76,7 +74,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + 2670 * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');

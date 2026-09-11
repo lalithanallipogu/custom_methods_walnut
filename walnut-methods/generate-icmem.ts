@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Generate ICMEM ID and Upload All Files
- * description: Generate a random ICMEM ID, replace {{member_id}} in templates ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/ storing ID in $[icmemId] with ${forwardDays} days forward
+ * description: Generate a random ICMEM ID, replace {{member_id}} in templates ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/ storing ID in $[icmemId]
  * actionType: custom_generate_icmem
  * context: shared
  * needsLocator: false
@@ -21,14 +21,12 @@ export async function generateIcmem(ctx: WalnutContext) {
   // ctx.args[6] = SFTP username (from ${sftpusername})
   // ctx.args[7] = SFTP password (from ${sftppassword})
   // ctx.args[8] = "icmemId" (from $[icmemId])
-  // ctx.args[9] = forward days (from ${forwardDays}) — number of days to shift date forward
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const host = ctx.args[4];
   const port = ctx.args[5] || '22';
   const username = ctx.args[6];
   const password = ctx.args[7];
-  const forwardDays = parseInt(ctx.args[9], 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   // Step 1: Generate a random ICMEM ID (format: ICMEM-{4 digits}{4 letters})
@@ -71,9 +69,9 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Generate unique timestamp per file (date shifted forwardDays days forward + unique epoch millis)
+    // Generate unique timestamp per file (date shifted 2670 days forward + unique epoch millis)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + 2670 * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');
