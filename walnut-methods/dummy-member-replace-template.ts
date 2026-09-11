@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Artifact Dummy Member ID Replace Template and Upload
- * description: Artifact Replace {{member_id}} with dummy ID ${dummyMemberId} in artifact ${filePath} and upload to /TO_AVER/ storing member ID in $[memberId] and batch in $[batch]
+ * description: Artifact Replace {{member_id}} with dummy ID ${dummyMemberId} in artifact ${filePath} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing member ID in $[memberId] and batch in $[batch]
  * actionType: custom_artifact_dummy_member_replace_upload
  * context: shared
  * needsLocator: false
@@ -14,20 +14,21 @@ import { spawnSync } from 'child_process';
 export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[0] = dummyMemberId (from ${dummyMemberId}) — the dummy ID to use for replacement
   // ctx.args[1] = filePath or artifact ref (from ${filePath})
-  // ctx.args[2] = "memberId" (from $[memberId]) — runtime variable name to store the dummy ID
-  // ctx.args[3] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
-  // SFTP credentials come from ctx.params (test data): sftphost, sftpport, sftpusername, sftppassword
+  // ctx.args[2] = SFTP host (from ${sftphost})
+  // ctx.args[3] = SFTP port (from ${sftpport})
+  // ctx.args[4] = SFTP username (from ${sftpusername})
+  // ctx.args[5] = SFTP password (from ${sftppassword})
+  // ctx.args[6] = "memberId" (from $[memberId]) — runtime variable name to store the dummy ID
+  // ctx.args[7] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
 
   const dummyMemberId = ctx.args[0];
   const fileRef = ctx.args[1];
-  const memberIdVarName = ctx.args[2];
-  const batchVarName = ctx.args[3];
-
-  // SFTP credentials from test data params (not description placeholders)
-  const host = ctx.params.sftphost;
-  const port = ctx.params.sftpport || '22';
-  const username = ctx.params.sftpusername;
-  const password = ctx.params.sftppassword;
+  const host = ctx.args[2];
+  const port = ctx.args[3] || '22';
+  const username = ctx.args[4];
+  const password = ctx.args[5];
+  const memberIdVarName = ctx.args[6];
+  const batchVarName = ctx.args[7];
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyMemberId) {
