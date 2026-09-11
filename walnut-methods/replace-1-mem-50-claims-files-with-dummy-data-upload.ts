@@ -22,6 +22,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // ctx.args[7] = sftpusername (from ${sftpusername})
   // ctx.args[8] = sftppassword (from ${sftppassword})
   // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store the batch value
+  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const dummyId = ctx.args[4];
@@ -30,6 +31,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const username = ctx.args[7];
   const password = ctx.args[8];
   const batchVarName = ctx.args[9]; // "batch" from $[batch]
+  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyId) {
@@ -74,7 +76,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2694 * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');

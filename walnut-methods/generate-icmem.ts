@@ -21,12 +21,14 @@ export async function generateIcmem(ctx: WalnutContext) {
   // ctx.args[6] = SFTP username (from ${sftpusername})
   // ctx.args[7] = SFTP password (from ${sftppassword})
   // ctx.args[8] = "icmemId" (from $[icmemId])
+  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
   const host = ctx.args[4];
   const port = ctx.args[5] || '22';
   const username = ctx.args[6];
   const password = ctx.args[7];
+  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   // Step 1: Generate a random ICMEM ID (format: ICMEM-{4 digits}{4 letters})
@@ -69,9 +71,9 @@ export async function generateIcmem(ctx: WalnutContext) {
     // Replace all occurrences of {{member_id}} with the generated ICMEM ID
     const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-    // Generate unique timestamp per file (date shifted 2694 days forward + unique epoch millis)
+    // Generate unique timestamp per file (date shifted forwardDays days forward + unique epoch millis)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2694 * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');

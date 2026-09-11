@@ -20,6 +20,7 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[5] = SFTP password (from ${sftppassword})
   // ctx.args[6] = "memberId" (from $[memberId]) — runtime variable name to store the dummy ID
   // ctx.args[7] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
+  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
 
   const dummyMemberId = ctx.args[0];
   const fileRef = ctx.args[1];
@@ -29,6 +30,7 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   const password = ctx.args[5];
   const memberIdVarName = ctx.args[6];
   const batchVarName = ctx.args[7];
+  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!dummyMemberId) {
@@ -87,7 +89,7 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   // Step 6: Write modified content to a temp file with timestamp filename
   const tempDir = process.env.TEMP || '/tmp';
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2694 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + forwardDays * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');

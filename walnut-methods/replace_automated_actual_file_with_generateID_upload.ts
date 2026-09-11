@@ -20,6 +20,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[5] = SFTP username (from ${sftpusername})
   // ctx.args[6] = SFTP password (from ${sftppassword})
   // ctx.args[7] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
+  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
 
   const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2]];
   const host = ctx.args[3];
@@ -27,6 +28,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
   const username = ctx.args[5];
   const password = ctx.args[6];
   const memberIdVarName = ctx.args[7];
+  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
@@ -77,7 +79,7 @@ export async function generateMemberReplaceUpload(ctx: WalnutContext) {
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2694 * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + forwardDays * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');

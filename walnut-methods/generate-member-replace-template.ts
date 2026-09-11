@@ -19,6 +19,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // ctx.args[4] = SFTP password (from ${sftppassword})
   // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ICMEM ID
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
+  // forwardDays comes from ctx.params.forwardDays (test data) — defaults to 2695
 
   const fileRef = ctx.args[0];
   const host = ctx.args[1];
@@ -27,6 +28,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   const password = ctx.args[4];
   const memberIdVarName = ctx.args[5];
   const batchVarName = ctx.args[6];
+  const forwardDays = parseInt(ctx.params.forwardDays, 10) || 2695;
   const remoteDirectory = '/TO_AVER/';
 
   if (!fileRef) {
@@ -87,7 +89,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // Step 7: Write modified content to a temp file with timestamp filename
   const tempDir = process.env.TEMP || '/tmp';
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2694 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + forwardDays * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
