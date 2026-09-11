@@ -5,7 +5,7 @@ import * as path from 'path';
 
 /** @walnut_method
  * name: Replace Template Values in File
- * description: Replace template placeholders in artifact file ${filePath} storing result in $[outputFilePath] with ${key1} ${val1} ${key2} ${val2} ${key3} ${val3} ${key4} ${val4} ${key5} ${val5} ${key6} ${val6} ${key7} ${val7} ${key8} ${val8} ${key9} ${val9} ${key10} ${val10}
+ * description: Replace ${{key}} placeholders in artifact file ${filePath} storing result in $[outputFilePath] with ${key1} ${val1} ${key2} ${val2} ${key3} ${val3} ${key4} ${val4} ${key5} ${val5} ${key6} ${val6} ${key7} ${val7} ${key8} ${val8} ${key9} ${val9} ${key10} ${val10}
  * actionType: custom_replace_template_values
  * context: shared
  * needsLocator: false
@@ -31,7 +31,9 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   let filePath: string;
   if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
-    filePath = await ctx.resolveArtifact(fileRef);
+    // Cast: resolveArtifact is injected on every ctx at runtime (custom-method.handler.ts),
+    // but not every project's cached walnut.d.ts declares it yet.
+    filePath = await (ctx as any).resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
   } else {
     filePath = fileRef;
@@ -94,4 +96,3 @@ export async function replaceTemplateValues(ctx: WalnutContext) {
   // Store temp file path as a runtime variable for subsequent steps (e.g., upload)
   ctx.setVariable(outputVarName, tempFilePath);
 }
- 
