@@ -65,23 +65,14 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   // Step 3: Read the file content
   let content = fs.readFileSync(filePath, 'utf-8');
 
-  // Step 4: Replace ALL {{key}} placeholders with the dummy member ID
+  // Step 4: Replace only {{member_id}} placeholders with the dummy member ID
   const beforeMember = content;
-  content = content.replace(/\{\{[^}]+\}\}/g, dummyMemberId);
+  content = content.replace(/\{\{member_id\}\}/g, dummyMemberId);
   if (content !== beforeMember) {
-    const count = (beforeMember.match(/\{\{[^}]+\}\}/g) || []).length;
-    ctx.log('Replaced ' + count + ' {{...}} placeholder(s) with ' + dummyMemberId);
+    const count = (beforeMember.match(/\{\{member_id\}\}/g) || []).length;
+    ctx.log('Replaced ' + count + ' {{member_id}} placeholder(s) with ' + dummyMemberId);
   } else {
-    ctx.warn('No {{...}} placeholders found in file.');
-  }
-
-  // Step 5: Check for any unreplaced {{...}} placeholders
-  const unreplaced = [...new Set(content.match(/\{\{[^}]+\}\}/g) || [])];
-  for (const match of unreplaced) {
-    ctx.warn('Unreplaced placeholder found: ' + match);
-  }
-  if (unreplaced.length > 0) {
-    throw new Error('Unreplaced placeholders found after replacement finished.');
+    ctx.warn('No {{member_id}} placeholders found in file.');
   }
 
   // Step 6: Write modified content to a temp file with timestamp filename

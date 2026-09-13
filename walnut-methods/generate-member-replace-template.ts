@@ -65,23 +65,14 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // Step 3: Read the file content
   let content = fs.readFileSync(filePath, 'utf-8');
 
-  // Step 4: Replace ALL {{key}} placeholders (any key name, no $ prefix) with the generated ICMEM ID
+  // Step 4: Replace only {{member_id}} placeholders with the generated ICMEM ID
   const beforeMember = content;
-  content = content.replace(/\{\{[^}]+\}\}/g, icmemId);
+  content = content.replace(/\{\{member_id\}\}/g, icmemId);
   if (content !== beforeMember) {
-    const count = (beforeMember.match(/\{\{[^}]+\}\}/g) || []).length;
-    ctx.log('Replaced ' + count + ' {{...}} placeholder(s) with ' + icmemId);
+    const count = (beforeMember.match(/\{\{member_id\}\}/g) || []).length;
+    ctx.log('Replaced ' + count + ' {{member_id}} placeholder(s) with ' + icmemId);
   } else {
-    ctx.warn('No {{...}} placeholders found in file.');
-  }
-
-  // Step 5: Check for any unreplaced {{...}} placeholders
-  const unreplaced = [...new Set(content.match(/\{\{[^}]+\}\}/g) || [])];
-  for (const match of unreplaced) {
-    ctx.warn('Unreplaced placeholder found: ' + match);
-  }
-  if (unreplaced.length > 0) {
-    throw new Error('Unreplaced placeholders found after replacement finished.');
+    ctx.warn('No {{member_id}} placeholders found in file.');
   }
 
   // Step 7: Write modified content to a temp file with timestamp filename
