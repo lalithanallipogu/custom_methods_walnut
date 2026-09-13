@@ -2,22 +2,20 @@ import type { WalnutContext, WalnutApiContext } from './walnut';
 
 /** @walnut_method
  * name: Get Member No Suffix
- * description: POST get member with ${request_body} to ${url} using session $[averSessionId] and member $[memberId]
+ * description: POST get member to ${url} using session $[averSessionId] and member $[memberId]
  * actionType: custom_get_member_no_suffix
  * context: api
  * needsLocator: false
  * category: API Testing
  */
 export async function getMemberNoSuffix(ctx: WalnutContext) {
-  // ctx.args[0] = request body JSON string (from ${request_body})
-  // ctx.args[1] = API URL (from ${url})
-  // ctx.args[2] = "averSessionId" (from $[averSessionId]) — runtime variable name
-  // ctx.args[3] = "memberId" (from $[memberId]) — runtime variable name
+  // ctx.args[0] = API URL (from ${url})
+  // ctx.args[1] = "averSessionId" (from $[averSessionId]) — runtime variable name
+  // ctx.args[2] = "memberId" (from $[memberId]) — runtime variable name
 
-  const requestBodyRaw = ctx.args[0];
-  const url = ctx.args[1];
-  const sessionId = ctx.getVariable(ctx.args[2]); // reads runtime variable $[averSessionId]
-  const memberId = ctx.getVariable(ctx.args[3]); // reads runtime variable $[memberId]
+  const url = ctx.args[0];
+  const sessionId = ctx.getVariable(ctx.args[1]); // reads runtime variable $[averSessionId]
+  const memberId = ctx.getVariable(ctx.args[2]); // reads runtime variable $[memberId]
 
   if (!sessionId) {
     throw new Error('AverSessionId not found in runtime variables. Run "Extract Aver Session Cookie" step first.');
@@ -29,16 +27,8 @@ export async function getMemberNoSuffix(ctx: WalnutContext) {
 
   ctx.log('Getting member: ' + memberId);
 
-  // Parse request body from test data
-  let body: any;
-  try {
-    body = typeof requestBodyRaw === 'string' ? JSON.parse(requestBodyRaw) : requestBodyRaw;
-  } catch (e) {
-    throw new Error('Failed to parse request_body: ' + requestBodyRaw);
-  }
-
-  // Set member_id directly (no suffix)
-  body.member_id = memberId;
+  // Build body directly from runtime variable — no test data needed
+  const body = { member_id: memberId };
 
   const headers: Record<string, string> = {
     'Cookie': sessionId,
