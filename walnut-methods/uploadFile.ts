@@ -1,8 +1,9 @@
 import type { WalnutContext } from './walnut';
+import * as fs from 'fs';
 
 /** @walnut_method
  * name: Upload Files To Input
- * description: Upload ${filePaths} to the linked object (one path, or several comma-separated paths)
+ * description: Upload ${filePaths} to the linked object (one path, or several comma-separated paths or artifact refs like ART-13)
  * actionType: custom_upload_files
  * context: web
  * needsLocator: true
@@ -11,19 +12,39 @@ import type { WalnutContext } from './walnut';
 export async function uploadFilesToInput(ctx: WalnutContext) {
   if (ctx.platform !== 'web') return;
 
-  // ctx.args[0] = ${filePaths} — "/path/a.pdf" or "/path/a.pdf, /path/b.png" (comma-separated for multiple files)
+  // ctx.args[0] = ${filePaths} — "/path/a.pdf", "ART-13", or "ART-13, /path/b.png" (comma-separated, mixed OK)
   const locator = (ctx as any).locator;
   if (!locator) throw new Error('No object linked to this step — attach an object in the test case editor');
 
   const rawPaths = String(ctx.args[0] ?? '').trim();
   if (!rawPaths) throw new Error('filePaths is empty — set the filePaths column in this test case\'s test data.');
 
+  // ── Helper: detect Walnut artifact references (ART-<digits> or 24-hex Mongo ObjectId) ──
+  const isArtifactRef = (value: string): boolean =>
+    /^ART-\d+$/i.test(value) || /^[a-f0-9]{24}$/i.test(value);
+
   // ── Resolve every path up front, so we fail before touching the browser ──
   const paths: string[] = [];
   for (const part of rawPaths.split(',')) {
     let p = part.trim();
     if (!p) continue;
-    paths.push(p);
+
+    if (isArtifactRef(p)) {
+      // Walnut artifact — resolve to a local file path via the runtime helper
+      ctx.log(`Resolving artifact reference: ${p}`);
+      const resolved = await ctx.resolveArtifact(p);
+      ctx.log(`Artifact ${p} resolved to: ${resolved}`);
+      if (!fs.existsSync(resolved)) {
+        throw new Error(`Artifact ${p} resolved to "${resolved}" but the file does not exist on disk.`);
+      }
+      paths.push(resolved);
+    } else {
+      // Local filesystem path — verify it exists
+      if (!fs.existsSync(p)) {
+        throw new Error(`Local file not found: "${p}". Check the path in your test data.`);
+      }
+      paths.push(p);
+    }
   }
   if (paths.length === 0) throw new Error(`No usable file path in "${rawPaths}".`);
   ctx.log(`Uploading ${paths.length} file(s): ${paths.join(', ')}`);
