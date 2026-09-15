@@ -30,9 +30,12 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
     if (!p) continue;
 
     if (isArtifactRef(p)) {
-      // Walnut artifact — resolve to a local file path via the runtime helper
+      // Walnut artifact — resolve to a local file path via the runtime helper.
+      // Cast: resolveArtifact is injected on every ctx at runtime
+      // (custom-method.handler.ts), but not every project's cached walnut.d.ts
+      // declares it yet.
       ctx.log(`Resolving artifact reference: ${p}`);
-      const resolved = await ctx.resolveArtifact(p);
+      const resolved = await (ctx as any).resolveArtifact(p);
       ctx.log(`Artifact ${p} resolved to: ${resolved}`);
       if (!fs.existsSync(resolved)) {
         throw new Error(`Artifact ${p} resolved to "${resolved}" but the file does not exist on disk.`);
@@ -55,8 +58,6 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
   try {
     await target.waitFor({ state: 'attached', timeout: 15000 });
   } catch {
-    // A wrong selector is the most common authoring slip — name it, rather than
-    // surfacing Playwright's bare "Timeout 15000ms exceeded".
     const total = await page.locator('input[type="file"]').count();
     throw new Error(
       `The linked object was not found after 15s. `
@@ -64,14 +65,10 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
     );
   }
 
-  // ── Find the real <input type=file>: the element itself, or one associated
-  //    with it (label[for], descendant). setInputFiles ONLY works on inputs. ──
   const handle = await target.elementHandle();
   if (!handle) throw new Error('Could not get element handle from the linked object.');
 
   const inputHandle = await handle.evaluateHandle(
-    // Built as a string via new Function so the bundler cannot inject helpers
-    // that would ReferenceError inside the browser.
     new Function('el', `
       var isFile = function (n) { return !!n && n.tagName === 'INPUT' && n.type === 'file'; };
       if (isFile(el)) return el;
@@ -86,12 +83,10 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
   const input = inputHandle.asElement();
 
   if (input) {
-    // Reject a mismatch clearly instead of letting Playwright throw a cryptic error.
     const isMultiple = await input.evaluate((el: any) => !!el.multiple);
     if (paths.length > 1 && !isMultiple) {
       throw new Error(`${paths.length} files given, but the linked object is a single-file input (no "multiple" attribute).`);
     }
-    // The OS dialog never opens: this sets the input's FileList directly.
     await input.setInputFiles(paths);
     const attached = await input.evaluate((el: any) => Array.from(el.files).map((f: any) => f.name));
     await input.dispose();
@@ -101,9 +96,6 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
     return;
   }
 
-  // ── No input in the DOM (a button that opens the OS dialog from JS). Arm the
-  //    file chooser FIRST, then click: Playwright intercepts the dialog so the
-  //    real OS picker never appears. ──
   await handle.dispose();
   ctx.warn('The linked object is not a file input and has none associated — clicking it and intercepting the file chooser instead.');
   const [chooser] = await Promise.all([
@@ -116,5 +108,4 @@ export async function uploadFilesToInput(ctx: WalnutContext) {
   await chooser.setFiles(paths);
   ctx.log(`Set ${paths.length} file(s) via the intercepted file chooser.`);
 }
-
  
