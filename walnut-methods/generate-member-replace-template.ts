@@ -1,24 +1,24 @@
 import type { WalnutContext } from './walnut';
-import * as fs from 'fs';
 import * as path from 'path';
+import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Artifact Generate Member ID Replace Template and Upload
- * description: Artifact Generate ICMEM ID, replace {{key}} placeholders in artifact ${filePath} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing member ID in $[memberId] and batch in $[batch]
+ * description: Generate unique member ID, replace {{member_id}} in file ${filePath} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch]
  * actionType: custom_artifact_generate_member_replace_upload
  * context: shared
  * needsLocator: false
  * category: Data Processing
  */
 export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
-  // ctx.args[0] = filePath or artifact ref (from ${filePath})
+  // ctx.args[0] = filePath (from ${filePath})
   // ctx.args[1] = SFTP host (from ${sftphost})
   // ctx.args[2] = SFTP port (from ${sftpport})
   // ctx.args[3] = SFTP username (from ${sftpusername})
   // ctx.args[4] = SFTP password (from ${sftppassword})
-  // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ICMEM ID
-  // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch date (YYYYMMDD)
+  // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
+  // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
   const fileRef = ctx.args[0];
   const host = ctx.args[1];
@@ -34,81 +34,81 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   }
 
   if (!host || !username || !password) {
-    throw new Error('SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.');
+    throw new Error(
+      'SFTP credentials missing. Ensure sftphost, sftpusername, and sftppassword are set in test data.'
+    );
   }
 
-  // Step 1: Generate a random ICMEM ID (format: ICMEM-{4 digits}{4 letters})
+  // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
+  // Example: ICMEM-1902SRXT
   const digits = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
   const letters = Array.from({ length: 4 }, () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    return chars.charAt(Math.floor(Math.random() * chars.length));
+    const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return alpha.charAt(Math.floor(Math.random() * alpha.length));
   }).join('');
-  const icmemId = 'ICMEM-' + digits + letters;
-  ctx.log('Generated ICMEM ID: ' + icmemId);
-  ctx.setVariable(memberIdVarName, icmemId);
+  const memberId = 'ICMEM-' + digits + letters;
+  ctx.log('Generated unique ICMEM ID: ' + memberId);
 
-  // Step 2: Resolve artifact references (e.g. "ART-13" or 24-char MongoDB ObjectId)
-  const isArtifactRef = /^ART-\d+$/i.test(fileRef) || /^[a-f0-9]{24}$/i.test(fileRef);
-  let filePath: string;
-  if (isArtifactRef) {
-    ctx.log('Resolving artifact reference: ' + fileRef);
-    filePath = await ctx.resolveArtifact(fileRef);
-    ctx.log('Resolved to: ' + filePath);
-  } else {
-    filePath = fileRef;
-  }
+  // Store the generated member ID as a runtime variable for use in subsequent steps
+  ctx.setVariable(memberIdVarName, memberId);
+
+  // Step 2: Resolve artifact reference to a local file path
+  ctx.log('Processing artifact: ' + fileRef);
+  const filePath = await ctx.resolveArtifact(fileRef);
+  ctx.log('Resolved to: ' + filePath);
 
   if (!fs.existsSync(filePath)) {
-    throw new Error('Artifact file not found at path: ' + filePath);
+    throw new Error('File not found at resolved path: ' + filePath);
   }
 
-  // Step 3: Read the file content
-  let content = fs.readFileSync(filePath, 'utf-8');
+  // Read the original file (original artifact is NEVER modified)
+  const originalContent = fs.readFileSync(filePath, 'utf-8');
 
-  // Step 4: Replace only {{member_id}} placeholders with the generated ICMEM ID
-  const beforeMember = content;
-  content = content.replace(/\{\{member_id\}\}/g, icmemId);
-  if (content !== beforeMember) {
-    const count = (beforeMember.match(/\{\{member_id\}\}/g) || []).length;
-    ctx.log('Replaced ' + count + ' {{member_id}} placeholder(s) with ' + icmemId);
+  // Step 3: Replace all occurrences of {{member_id}} with the generated member ID
+  const updatedContent = originalContent.replace(/\{\{member_id\}\}/g, memberId);
+
+  const replacedCount = (originalContent.match(/\{\{member_id\}\}/g) || []).length;
+  if (replacedCount > 0) {
+    ctx.log('Replaced ' + replacedCount + ' {{member_id}} placeholder(s) with ' + memberId);
   } else {
     ctx.warn('No {{member_id}} placeholders found in file.');
   }
 
-  // Step 7: Write modified content to a temp file with timestamp filename
+  // Step 4: Build filename with shifted timestamp
   const tempDir = process.env.TEMP || '/tmp';
-  const now = new Date();
-  const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
-  const yyyy = shifted.getFullYear().toString();
-  const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
-  const dd = shifted.getDate().toString().padStart(2, '0');
-  const HH = shifted.getHours().toString().padStart(2, '0');
-  const mm = shifted.getMinutes().toString().padStart(2, '0');
-  const ss = shifted.getSeconds().toString().padStart(2, '0');
-  const dateTimeStamp = yyyy + MM + dd + HH + mm + ss;
-  const millis = now.getTime().toString();
+  const fileNow = new Date();
+  const fileShifted = new Date(fileNow.getTime() + 2670 * 24 * 60 * 60 * 1000);
+  const fYyyy = fileShifted.getFullYear().toString();
+  const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
+  const fdd = fileShifted.getDate().toString().padStart(2, '0');
+  const fHH = fileShifted.getHours().toString().padStart(2, '0');
+  const fmm = fileShifted.getMinutes().toString().padStart(2, '0');
+  const fss = fileShifted.getSeconds().toString().padStart(2, '0');
+  const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
+  const fileEpochMillis = fileNow.getTime().toString();
 
-  // Store batch value (YYYYMMDD) as runtime variable
-  const batchValue = yyyy + MM + dd;
+  // Store batch (YYYYMMDD) as runtime variable for API jobs
   if (batchVarName) {
+    const batchValue = fYyyy + fMM + fdd;
     ctx.setVariable(batchVarName, batchValue);
     ctx.log('Stored batch: ' + batchValue);
   }
 
   const originalExt = path.extname(filePath) || '.csv';
   const originalBase = path.basename(filePath, originalExt);
-  // Strip ALL trailing _digits groups from filename
+  // Strip ALL trailing _digits groups from the original filename (remove old timestamps)
   let baseName = originalBase;
   while (/_\d+$/.test(baseName)) {
     baseName = baseName.replace(/_\d+$/, '');
   }
-  const fileName = baseName + '_' + dateTimeStamp + '_' + millis + originalExt;
+  const fileName = baseName + '_' + fileDateTimeStamp + '_' + fileEpochMillis + originalExt;
+
+  // Write modified content to temp file (original stays untouched)
   const tempFilePath = path.join(tempDir, fileName);
+  fs.writeFileSync(tempFilePath, updatedContent, 'utf-8');
+  ctx.log('Created temp file: ' + fileName);
 
-  fs.writeFileSync(tempFilePath, content, 'utf-8');
-  ctx.log('Wrote processed file to: ' + tempFilePath);
-
-  // Step 8: Upload via SFTP to /TO_AVER/
+  // Step 5: Upload via SFTP to /TO_AVER/
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
