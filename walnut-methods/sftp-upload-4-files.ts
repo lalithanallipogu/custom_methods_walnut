@@ -21,7 +21,29 @@ export async function sftpUpload4Files(ctx: WalnutContext) {
   // ctx.args[6] = SFTP username (from ${sftpusername})
   // ctx.args[7] = SFTP password (from ${sftppassword})
 
-  const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
+  // Helper to detect Walnut artifact references (ART-13 or 24-char hex ObjectId)
+  const isArtifactRef = (v: string) =>
+    /^ART-\d+$/i.test(v) || /^[a-f0-9]{24}$/i.test(v);
+
+  // Resolve each file path — if it's an artifact ref, download it to a temp path first
+  const rawPaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
+  const filePaths: string[] = [];
+  for (let i = 0; i < rawPaths.length; i++) {
+    const raw = rawPaths[i];
+    if (!raw) {
+      filePaths.push('');
+      continue;
+    }
+    if (isArtifactRef(raw)) {
+      ctx.log('File ' + (i + 1) + ' is an artifact reference (' + raw + '), resolving...');
+      const resolved = await (ctx as any).resolveArtifact(raw);
+      ctx.log('File ' + (i + 1) + ' resolved to: ' + resolved);
+      filePaths.push(resolved);
+    } else {
+      filePaths.push(raw);
+    }
+  }
+
   const host = ctx.args[4];
   const port = ctx.args[5] || '22';
   const username = ctx.args[6];
