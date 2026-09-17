@@ -1,7 +1,7 @@
 import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
- * name: Trigger CDC BBM Job
+ * name: BETL CDC BBM Job
  * description: POST CDC BBM job to ${url} with ${requestBody} using runtime batch $[batch] and session $[averSessionId]
  * actionType: custom_pre_betl_trigger_cdc_bbm_job
  * context: api

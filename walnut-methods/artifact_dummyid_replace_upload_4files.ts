@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Artifact DummyID Replace Upload 4 Files
+ * name: SFTP DummyID 4Files Upload
  * description: Replace {{member_id}} with dummy ID ${dummyId} in 4 artifact files ${artifact1} ${artifact2} ${artifact3} ${artifact4} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
  * actionType: custom_artifact_dummyid_replace_upload_4files
  * context: shared
