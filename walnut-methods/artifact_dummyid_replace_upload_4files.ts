@@ -1,43 +1,44 @@
-import type { WalnutContext } from './walnut';
+import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Replace Files With Dummy Data and Upload
- * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch]
- * actionType: custom_replace_files_with_dummy_data
+ * name: Artifact DummyID Replace Upload 4 Files
+ * description: Replace {{member_id}} with dummy ID ${dummyId} in 4 artifact files ${artifact1} ${artifact2} ${artifact3} ${artifact4} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing batch in $[batch]
+ * actionType: custom_artifact_dummyid_replace_upload_4files
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
-export async function replaceFilesWithDummyData(ctx: WalnutContext) {
-  // ctx.args[0] = filePath1 (from ${filePath1})
-  // ctx.args[1] = filePath2 (from ${filePath2})
-  // ctx.args[2] = filePath3 (from ${filePath3})
-  // ctx.args[3] = filePath4 (from ${filePath4})
-  // ctx.args[4] = dummyId value (from ${dummyId}) — local variable from test data
-  // ctx.args[5] = sftphost (from ${sftphost})
-  // ctx.args[6] = sftpport (from ${sftpport})
-  // ctx.args[7] = sftpusername (from ${sftpusername})
-  // ctx.args[8] = sftppassword (from ${sftppassword})
-  // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store the batch value
+export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext) {
+  // ctx.args[0] = dummyId (from ${dummyId}) — dummy member ID from test data
+  // ctx.args[1] = artifact1 (from ${artifact1}) — artifact ref for file 1
+  // ctx.args[2] = artifact2 (from ${artifact2}) — artifact ref for file 2
+  // ctx.args[3] = artifact3 (from ${artifact3}) — artifact ref for file 3
+  // ctx.args[4] = artifact4 (from ${artifact4}) — artifact ref for file 4
+  // ctx.args[5] = SFTP host (from ${sftphost})
+  // ctx.args[6] = SFTP port (from ${sftpport})
+  // ctx.args[7] = SFTP username (from ${sftpusername})
+  // ctx.args[8] = SFTP password (from ${sftppassword})
+  // ctx.args[9] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
-  const filePaths = [ctx.args[0], ctx.args[1], ctx.args[2], ctx.args[3]];
-  const dummyId = ctx.args[4];
+  const dummyId = ctx.args[0];
+  const artifactRefs = [ctx.args[1], ctx.args[2], ctx.args[3], ctx.args[4]];
   const host = ctx.args[5];
   const port = ctx.args[6] || '22';
   const username = ctx.args[7];
   const password = ctx.args[8];
-  const batchVarName = ctx.args[9]; // "batch" from $[batch]
-  const remoteDirectory = '/TO_AVER/';
+  const batchVarName = ctx.args[9];
 
   if (!dummyId) {
     throw new Error(
-      'dummyId is empty. Ensure it is configured as a local variable in WalnutAI test data management.'
+      'dummyId is empty. Ensure it is configured in test data.'
     );
   }
   ctx.log('Using dummy ID from test data: ' + dummyId);
+
+  const remoteDirectory = '/TO_AVER/';
 
   if (!host || !username || !password) {
     throw new Error(
@@ -48,30 +49,41 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   const tempDir = process.env.TEMP || '/tmp';
   const tempFiles: string[] = [];
   const uploadPairs: { local: string; remote: string }[] = [];
-  let batchValue = '';
 
-  // Process each of the 4 original files
-  for (let i = 0; i < filePaths.length; i++) {
-    const filePath = filePaths[i];
+  // Process each of the 4 artifact files
+  for (let i = 0; i < artifactRefs.length; i++) {
+    const artifactRef = artifactRefs[i];
 
-    if (!filePath) {
-      ctx.log('File path ' + (i + 1) + ' is empty, skipping...');
+    if (!artifactRef) {
+      ctx.log('Artifact ref ' + (i + 1) + ' is empty, skipping...');
       continue;
     }
 
+    ctx.log('Processing artifact ' + (i + 1) + ' of 4: ' + artifactRef);
+
+    // Resolve artifact reference to a local file path
+    const filePath = await ctx.resolveArtifact(artifactRef);
+    ctx.log('Resolved artifact to: ' + filePath);
+
     if (!fs.existsSync(filePath)) {
-      throw new Error('Original file ' + (i + 1) + ' not found at path: ' + filePath);
+      throw new Error('Artifact file ' + (i + 1) + ' not found at resolved path: ' + filePath);
     }
 
-    ctx.log('Processing file ' + (i + 1) + ': ' + filePath);
-
-    // Read the original file (original file is NEVER modified)
+    // Read the original artifact file (original artifact is NEVER modified)
     const originalContent = fs.readFileSync(filePath, 'utf-8');
 
-    // Replace all occurrences of {{member_id}} with the dummy ID in the temp copy
+    // Replace all occurrences of {{member_id}} with the dummy ID
     const updatedContent = originalContent.replace(/\{\{member_id\}\}/g, dummyId);
 
+    const replacedCount = (originalContent.match(/\{\{member_id\}\}/g) || []).length;
+    if (replacedCount > 0) {
+      ctx.log('Replaced ' + replacedCount + ' {{member_id}} placeholder(s) with ' + dummyId + ' in artifact ' + (i + 1));
+    } else {
+      ctx.warn('No {{member_id}} placeholders found in artifact ' + (i + 1));
+    }
+
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
+    // Timestamp is shifted 2699 days forward from today
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
     const fileShifted = new Date(fileNow.getTime() + 2699 * 24 * 60 * 60 * 1000);
@@ -84,12 +96,14 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
     const fileEpochMillis = fileNow.getTime().toString();
 
-    // Capture the batch value (YYYYMMDD) from the first file processed
-    if (!batchValue) {
-      batchValue = fYyyy + fMM + fdd;
+    // Store batch (YYYYMMDD) from first file's timestamp for API jobs
+    if (i === 0 && batchVarName) {
+      const batchValue = fYyyy + fMM + fdd;
+      ctx.setVariable(batchVarName, batchValue);
+      ctx.log('Stored batch: ' + batchValue);
     }
 
-    const originalExt = path.extname(filePath);
+    const originalExt = path.extname(filePath) || '.csv';
     const originalBase = path.basename(filePath, originalExt);
     // Strip ALL trailing _digits groups from the original filename (remove old timestamps)
     let baseName = originalBase;
@@ -98,8 +112,8 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
     }
     const fileName = baseName + '_' + fileDateTimeStamp + '_' + fileEpochMillis + originalExt;
 
+    // Write modified content to temp file (original artifact stays untouched)
     const tempFilePath = path.join(tempDir, fileName);
-
     fs.writeFileSync(tempFilePath, updatedContent, 'utf-8');
     tempFiles.push(tempFilePath);
 
@@ -113,10 +127,10 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   }
 
   if (uploadPairs.length === 0) {
-    throw new Error('No valid file paths provided. Nothing to upload.');
+    throw new Error('No valid artifact references provided. Nothing to upload.');
   }
 
-  // Upload all temp files via SFTP to /TO_AVER/
+  // Upload all 4 temp files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
   // Python script reads credentials from command-line args (never written to disk)
@@ -149,7 +163,7 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
   // File pairs as JSON (no credentials in this data)
   const filePairsJson = JSON.stringify(uploadPairs.map(p => [p.local, p.remote]));
 
-  const tmpScript = path.join(tempDir, 'sftp_upload_dummy_' + Date.now() + '.py');
+  const tmpScript = path.join(tempDir, 'sftp_upload_4artifacts_dummy_' + Date.now() + '.py');
 
   try {
     fs.writeFileSync(tmpScript, pyScript);
@@ -175,14 +189,8 @@ export async function replaceFilesWithDummyData(ctx: WalnutContext) {
       throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     }
 
-    ctx.log('All files uploaded successfully to ' + remoteDirectory);
+    ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
     ctx.log(result.stdout);
-
-    // Store the batch value (YYYYMMDD) as a runtime variable for use in subsequent steps
-    if (batchVarName && batchValue) {
-      ctx.setVariable(batchVarName, batchValue);
-      ctx.log('Stored batch value: ' + batchValue + ' in variable: ' + batchVarName);
-    }
   } finally {
     // Cleanup: remove temp Python script and temp data files
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
