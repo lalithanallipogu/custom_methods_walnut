@@ -1,7 +1,7 @@
 import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
- * name: API Get Member By Generated ID
+ * name: Trigger Get Member Without Suffix
  * description: POST get member to ${url} with ${requestBody} using session $[averSessionId] and generated member $[memberId]
  * actionType: custom_api_get_member_by_generated_id
  * context: api
