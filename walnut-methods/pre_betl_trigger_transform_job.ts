@@ -1,7 +1,7 @@
 import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
- * name: BETL Transform Job
+ * name: Trigger Transform Job
  * description: POST transform job to ${url} with ${requestBody} using runtime batch $[batch] and session $[averSessionId]
  * actionType: custom_pre_betl_trigger_transform_job
  * context: api

@@ -1,7 +1,7 @@
 import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
- * name: BETL Validate Job
+ * name: Trigger Validate Job
  * description: POST validate job to ${url} with ${requestBody} using runtime batch $[batch] and session $[averSessionId]
  * actionType: custom_pre_betl_trigger_validate_job
  * context: api
