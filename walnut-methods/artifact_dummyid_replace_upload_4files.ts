@@ -62,7 +62,9 @@ export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext)
     ctx.log('Processing artifact ' + (i + 1) + ' of 4: ' + artifactRef);
 
     // Resolve artifact reference to a local file path
-    const filePath = await ctx.resolveArtifact(artifactRef);
+    // Use realpathSync to convert Windows 8.3 short names (e.g. MEMBER~1.CSV) to full long names
+    const rawPath = await ctx.resolveArtifact(artifactRef);
+    const filePath = fs.realpathSync(rawPath);
     ctx.log('Resolved artifact to: ' + filePath);
 
     if (!fs.existsSync(filePath)) {
