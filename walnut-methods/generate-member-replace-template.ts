@@ -77,7 +77,7 @@ export async function artifactGenerateMemberReplaceUpload(ctx: WalnutContext) {
   // Step 4: Build filename with shifted timestamp
   const tempDir = process.env.TEMP || '/tmp';
   const fileNow = new Date();
-  const fileShifted = new Date(fileNow.getTime() + 2699 * 24 * 60 * 60 * 1000);
+  const fileShifted = new Date(fileNow.getTime() + 2700 * 24 * 60 * 60 * 1000);
   const fYyyy = fileShifted.getFullYear().toString();
   const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
   const fdd = fileShifted.getDate().toString().padStart(2, '0');
