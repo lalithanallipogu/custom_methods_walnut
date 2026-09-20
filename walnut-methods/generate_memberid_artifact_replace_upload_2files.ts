@@ -4,30 +4,29 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Mem_claim1_ActualFile Artifacts Upload Generate MemberID Replace Upload 2 Files
- * description: Generate unique member ID, replace {{member_id}} in 2 artifact files ${memberArtifact} ${claim1Artifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch]
+ * name: Mem ActualFile Artifact Upload Generate MemberID Replace Upload 1 File
+ * description: Generate unique member ID, replace {{member_id}} in artifact ${memberArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch]
  * actionType: custom_generate_memberid_artifact_replace_upload_2files
  * context: shared
  * needsLocator: false
  * category: File Transfer
  */
-export async function generateMemberIdArtifactReplaceUpload2Files(ctx: WalnutBaseContext) {
+export async function generateMemberIdArtifactReplaceUpload1File(ctx: WalnutBaseContext) {
   // ctx.args[0] = memberArtifact (from ${memberArtifact}) — artifact ref for member file
-  // ctx.args[1] = claim1Artifact (from ${claim1Artifact}) — artifact ref for first claim file
-  // ctx.args[2] = SFTP host (from ${sftphost})
-  // ctx.args[3] = SFTP port (from ${sftpport})
-  // ctx.args[4] = SFTP username (from ${sftpusername})
-  // ctx.args[5] = SFTP password (from ${sftppassword})
-  // ctx.args[6] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
-  // ctx.args[7] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
+  // ctx.args[1] = SFTP host (from ${sftphost})
+  // ctx.args[2] = SFTP port (from ${sftpport})
+  // ctx.args[3] = SFTP username (from ${sftpusername})
+  // ctx.args[4] = SFTP password (from ${sftppassword})
+  // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
+  // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
 
-  const artifactRefs = [ctx.args[0], ctx.args[1]];
-  const host = ctx.args[2];
-  const port = ctx.args[3] || '22';
-  const username = ctx.args[4];
-  const password = ctx.args[5];
-  const memberIdVarName = ctx.args[6];
-  const batchVarName = ctx.args[7];
+  const artifactRef = ctx.args[0];
+  const host = ctx.args[1];
+  const port = ctx.args[2] || '22';
+  const username = ctx.args[3];
+  const password = ctx.args[4];
+  const memberIdVarName = ctx.args[5];
+  const batchVarName = ctx.args[6];
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
@@ -50,126 +49,97 @@ export async function generateMemberIdArtifactReplaceUpload2Files(ctx: WalnutBas
     );
   }
 
+  if (!artifactRef) {
+    throw new Error('Artifact reference is required for the member file to upload.');
+  }
+
   const tempDir = process.env.TEMP || '/tmp';
-  const tempFiles: string[] = [];
-  const uploadPairs: { local: string; remote: string }[] = [];
 
-  // Step 2: Process each of the 2 artifact files
-  for (let i = 0; i < artifactRefs.length; i++) {
-    const artifactRef = artifactRefs[i];
+  // Step 2: Process the member artifact file
+  ctx.log('Processing member artifact: ' + artifactRef);
+  const filePath = await ctx.resolveArtifact(artifactRef);
+  ctx.log('Resolved artifact to: ' + filePath);
 
-    if (!artifactRef) {
-      ctx.log('Artifact ref ' + (i + 1) + ' is empty, skipping...');
-      continue;
-    }
-
-    ctx.log('Processing artifact ' + (i + 1) + ' of 2: ' + artifactRef);
-
-    // Resolve artifact reference to a local file path
-    // Use realpathSync to convert Windows 8.3 short names (e.g. MEMBER~1.CSV) to full long names
-    const rawPath = await ctx.resolveArtifact(artifactRef);
-    const filePath = fs.realpathSync(rawPath);
-    ctx.log('Resolved artifact to: ' + filePath);
-
-    if (!fs.existsSync(filePath)) {
-      throw new Error('Artifact file ' + (i + 1) + ' not found at resolved path: ' + filePath);
-    }
-
-    // Read the original artifact file (original artifact is NEVER modified)
-    const originalContent = fs.readFileSync(filePath, 'utf-8');
-
-    // Replace all occurrences of {{member_id}} with the generated member ID
-    const updatedContent = originalContent.replace(/\{\{member_id\}\}/g, memberId);
-
-    const replacedCount = (originalContent.match(/\{\{member_id\}\}/g) || []).length;
-    if (replacedCount > 0) {
-      ctx.log('Replaced ' + replacedCount + ' {{member_id}} placeholder(s) with ' + memberId + ' in artifact ' + (i + 1));
-    } else {
-      ctx.warn('No {{member_id}} placeholders found in artifact ' + (i + 1));
-    }
-
-    // Build filename: strip any existing timestamp from original, append new shifted timestamp
-    // Timestamp is shifted 2700 days forward from today
-    // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
-    const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2700 * 24 * 60 * 60 * 1000);
-    const fYyyy = fileShifted.getFullYear().toString();
-    const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
-    const fdd = fileShifted.getDate().toString().padStart(2, '0');
-    const fHH = fileShifted.getHours().toString().padStart(2, '0');
-    const fmm = fileShifted.getMinutes().toString().padStart(2, '0');
-    const fss = fileShifted.getSeconds().toString().padStart(2, '0');
-    const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
-    const fileEpochMillis = fileNow.getTime().toString();
-
-    // Store batch (YYYYMMDD) from first file's timestamp for API jobs
-    if (i === 0 && batchVarName) {
-      const batchValue = fYyyy + fMM + fdd;
-      ctx.setVariable(batchVarName, batchValue);
-      ctx.log('Stored batch: ' + batchValue);
-    }
-
-    const originalExt = path.extname(filePath) || '.csv';
-    const originalBase = path.basename(filePath, originalExt);
-    // Strip ALL trailing _digits groups from the original filename (remove old timestamps)
-    let baseName = originalBase;
-    while (/_\d+$/.test(baseName)) {
-      baseName = baseName.replace(/_\d+$/, '');
-    }
-    const fileName = baseName + '_' + fileDateTimeStamp + '_' + fileEpochMillis + originalExt;
-
-    // Write modified content to temp file (original artifact stays untouched)
-    const tempFilePath = path.join(tempDir, fileName);
-    fs.writeFileSync(tempFilePath, updatedContent, 'utf-8');
-    tempFiles.push(tempFilePath);
-
-    const remotePath = remoteDirectory + fileName;
-    uploadPairs.push({ local: tempFilePath, remote: remotePath });
-
-    ctx.log('Created temp file: ' + fileName);
-
-    // Small delay to ensure unique epoch millis per file
-    await new Promise(resolve => setTimeout(resolve, 10));
+  if (!fs.existsSync(filePath)) {
+    throw new Error('Artifact file not found at resolved path: ' + filePath);
   }
 
-  if (uploadPairs.length === 0) {
-    throw new Error('No valid artifact references provided. Nothing to upload.');
+  // Read the original artifact file (original artifact is NEVER modified)
+  const originalContent = fs.readFileSync(filePath, 'utf-8');
+
+  // Replace all occurrences of {{member_id}} with the generated member ID
+  const updatedContent = originalContent.replace(/\{\{member_id\}\}/g, memberId);
+
+  const replacedCount = (originalContent.match(/\{\{member_id\}\}/g) || []).length;
+  if (replacedCount > 0) {
+    ctx.log('Replaced ' + replacedCount + ' {{member_id}} placeholder(s) with ' + memberId);
+  } else {
+    ctx.warn('No {{member_id}} placeholders found in artifact');
   }
 
-  // Step 3: Upload 2 temp files via SFTP to /TO_AVER/
-  ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
+  // Build filename: strip any existing timestamp from original, append new shifted timestamp
+  // Timestamp is shifted 2700 days forward from today
+  // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext
+  const fileNow = new Date();
+  const fileShifted = new Date(fileNow.getTime() + 2700 * 24 * 60 * 60 * 1000);
+  const fYyyy = fileShifted.getFullYear().toString();
+  const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
+  const fdd = fileShifted.getDate().toString().padStart(2, '0');
+  const fHH = fileShifted.getHours().toString().padStart(2, '0');
+  const fmm = fileShifted.getMinutes().toString().padStart(2, '0');
+  const fss = fileShifted.getSeconds().toString().padStart(2, '0');
+  const fileDateTimeStamp = fYyyy + fMM + fdd + fHH + fmm + fss;
+  const fileEpochMillis = fileNow.getTime().toString();
 
-  // Python script reads credentials from command-line args (never written to disk)
+  // Store batch (YYYYMMDD) from the file's timestamp for API jobs
+  if (batchVarName) {
+    const batchValue = fYyyy + fMM + fdd;
+    ctx.setVariable(batchVarName, batchValue);
+    ctx.log('Stored batch: ' + batchValue);
+  }
+
+  const originalExt = path.extname(filePath) || '.csv';
+  const originalBase = path.basename(filePath, originalExt);
+  // Strip ALL trailing _digits groups from the original filename (remove old timestamps)
+  let baseName = originalBase;
+  while (/_\d+$/.test(baseName)) {
+    baseName = baseName.replace(/_\d+$/, '');
+  }
+  const fileName = baseName + '_' + fileDateTimeStamp + '_' + fileEpochMillis + originalExt;
+
+  // Write modified content to temp file (original artifact stays untouched)
+  const tempFilePath = path.join(tempDir, fileName);
+  fs.writeFileSync(tempFilePath, updatedContent, 'utf-8');
+  ctx.log('Created temp file: ' + fileName);
+
+  // Step 3: Upload temp file via SFTP to /TO_AVER/
+  const remotePath = remoteDirectory + fileName;
+  ctx.log('Uploading to ' + host + ':' + remotePath + '...');
+
   const pyScript = [
     'import paramiko',
     'import sys',
-    'import json',
     '',
     'host = sys.argv[1]',
     'port = int(sys.argv[2])',
     'username = sys.argv[3]',
     'password = sys.argv[4]',
-    'file_pairs = json.loads(sys.argv[5])',
+    'local_file = sys.argv[5]',
+    'remote_path = sys.argv[6]',
     '',
     'transport = paramiko.Transport((host, port))',
     'transport.connect(username=username, password=password)',
     'sftp = paramiko.SFTPClient.from_transport(transport)',
     '',
     'try:',
-    '    for i, pair in enumerate(file_pairs):',
-    '        print(f"Uploading file {i+1}/{len(file_pairs)}: {pair[1]}")',
-    '        sftp.put(pair[0], pair[1])',
-    '        print(f"  Upload successful: {pair[1]}")',
-    '    print(f"All {len(file_pairs)} files uploaded successfully.")',
+    '    sftp.put(local_file, remote_path)',
+    '    print("Upload successful: " + remote_path)',
     'finally:',
     '    sftp.close()',
     '    transport.close()',
   ].join('\n');
 
-  // File pairs as JSON (no credentials in this data)
-  const filePairsJson = JSON.stringify(uploadPairs.map(p => [p.local, p.remote]));
-
-  const tmpScript = path.join(tempDir, 'sftp_upload_2artifacts_' + Date.now() + '.py');
+  const tmpScript = path.join(tempDir, 'sftp_upload_member_artifact_' + Date.now() + '.py');
 
   try {
     fs.writeFileSync(tmpScript, pyScript);
@@ -181,7 +151,8 @@ export async function generateMemberIdArtifactReplaceUpload2Files(ctx: WalnutBas
       port,
       username,
       password,
-      filePairsJson,
+      tempFilePath,
+      remotePath,
     ], {
       timeout: 180000,
       encoding: 'utf-8',
@@ -195,13 +166,11 @@ export async function generateMemberIdArtifactReplaceUpload2Files(ctx: WalnutBas
       throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     }
 
-    ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
+    ctx.log('Successfully uploaded member file to ' + remotePath);
     ctx.log(result.stdout);
   } finally {
-    // Cleanup: remove temp Python script and temp data files
+    // Cleanup: remove temp Python script and temp data file
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
-    for (const tempFile of tempFiles) {
-      if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
-    }
+    if (fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
   }
 }

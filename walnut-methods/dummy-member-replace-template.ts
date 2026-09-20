@@ -52,9 +52,7 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   let filePath: string;
   if (isArtifactRef) {
     ctx.log('Resolving artifact reference: ' + fileRef);
-    // Use realpathSync to convert Windows 8.3 short names (e.g. MEMBER~1.CSV) to full long names
-    const rawPath = await ctx.resolveArtifact(fileRef);
-    filePath = fs.realpathSync(rawPath);
+    filePath = await ctx.resolveArtifact(fileRef);
     ctx.log('Resolved to: ' + filePath);
   } else {
     filePath = fileRef;
