@@ -78,7 +78,7 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   // Step 6: Write modified content to a temp file with timestamp filename
   const tempDir = process.env.TEMP || '/tmp';
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2702 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2704 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');

@@ -83,10 +83,10 @@ export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext)
     }
 
     // Build filename: strip any existing timestamp from original, append new shifted timestamp
-    // Timestamp is shifted 2702 days forward from today
+    // Timestamp is shifted 2704 days forward from today
     // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext (unique epoch per file)
     const fileNow = new Date();
-    const fileShifted = new Date(fileNow.getTime() + 2702 * 24 * 60 * 60 * 1000);
+    const fileShifted = new Date(fileNow.getTime() + 2704 * 24 * 60 * 60 * 1000);
     const fYyyy = fileShifted.getFullYear().toString();
     const fMM = (fileShifted.getMonth() + 1).toString().padStart(2, '0');
     const fdd = fileShifted.getDate().toString().padStart(2, '0');
