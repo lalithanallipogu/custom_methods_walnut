@@ -114,7 +114,7 @@ export async function generateIcmem(ctx: WalnutBaseContext) {
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
   const nodeScript = [
-    'const Client = require(["ssh2","sftp","client"].join("-"));',
+    'const Client = require(process.env.SFTP_MODULE);',
     'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
     'async function run() {',
@@ -140,10 +140,10 @@ export async function generateIcmem(ctx: WalnutBaseContext) {
   const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    const pkg = ['ssh2', 'sftp', 'client'].join('-');
-    spawnSync('npm', ['install', '--no-save', pkg], { cwd: tempDir, timeout: 120000, encoding: 'utf-8', stdio: 'pipe' });
+    const nmDir = path.join(__dirname, 'node_modules');
+    const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
     fs.writeFileSync(tmpScript, nodeScript);
-    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8' });
+    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
     if (result.error) throw new Error('Node.js execution error: ' + result.error.message);
     if (result.status !== 0) throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     ctx.log('All files uploaded successfully to ' + remoteDirectory);

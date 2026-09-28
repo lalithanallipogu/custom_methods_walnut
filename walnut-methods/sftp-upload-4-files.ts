@@ -85,9 +85,9 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
   // Upload all files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  // Node.js SFTP script — runs in a child process to bypass bundler restrictions
+  // Node.js SFTP script — runs in a child process with bundled node_modules
   const nodeScript = [
-    'const Client = require(["ssh2","sftp","client"].join("-"));',
+    'const Client = require(process.env.SFTP_MODULE);',
     'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
     'async function run() {',
@@ -116,19 +116,15 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
   const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    const pkg = ['ssh2', 'sftp', 'client'].join('-');
-    spawnSync('npm', ['install', '--no-save', pkg], {
-      cwd: tempDir,
-      timeout: 120000,
-      encoding: 'utf-8',
-      stdio: 'pipe',
-    });
+    const nmDir = path.join(__dirname, 'node_modules');
+    const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
 
     fs.writeFileSync(tmpScript, nodeScript);
 
     const result = spawnSync('node', [tmpScript, scriptArgs], {
       timeout: 180000,
       encoding: 'utf-8',
+      env: { ...process.env, SFTP_MODULE: sftpModPath },
     });
 
     if (result.error) {
