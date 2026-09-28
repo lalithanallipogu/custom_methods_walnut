@@ -1,6 +1,7 @@
 import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
+import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: SFTP Upload 4 Original Files
@@ -84,29 +85,62 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
   // Upload all files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  const sftpMod = ['ssh2', 'sftp', 'client'].join('-');
-  const SftpClient = require(sftpMod);
-  const sftp = new SftpClient();
+  // Node.js SFTP script — runs in a child process to bypass bundler restrictions
+  const nodeScript = [
+    'const Client = require("ssh2-sftp-client");',
+    'const sftp = new Client();',
+    'const args = JSON.parse(process.argv[2]);',
+    'async function run() {',
+    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
+    '  for (let i = 0; i < args.files.length; i++) {',
+    '    const f = args.files[i];',
+    '    console.log("Uploading file " + (i+1) + "/" + args.files.length + ": " + f.remote);',
+    '    await sftp.put(f.local, f.remote);',
+    '    console.log("  Upload successful: " + f.remote);',
+    '  }',
+    '  await sftp.end();',
+    '  console.log("All " + args.files.length + " files uploaded successfully.");',
+    '}',
+    'run().catch(e => { console.error(e.message); process.exit(1); });',
+  ].join('\n');
+
+  const scriptArgs = JSON.stringify({
+    host: host,
+    port: parseInt(port, 10),
+    username: username,
+    password: password,
+    files: uploadPairs,
+  });
+
+  const tempDir = process.env.TEMP || '/tmp';
+  const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    await sftp.connect({
-      host: host,
-      port: parseInt(port, 10),
-      username: username,
-      password: password,
+    spawnSync('npm', ['install', '--no-save', 'ssh2-sftp-client'], {
+      cwd: tempDir,
+      timeout: 120000,
+      encoding: 'utf-8',
+      stdio: 'pipe',
     });
 
-    for (let i = 0; i < uploadPairs.length; i++) {
-      const pair = uploadPairs[i];
-      ctx.log('Uploading file ' + (i + 1) + '/' + uploadPairs.length + ': ' + pair.remote);
-      await sftp.put(pair.local, pair.remote);
-      ctx.log('  Upload successful: ' + pair.remote);
+    fs.writeFileSync(tmpScript, nodeScript);
+
+    const result = spawnSync('node', [tmpScript, scriptArgs], {
+      timeout: 180000,
+      encoding: 'utf-8',
+    });
+
+    if (result.error) {
+      throw new Error('Node.js execution error: ' + result.error.message);
     }
 
+    if (result.status !== 0) {
+      throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
+    }
+
+    ctx.log(result.stdout);
     ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
-  } catch (err: any) {
-    throw new Error('SFTP upload failed: ' + (err.message || err));
   } finally {
-    await sftp.end();
+    if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
   }
 }
