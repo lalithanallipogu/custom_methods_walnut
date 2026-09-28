@@ -1,7 +1,6 @@
 import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
-import SftpClient from 'ssh2-sftp-client';
 
 /** @walnut_method
  * name: Altarum Artifact file upload DummyID Replace Upload 4 Files
@@ -133,6 +132,7 @@ export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext)
   // Upload all 4 temp files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
+  const SftpClient = require('ssh2-sftp-client');
   const sftp = new SftpClient();
 
   try {

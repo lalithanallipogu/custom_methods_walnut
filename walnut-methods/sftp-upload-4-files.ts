@@ -1,7 +1,6 @@
 import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
-import SftpClient from 'ssh2-sftp-client';
 
 /** @walnut_method
  * name: SFTP Upload 4 Original Files
@@ -85,6 +84,7 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
   // Upload all files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
+  const SftpClient = require('ssh2-sftp-client');
   const sftp = new SftpClient();
 
   try {

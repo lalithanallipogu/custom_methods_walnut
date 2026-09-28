@@ -1,7 +1,6 @@
 import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
-import SftpClient from 'ssh2-sftp-client';
 
 /** @walnut_method
  * name: Replace ICMEM and Upload Single File
@@ -84,6 +83,7 @@ export async function sftpTemplateUpload(ctx: WalnutBaseContext) {
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
+  const SftpClient = require('ssh2-sftp-client');
   const sftp = new SftpClient();
 
   try {
