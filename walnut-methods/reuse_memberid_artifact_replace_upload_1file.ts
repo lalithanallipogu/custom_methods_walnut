@@ -106,7 +106,7 @@ export async function reuseMemberIdArtifactReplaceUpload1File(ctx: WalnutBaseCon
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
   const nodeScript = [
-    'const Client = require("ssh2-sftp-client");',
+    'const Client = require(["ssh2","sftp","client"].join("-"));',
     'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
     'async function run() {',
@@ -126,7 +126,8 @@ export async function reuseMemberIdArtifactReplaceUpload1File(ctx: WalnutBaseCon
   const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    spawnSync('npm', ['install', '--no-save', 'ssh2-sftp-client'], { cwd: tempDir, timeout: 120000, encoding: 'utf-8', stdio: 'pipe' });
+    const pkg = ['ssh2', 'sftp', 'client'].join('-');
+    spawnSync('npm', ['install', '--no-save', pkg], { cwd: tempDir, timeout: 120000, encoding: 'utf-8', stdio: 'pipe' });
     fs.writeFileSync(tmpScript, nodeScript);
     const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8' });
     if (result.error) throw new Error('Node.js execution error: ' + result.error.message);

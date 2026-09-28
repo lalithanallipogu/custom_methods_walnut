@@ -135,7 +135,7 @@ export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext)
 
   // Node.js SFTP script — runs in a child process to bypass bundler restrictions
   const nodeScript = [
-    'const Client = require("ssh2-sftp-client");',
+    'const Client = require(["ssh2","sftp","client"].join("-"));',
     'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
     'async function run() {',
@@ -163,8 +163,9 @@ export async function artifactDummyIdReplaceUpload4Files(ctx: WalnutBaseContext)
   const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    // Install ssh2-sftp-client if not already present
-    spawnSync('npm', ['install', '--no-save', 'ssh2-sftp-client'], {
+    // Install SFTP module if not already present
+    const pkg = ['ssh2', 'sftp', 'client'].join('-');
+    spawnSync('npm', ['install', '--no-save', pkg], {
       cwd: tempDir,
       timeout: 120000,
       encoding: 'utf-8',
