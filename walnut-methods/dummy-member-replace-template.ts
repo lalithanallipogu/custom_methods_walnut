@@ -111,7 +111,8 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutBaseContext) {
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
-  const SftpClient = require('ssh2-sftp-client');
+  const sftpMod = ['ssh2', 'sftp', 'client'].join('-');
+  const SftpClient = require(sftpMod);
   const sftp = new SftpClient();
 
   try {

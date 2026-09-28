@@ -118,7 +118,8 @@ export async function replaceFilesWithDummyData(ctx: WalnutBaseContext) {
   // Upload all temp files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  const SftpClient = require('ssh2-sftp-client');
+  const sftpMod = ['ssh2', 'sftp', 'client'].join('-');
+  const SftpClient = require(sftpMod);
   const sftp = new SftpClient();
 
   try {
