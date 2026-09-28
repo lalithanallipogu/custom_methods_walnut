@@ -1,7 +1,7 @@
-import type { WalnutContext } from './walnut';
+import type { WalnutBaseContext } from './walnut';
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawnSync } from 'child_process';
+import SftpClient from 'ssh2-sftp-client';
 
 /** @walnut_method
  * name: Artifact Dummy Member ID Replace Template and Upload
@@ -11,7 +11,7 @@ import { spawnSync } from 'child_process';
  * needsLocator: false
  * category: Data Processing
  */
-export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
+export async function artifactDummyMemberReplaceUpload(ctx: WalnutBaseContext) {
   // ctx.args[0] = dummyMemberId (from ${dummyMemberId}) — the dummy ID to use for replacement
   // ctx.args[1] = filePath or artifact ref (from ${filePath})
   // ctx.args[2] = SFTP host (from ${sftphost})
@@ -112,60 +112,23 @@ export async function artifactDummyMemberReplaceUpload(ctx: WalnutContext) {
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
-  const pyScript = [
-    'import paramiko',
-    'import sys',
-    '',
-    'host = sys.argv[1]',
-    'port = int(sys.argv[2])',
-    'username = sys.argv[3]',
-    'password = sys.argv[4]',
-    'local_file = sys.argv[5]',
-    'remote_path = sys.argv[6]',
-    '',
-    'transport = paramiko.Transport((host, port))',
-    'transport.connect(username=username, password=password)',
-    'sftp = paramiko.SFTPClient.from_transport(transport)',
-    '',
-    'try:',
-    '    sftp.put(local_file, remote_path)',
-    '    print("Upload successful: " + remote_path)',
-    'finally:',
-    '    sftp.close()',
-    '    transport.close()',
-  ].join('\n');
-
-  const tmpScript = path.join(tempDir, 'sftp_upload_' + Date.now() + '.py');
+  const sftp = new SftpClient();
 
   try {
-    fs.writeFileSync(tmpScript, pyScript);
-
-    const result = spawnSync('python', [
-      tmpScript,
-      host,
-      port,
-      username,
-      password,
-      tempFilePath,
-      remotePath,
-    ], {
-      timeout: 180000,
-      encoding: 'utf-8',
+    await sftp.connect({
+      host: host,
+      port: parseInt(port, 10),
+      username: username,
+      password: password,
     });
 
-    if (result.error) {
-      throw new Error('Python execution error: ' + result.error.message);
-    }
-
-    if (result.status !== 0) {
-      throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
-    }
-
+    await sftp.put(tempFilePath, remotePath);
     ctx.log('Successfully uploaded file to ' + remotePath);
-    ctx.log(result.stdout);
+  } catch (err: any) {
+    throw new Error('SFTP upload failed: ' + (err.message || err));
   } finally {
-    // Cleanup temp files
-    if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
+    await sftp.end();
+    // Cleanup temp file
     if (fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
   }
 }

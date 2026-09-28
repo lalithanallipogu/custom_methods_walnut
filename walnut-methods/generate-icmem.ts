@@ -1,7 +1,7 @@
-import type { WalnutContext } from './walnut';
+import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
-import { spawnSync } from 'child_process';
+import SftpClient from 'ssh2-sftp-client';
 
 /** @walnut_method
  * name: Generate ICMEM ID and Upload All Files
@@ -11,7 +11,7 @@ import { spawnSync } from 'child_process';
  * needsLocator: false
  * category: Data Processing
  */
-export async function generateIcmem(ctx: WalnutContext) {
+export async function generateIcmem(ctx: WalnutBaseContext) {
   // ctx.args[0] = localFilePath1 (from ${localFilePath1})
   // ctx.args[1] = localFilePath2 (from ${localFilePath2})
   // ctx.args[2] = localFilePath3 (from ${localFilePath3})
@@ -113,67 +113,29 @@ export async function generateIcmem(ctx: WalnutContext) {
   // Step 3: Upload all modified temp files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  // Python script reads credentials from command-line args (never written to disk)
-  const pyScript = [
-    'import paramiko',
-    'import sys',
-    'import json',
-    '',
-    'host = sys.argv[1]',
-    'port = int(sys.argv[2])',
-    'username = sys.argv[3]',
-    'password = sys.argv[4]',
-    'file_pairs = json.loads(sys.argv[5])',
-    '',
-    'transport = paramiko.Transport((host, port))',
-    'transport.connect(username=username, password=password)',
-    'sftp = paramiko.SFTPClient.from_transport(transport)',
-    '',
-    'try:',
-    '    for i, pair in enumerate(file_pairs):',
-    '        print(f"Uploading file {i+1}/{len(file_pairs)}: {pair[1]}")',
-    '        sftp.put(pair[0], pair[1])',
-    '        print(f"  Upload successful: {pair[1]}")',
-    '    print(f"All {len(file_pairs)} files uploaded successfully.")',
-    'finally:',
-    '    sftp.close()',
-    '    transport.close()',
-  ].join('\n');
-
-  // File pairs as JSON (no credentials in this data)
-  const filePairsJson = JSON.stringify(uploadPairs.map(p => [p.local, p.remote]));
-
-  const tmpScript = path.join(tempDir, 'sftp_upload_all_' + Date.now() + '.py');
+  const sftp = new SftpClient();
 
   try {
-    fs.writeFileSync(tmpScript, pyScript);
-
-    // Credentials passed as arguments — never written to any file
-    const result = spawnSync('python', [
-      tmpScript,
-      host.trim(),
-      port.toString().trim(),
-      username.trim(),
-      password.trim(),
-      filePairsJson,
-    ], {
-      timeout: 180000,
-      encoding: 'utf-8',
+    await sftp.connect({
+      host: host.trim(),
+      port: parseInt(port.toString().trim(), 10),
+      username: username.trim(),
+      password: password.trim(),
     });
 
-    if (result.error) {
-      throw new Error('Python execution error: ' + result.error.message);
-    }
-
-    if (result.status !== 0) {
-      throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
+    for (let i = 0; i < uploadPairs.length; i++) {
+      const pair = uploadPairs[i];
+      ctx.log('Uploading file ' + (i + 1) + '/' + uploadPairs.length + ': ' + pair.remote);
+      await sftp.put(pair.local, pair.remote);
+      ctx.log('  Upload successful: ' + pair.remote);
     }
 
     ctx.log('All files uploaded successfully to ' + remoteDirectory);
-    ctx.log(result.stdout);
+  } catch (err: any) {
+    throw new Error('SFTP upload failed: ' + (err.message || err));
   } finally {
+    await sftp.end();
     // Cleanup all temp files
-    if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
     for (const tempFile of tempFiles) {
       if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
     }
