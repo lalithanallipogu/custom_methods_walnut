@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { spawnSync } from 'child_process';
 
 /** @walnut_method
- * name: Claim ActualFile Artifact Upload Reuse MemberID Replace Upload 1 File
+ * name: Reuse MemberID Replace ActualFile Artifact Upload 1 File
  * description: Reuse generated member ID $[memberId], replace {{member_id}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} using batch $[batch]
  * actionType: custom_reuse_memberid_artifact_replace_upload_1file
  * context: shared
