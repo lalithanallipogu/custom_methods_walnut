@@ -8,6 +8,7 @@ import { spawnSync } from 'child_process';
  * description: Generate unique member ID, replace {{member_id}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch]
  * actionType: custom_generate_memberid_artifact_replace_upload_2files
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */

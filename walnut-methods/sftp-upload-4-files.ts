@@ -8,6 +8,7 @@ import { spawnSync } from 'child_process';
  * description: Upload 4 files ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword}
  * actionType: custom_sftp_upload_4_files
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */

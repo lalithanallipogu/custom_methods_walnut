@@ -8,6 +8,7 @@ import { spawnSync } from 'child_process';
  * description: Replace {{member_id}} with $[icmemId] in template ${localFilePath} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/
  * actionType: custom_sftp_template_upload
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */

@@ -8,6 +8,7 @@ import { spawnSync } from 'child_process';
  * description: Read 4 files ${filePath1} ${filePath2} ${filePath3} ${filePath4}, replace {{member_id}} with ${dummyId} in temp copies, upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and store batch in $[batch]
  * actionType: custom_replace_files_with_dummy_data
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */
