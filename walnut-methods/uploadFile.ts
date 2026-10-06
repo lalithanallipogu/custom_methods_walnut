@@ -6,6 +6,7 @@ import * as fs from 'fs';
  * description: Upload ${filePaths} to the linked object (one path, or several comma-separated paths or artifact refs like ART-13)
  * actionType: custom_upload_files
  * context: web
+ * modules: fs
  * needsLocator: true
  * category: Interaction
  */

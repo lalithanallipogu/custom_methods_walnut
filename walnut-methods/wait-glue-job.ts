@@ -6,6 +6,7 @@ import { spawnSync } from 'child_process';
  * description: Poll AWS Glue job ${jobName} until it succeeds or fails with AWS access key ${awsAccessKeyId} secret ${awsSecretAccessKey} region ${awsRegion}
  * actionType: custom_wait_glue_job
  * context: shared
+ * modules: child_process, path, fs
  * needsLocator: false
  * category: Data Processing
  */

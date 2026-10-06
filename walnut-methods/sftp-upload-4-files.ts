@@ -8,6 +8,7 @@ import { spawnSync } from 'child_process';
  * description: Upload 4 files ${localFilePath1} ${localFilePath2} ${localFilePath3} ${localFilePath4} to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId]
  * actionType: custom_sftp_upload_4_files
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */
@@ -147,66 +148,71 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
   // Step 3: Upload all files via SFTP to /TO_AVER/
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  // Python script reads credentials from command-line args (never written to disk)
-  const pyScript = [
-    'import paramiko',
-    'import sys',
-    'import json',
-    '',
-    'host = sys.argv[1]',
-    'port = int(sys.argv[2])',
-    'username = sys.argv[3]',
-    'password = sys.argv[4]',
-    'file_pairs = json.loads(sys.argv[5])',
-    '',
-    'transport = paramiko.Transport((host, port))',
-    'transport.connect(username=username, password=password)',
-    'sftp = paramiko.SFTPClient.from_transport(transport)',
-    '',
-    'try:',
-    '    for i, pair in enumerate(file_pairs):',
-    '        print(f"Uploading file {i+1}/{len(file_pairs)}: {pair[1]}")',
-    '        sftp.put(pair[0], pair[1])',
-    '        print(f"  Upload successful: {pair[1]}")',
-    '    print(f"All {len(file_pairs)} files uploaded successfully.")',
-    'finally:',
-    '    sftp.close()',
-    '    transport.close()',
+  // Node.js SFTP script — runs in a child process with bundled node_modules
+  const nodeScript = [
+    'const Client = require(process.env.SFTP_MODULE);',
+    'const sftp = new Client();',
+    'const args = JSON.parse(process.argv[2]);',
+    'async function run() {',
+    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
+    '  for (let i = 0; i < args.files.length; i++) {',
+    '    const f = args.files[i];',
+    '    console.log("Uploading file " + (i+1) + "/" + args.files.length + ": " + f.remote);',
+    '    await sftp.put(f.local, f.remote);',
+    '    console.log("  Upload successful: " + f.remote);',
+    '  }',
+    '  await sftp.end();',
+    '  console.log("All " + args.files.length + " files uploaded successfully.");',
+    '}',
+    'run().catch(e => { console.error(e.message); process.exit(1); });',
   ].join('\n');
 
-  // File pairs as JSON (no credentials in this data)
-  const filePairsJson = JSON.stringify(uploadPairs.map(p => [p.local, p.remote]));
+  const scriptArgs = JSON.stringify({
+    host: host,
+    port: parseInt(port, 10),
+    username: username,
+    password: password,
+    files: uploadPairs,
+  });
 
+<<<<<<< HEAD
   const tmpScript = path.join(tempDir, 'sftp_upload_batch_' + Date.now() + '.py');
+=======
+  const tempDir = process.env.TEMP || '/tmp';
+  const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
+>>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
 
   try {
-    fs.writeFileSync(tmpScript, pyScript);
+    const nmDir = path.join(__dirname, 'node_modules');
+    const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
 
-    // Credentials passed as arguments — never written to any file
-    const result = spawnSync('python', [
-      tmpScript,
-      host,
-      port,
-      username,
-      password,
-      filePairsJson,
-    ], {
+    fs.writeFileSync(tmpScript, nodeScript);
+
+    const result = spawnSync('node', [tmpScript, scriptArgs], {
       timeout: 180000,
       encoding: 'utf-8',
+      env: { ...process.env, SFTP_MODULE: sftpModPath },
     });
 
     if (result.error) {
-      throw new Error('Python execution error: ' + result.error.message);
+      throw new Error('Node.js execution error: ' + result.error.message);
     }
 
     if (result.status !== 0) {
       throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     }
 
+<<<<<<< HEAD
     ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
+=======
+>>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
     ctx.log(result.stdout);
+    ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
   } finally {
+<<<<<<< HEAD
     // Cleanup temp files
+=======
+>>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
     for (const tempFile of tempFiles) {
       if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);

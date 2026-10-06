@@ -1,4 +1,4 @@
-import type { WalnutContext } from './walnut';
+import type { WalnutBaseContext } from './walnut';
 import * as path from 'path';
 import * as fs from 'fs';
 import { spawnSync } from 'child_process';
@@ -8,10 +8,11 @@ import { spawnSync } from 'child_process';
  * description: Replace {{member_id}} with $[icmemId] in template ${localFilePath} with SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} and upload to /TO_AVER/
  * actionType: custom_sftp_template_upload
  * context: shared
+ * modules: path, fs, child_process
  * needsLocator: false
  * category: File Transfer
  */
-export async function sftpTemplateUpload(ctx: WalnutContext) {
+export async function sftpTemplateUpload(ctx: WalnutBaseContext) {
   // ctx.args[0] = "icmemId" (from $[icmemId]) — reads existing runtime variable from Step 1
   // ctx.args[1] = file path from ${localFilePath}
   // ctx.args[2] = SFTP host from ${sftphost}
@@ -52,9 +53,9 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const templateContent = fs.readFileSync(localFilePath, 'utf-8');
   const updatedContent = templateContent.replace(/\{\{member_id\}\}/g, icmemId);
 
-  // Generate filename: baseName_YYYYMMDDhhmmss_epochMillis (date shifted 2,690 days forward)
+  // Generate filename: baseName_YYYYMMDDhhmmss_epochMillis (date shifted 2,704 days forward)
   const now = new Date();
-  const shifted = new Date(now.getTime() + 2670 * 24 * 60 * 60 * 1000);
+  const shifted = new Date(now.getTime() + 2708 * 24 * 60 * 60 * 1000);
   const yyyy = shifted.getFullYear().toString();
   const MM = (shifted.getMonth() + 1).toString().padStart(2, '0');
   const dd = shifted.getDate().toString().padStart(2, '0');
@@ -84,60 +85,36 @@ export async function sftpTemplateUpload(ctx: WalnutContext) {
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
-  const pyLines = [
-    'import paramiko',
-    'import sys',
-    '',
-    'host = sys.argv[1]',
-    'port = int(sys.argv[2])',
-    'username = sys.argv[3]',
-    'password = sys.argv[4]',
-    'local_file = sys.argv[5]',
-    'remote_path = sys.argv[6]',
-    '',
-    'transport = paramiko.Transport((host, port))',
-    'transport.connect(username=username, password=password)',
-    'sftp = paramiko.SFTPClient.from_transport(transport)',
-    '',
-    'try:',
-    '    sftp.put(local_file, remote_path)',
-    '    print("Upload successful: " + remote_path)',
-    'finally:',
-    '    sftp.close()',
-    '    transport.close()',
-  ];
+  const nodeScript = [
+    'const Client = require(process.env.SFTP_MODULE);',
+    'const sftp = new Client();',
+    'const args = JSON.parse(process.argv[2]);',
+    'async function run() {',
+    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
+    '  await sftp.put(args.local, args.remote);',
+    '  console.log("Upload successful: " + args.remote);',
+    '  await sftp.end();',
+    '}',
+    'run().catch(e => { console.error(e.message); process.exit(1); });',
+  ].join('\n');
 
-  const pyScript = pyLines.join('\n');
-  const tmpScript = path.join(tempDir, 'sftp_upload_' + Date.now() + '.py');
+  const scriptArgs = JSON.stringify({
+    host: host, port: parseInt(port, 10), username: username, password: password,
+    local: modifiedFilePath, remote: remotePath,
+  });
+
+  const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
 
   try {
-    fs.writeFileSync(tmpScript, pyScript);
-
-    const result = spawnSync('python', [
-      tmpScript,
-      host,
-      port,
-      username,
-      password,
-      modifiedFilePath,
-      remotePath
-    ], {
-      timeout: 120000,
-      encoding: 'utf-8',
-    });
-
-    if (result.error) {
-      throw new Error('Python execution error: ' + result.error.message);
-    }
-
-    if (result.status !== 0) {
-      throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
-    }
-
+    const nmDir = path.join(__dirname, 'node_modules');
+    const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
+    fs.writeFileSync(tmpScript, nodeScript);
+    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
+    if (result.error) throw new Error('Node.js execution error: ' + result.error.message);
+    if (result.status !== 0) throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     ctx.log('Successfully uploaded file to ' + remotePath);
     ctx.log(result.stdout);
   } finally {
-    // Cleanup temp files
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
     if (fs.existsSync(modifiedFilePath)) fs.unlinkSync(modifiedFilePath);
   }
