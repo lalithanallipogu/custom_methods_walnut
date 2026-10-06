@@ -145,10 +145,9 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
     throw new Error('No valid file paths provided. Nothing to upload.');
   }
 
-  // Step 3: Upload all files via SFTP to /TO_AVER/
+  // Step 3: Upload all files via SFTP to /TO_AVER/ using Node.js ssh2-sftp-client
   ctx.log('Uploading ' + uploadPairs.length + ' files to ' + host + ':' + remoteDirectory + '...');
 
-  // Node.js SFTP script — runs in a child process with bundled node_modules
   const nodeScript = [
     'const Client = require(process.env.SFTP_MODULE);',
     'const sftp = new Client();',
@@ -175,12 +174,7 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
     files: uploadPairs,
   });
 
-<<<<<<< HEAD
-  const tmpScript = path.join(tempDir, 'sftp_upload_batch_' + Date.now() + '.py');
-=======
-  const tempDir = process.env.TEMP || '/tmp';
   const tmpScript = path.join(tempDir, 'sftp_node_upload_' + Date.now() + '.js');
->>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
 
   try {
     const nmDir = path.join(__dirname, 'node_modules');
@@ -191,7 +185,7 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
     const result = spawnSync('node', [tmpScript, scriptArgs], {
       timeout: 180000,
       encoding: 'utf-8',
-      env: { ...process.env, SFTP_MODULE: sftpModPath },
+      env: Object.assign({}, process.env, { SFTP_MODULE: sftpModPath }),
     });
 
     if (result.error) {
@@ -202,17 +196,9 @@ export async function sftpUpload4Files(ctx: WalnutBaseContext) {
       throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     }
 
-<<<<<<< HEAD
-    ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
-=======
->>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
     ctx.log(result.stdout);
     ctx.log('All ' + uploadPairs.length + ' files uploaded successfully to ' + remoteDirectory);
   } finally {
-<<<<<<< HEAD
-    // Cleanup temp files
-=======
->>>>>>> a9296eb6acc5cd92e6c01a6d83cedc434bb1c06b
     if (fs.existsSync(tmpScript)) fs.unlinkSync(tmpScript);
     for (const tempFile of tempFiles) {
       if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
