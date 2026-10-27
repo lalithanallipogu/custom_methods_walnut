@@ -2,7 +2,7 @@ import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
  * name: POST Contract 1 With Runtime Variables
- * description: POST the ${request_body} to ${url2} using batch $[batch] and session $[averSessionId] with iteration ${current_iteration} and run package ${run_package_filename} replacing {{rbe_tin}} {{dsp_one_tin}} {{rbe_npi}} {{rbe_ppid}} {{contract_id}} {{dsptin}} from $[dsptin] $[rbenpi] $[rbeppid]
+ * description: POST the ${request_body} to ${url2} using batch $[batch] and session $[averSessionId] with iteration ${current_iteration} and run package ${run_package_filename} and rbe_tin ${rbe_tin} replacing placeholders from $[dsptin] $[rbenpi] $[rbeppid]
  * actionType: custom_post_contract1_with_runtime_vars
  * context: api
  * needsLocator: false
@@ -15,6 +15,10 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   // ctx.args[3] = "averSessionId" (from $[averSessionId]) — runtime variable name
   // ctx.args[4] = current_iteration value (from ${current_iteration}) — test data
   // ctx.args[5] = run_package_filename value (from ${run_package_filename}) — test data
+  // ctx.args[6] = rbe_tin value (from ${rbe_tin}) — test data e.g. RBETIN0000082
+  // ctx.args[7] = "dsptin" (from $[dsptin]) — runtime variable name
+  // ctx.args[8] = "rbenpi" (from $[rbenpi]) — runtime variable name
+  // ctx.args[9] = "rbeppid" (from $[rbeppid]) — runtime variable name
 
   const requestBodyRaw = ctx.args[0];
   const url = ctx.args[1];
@@ -22,6 +26,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   const sessionId = ctx.getVariable(ctx.args[3]);
   const currentIteration = ctx.args[4];
   const runPackageFilename = ctx.args[5];
+  const rbetin = ctx.args[6];
 
   // Ensure request body is a string for placeholder resolution
   let bodyStr = typeof requestBodyRaw === 'string' ? requestBodyRaw : JSON.stringify(requestBodyRaw);
@@ -41,9 +46,9 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
     throw new Error('current_iteration is required. Ensure it is set in test data.');
   }
 
-  // Generate values for Contract 1
+  // Generate contract_id for Contract 1
   const contractId = '3001' + currentIteration;       // e.g. "30010081"
-  const rbetin = 'RBETIN000' + currentIteration;      // e.g. "RBETIN0000081"
+  // rbe_tin comes from test data ${rbe_tin} e.g. RBETIN0000082
 
   // Read runtime variables set by Step 1 (generate-runtime-ids.ts)
   const dsptin = ctx.getVariable('dsptin');
