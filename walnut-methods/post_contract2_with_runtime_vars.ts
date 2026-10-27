@@ -6,7 +6,7 @@ import type { WalnutApiContext } from './walnut';
  * actionType: custom_post_contract2_with_runtime_vars
  * context: api
  * needsLocator: false
- * category: Contract API
+ * category: API Testing
  */
 export async function postContract2WithRuntimeVars(ctx: WalnutApiContext) {
   // ctx.args[0] = request body JSON string (from ${request_body2})
