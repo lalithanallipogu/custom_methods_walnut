@@ -15,6 +15,13 @@ export async function extractAverSession(ctx: WalnutContext) {
   // The browser will automatically attach the HttpOnly cookie
   // Then we read it from the request headers via Playwright's route interception
 
+  // Wait for the page to fully load after any navigation
+  // This prevents "Execution context was destroyed" errors
+  await webCtx.page.waitForLoadState('load');
+  await webCtx.page.waitForLoadState('domcontentloaded');
+  await webCtx.wait(1000);
+  ctx.log('Page load state settled, proceeding with cookie extraction');
+
   // Set up route interception BEFORE making the request
   // Capture the entire cookie header dynamically — no hardcoded cookie name
   let fullCookieHeader = '';
@@ -28,13 +35,32 @@ export async function extractAverSession(ctx: WalnutContext) {
   });
 
   // Trigger the get_session_user call using fetch from within the page
-  await webCtx.evaluate(`
-    fetch('/api/user-management/get_session_user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include'
-    })
-  `);
+  // Retry up to 3 times in case context is still settling
+  let evalError: any = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await webCtx.evaluate(`
+        fetch('/api/user-management/get_session_user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        })
+      `);
+      evalError = null;
+      break;
+    } catch (e: any) {
+      evalError = e;
+      ctx.warn('page.evaluate attempt ' + attempt + ' failed: ' + e.message);
+      if (attempt < 3) {
+        await webCtx.wait(2000);
+        await webCtx.page.waitForLoadState('load');
+      }
+    }
+  }
+
+  if (evalError) {
+    throw new Error('page.evaluate failed after 3 attempts: ' + evalError.message);
+  }
 
   // Wait briefly for the route handler to execute
   await webCtx.wait(2000);
