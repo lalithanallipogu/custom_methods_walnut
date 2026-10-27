@@ -102,21 +102,37 @@ export async function reuseMemberIdArtifactReplaceUpload1File(ctx: WalnutBaseCon
   fs.writeFileSync(tempFilePath, updatedContent, 'utf-8');
   ctx.log('Created temp file: ' + fileName);
 
-  // Step 4: Upload temp file via SFTP to /TO_AVER/
+  // Step 4: Upload temp file via SFTP to /TO_AVER/ (with retry + connect timeout)
   const remotePath = remoteDirectory + fileName;
   ctx.log('Uploading to ' + host + ':' + remotePath + '...');
 
   const nodeScript = [
     'const Client = require(process.env.SFTP_MODULE);',
-    'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
-    'async function run() {',
-    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
-    '  await sftp.put(args.local, args.remote);',
-    '  console.log("Upload successful: " + args.remote);',
-    '  await sftp.end();',
+    'const MAX_RETRIES = 3;',
+    'const RETRY_DELAY = 5000;',
+    'async function attempt(n) {',
+    '  const sftp = new Client();',
+    '  try {',
+    '    await sftp.connect({',
+    '      host: args.host, port: args.port,',
+    '      username: args.username, password: args.password,',
+    '      readyTimeout: 30000, retries: 2, retry_minTimeout: 3000',
+    '    });',
+    '    await sftp.put(args.local, args.remote);',
+    '    console.log("Upload successful: " + args.remote);',
+    '    await sftp.end();',
+    '  } catch (e) {',
+    '    try { await sftp.end(); } catch (_) {}',
+    '    if (n < MAX_RETRIES) {',
+    '      console.log("Attempt " + n + " failed (" + e.message + "), retrying in " + (RETRY_DELAY/1000) + "s...");',
+    '      await new Promise(r => setTimeout(r, RETRY_DELAY));',
+    '      return attempt(n + 1);',
+    '    }',
+    '    throw e;',
+    '  }',
     '}',
-    'run().catch(e => { console.error(e.message); process.exit(1); });',
+    'attempt(1).catch(e => { console.error(e.message); process.exit(1); });',
   ].join('\n');
 
   const scriptArgs = JSON.stringify({
@@ -130,7 +146,7 @@ export async function reuseMemberIdArtifactReplaceUpload1File(ctx: WalnutBaseCon
     const nmDir = path.join(__dirname, 'node_modules');
     const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
     fs.writeFileSync(tmpScript, nodeScript);
-    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
+    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 300000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
     if (result.error) throw new Error('Node.js execution error: ' + result.error.message);
     if (result.status !== 0) throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     ctx.log('Successfully uploaded file to ' + remotePath);
