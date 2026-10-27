@@ -2,7 +2,7 @@ import type { WalnutApiContext } from './walnut';
 
 /** @walnut_method
  * name: POST Contract 2 With Runtime Variables
- * description: POST the ${request_body2} to ${url2} using batch $[batch] and session $[averSessionId] with iteration ${current_iteration} and run package ${run_package_filename}
+ * description: POST the ${request_body2} to ${url2} using batch $[batch] and session $[averSessionId] with iteration ${current_iteration} and run package ${run_package_filename} replacing {{rbe_tin}} {{dsp_one_tin}} {{rbe_npi}} {{rbe_ppid}} {{contract_id}} {{dsptin}} from $[dsptin] $[rbenpi] $[rbeppid]
  * actionType: custom_post_contract2_with_runtime_vars
  * context: api
  * needsLocator: false
