@@ -112,9 +112,16 @@ export async function postContract2WithRuntimeVars(ctx: WalnutApiContext) {
     'Content-Type': 'application/json',
   };
 
+  // Log the final body for debugging
+  const finalBodyStr = JSON.stringify(body);
+  ctx.log('Final body length: ' + finalBodyStr.length);
+  ctx.log('Final body (first 500): ' + finalBodyStr.substring(0, 500));
+  ctx.log('Final body id field: ' + JSON.stringify(body.id) + ' (type: ' + typeof body.id + ')');
   ctx.log('POST ' + url);
 
   const response = await ctx.post(url, body, { headers });
+  ctx.log('Response status: ' + response.status);
+  ctx.log('Response body: ' + JSON.stringify(response.body).substring(0, 500));
   ctx.assertStatus(response, 200);
 
   ctx.log('Contract 2 POST successful. Status: ' + response.status);
