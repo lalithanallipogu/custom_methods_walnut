@@ -19,6 +19,11 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   const batch = ctx.getVariable(ctx.args[2]);
   const sessionId = ctx.getVariable(ctx.args[3]);
 
+  // Ensure request body is a string for placeholder resolution
+  // ctx.args[0] may arrive as a parsed object or a string
+  let bodyStr = typeof requestBodyRaw === 'string' ? requestBodyRaw : JSON.stringify(requestBodyRaw);
+  ctx.log('Request body type: ' + typeof requestBodyRaw + ', length: ' + bodyStr.length);
+
   if (!url) {
     throw new Error('URL is required. Ensure url2 is set in test data.');
   }
@@ -43,7 +48,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   };
 
   // Resolve all {{placeholder}} in the request body using the Aver variable mapping
-  requestBodyRaw = requestBodyRaw.replace(/\{\{([^}]+)\}\}/g, (_match: string, placeholder: string) => {
+  bodyStr = bodyStr.replace(/\{\{([^}]+)\}\}/g, (_match: string, placeholder: string) => {
     const averVarName = placeholderMap[placeholder] || placeholder;
     const value = ctx.getVariable(averVarName);
     if (value === undefined || value === null) {
@@ -55,7 +60,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   });
 
   // Also resolve $[variableName] placeholders
-  requestBodyRaw = requestBodyRaw.replace(/\$\[([^\]]+)\]/g, (_match: string, varName: string) => {
+  bodyStr = bodyStr.replace(/\$\[([^\]]+)\]/g, (_match: string, varName: string) => {
     const value = ctx.getVariable(varName);
     if (value === undefined || value === null) {
       ctx.warn('Runtime variable "' + varName + '" not found — leaving as-is');
@@ -68,7 +73,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   // Parse the resolved request body
   let body: any;
   try {
-    body = typeof requestBodyRaw === 'string' ? JSON.parse(requestBodyRaw) : requestBodyRaw;
+    body = JSON.parse(bodyStr);
   } catch (e) {
     throw new Error('Failed to parse request_body after variable resolution: ' + (e as Error).message);
   }
