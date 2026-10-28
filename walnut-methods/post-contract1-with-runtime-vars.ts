@@ -102,6 +102,33 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
     throw new Error('Failed to parse request_body after variable resolution: ' + (e as Error).message);
   }
 
+  // Deep-replace any {{placeholder}} that survived string-level replacement
+  // (handles cases where runtime delivers ctx.args[0] as a parsed object)
+  function deepReplace(obj: any): any {
+    if (typeof obj === 'string') {
+      return obj.replace(/\{\{([^}]+)\}\}/g, (_m: string, key: string) => {
+        const v = valueMap[key];
+        if (v !== undefined) {
+          ctx.log('Deep-resolved {{' + key + '}} -> ' + v);
+          return v;
+        }
+        return _m;
+      });
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(deepReplace);
+    }
+    if (obj && typeof obj === 'object') {
+      const out: Record<string, any> = {};
+      for (const k of Object.keys(obj)) {
+        out[k] = deepReplace(obj[k]);
+      }
+      return out;
+    }
+    return obj;
+  }
+  body = deepReplace(body);
+
   if (batch) {
     body.batch = batch;
     ctx.log('Using runtime batch: ' + batch);
