@@ -44,11 +44,18 @@ export async function postContract2WithRuntimeVars(ctx: WalnutApiContext) {
     throw new Error('current_iteration is required. Ensure it is set in test data.');
   }
 
-  // Generate contract_id and rbe_tin for Contract 2
-  const contractId = '3011' + currentIteration;       // e.g. "30110081"
-  const rbetin = 'RBETIN000' + currentIteration;      // e.g. "RBETIN0000081"
+  // Read contract_id2 and rbe_tin from runtime variables (set by generate-runtime-ids.ts with test data prefixes)
+  const contractId = ctx.getVariable('contract_id2');
+  const rbetin = ctx.getVariable('rbe_tin');
 
-  // Read runtime variables set by Step 1 (generate-runtime-ids.ts)
+  if (!contractId) {
+    throw new Error('Runtime variable $[contract_id2] not found. Ensure "Generate Runtime IDs" step ran first.');
+  }
+  if (!rbetin) {
+    throw new Error('Runtime variable $[rbe_tin] not found. Ensure "Generate Runtime IDs" step ran first.');
+  }
+
+  // Read other runtime variables set by Step 1 (generate-runtime-ids.ts)
   const dsptin = ctx.getVariable('dsptin');
   const rbenpi = ctx.getVariable('rbenpi');
   const rbeppid = ctx.getVariable('rbeppid');

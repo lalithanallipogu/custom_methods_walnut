@@ -2,28 +2,34 @@ import type { WalnutBaseContext } from './walnut';
 
 /** @walnut_method
  * name: Ortho Monitoring Generate Runtime IDs
- * description: Generate random NPI, PPID and DSPTIN IDs with [A-Z,0-9] suffix, storing them in $[rbenpi] $[rbeppid] $[dsptin] and generate contract IDs from ${current_iteration} storing in $[contract_id1] $[contract_id2] $[rbe_tin]
+ * description: Generate random NPI, PPID and DSPTIN IDs with [A-Z,0-9] suffix, storing them in $[rbenpi] $[rbeppid] $[dsptin] and generate contract IDs from ${current_iteration} with prefixes ${contractPrefix1} ${contractPrefix2} ${rbeTinPrefix} storing in $[contract_id1] $[contract_id2] $[rbe_tin]
  * actionType: custom_ortho_monitoring_generate_runtime_ids
  * context: shared
  * needsLocator: false
  * category: Data Generation
  */
 export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) {
-  // ctx.args[0] = "rbenpi"        (from $[rbenpi])          — runtime variable name for NPI ID
-  // ctx.args[1] = "rbeppid"       (from $[rbeppid])         — runtime variable name for PPID ID
-  // ctx.args[2] = "dsptin"        (from $[dsptin])          — runtime variable name for DSPTIN ID
-  // ctx.args[3] = current_iteration value (from ${current_iteration}) — test data e.g. "0082"
-  // ctx.args[4] = "contract_id1"  (from $[contract_id1])    — runtime variable name for Contract 1 ID
-  // ctx.args[5] = "contract_id2"  (from $[contract_id2])    — runtime variable name for Contract 2 ID
-  // ctx.args[6] = "rbe_tin"       (from $[rbe_tin])         — runtime variable name for RBE TIN
+  // ctx.args[0] = "rbenpi"           (from $[rbenpi])
+  // ctx.args[1] = "rbeppid"          (from $[rbeppid])
+  // ctx.args[2] = "dsptin"           (from $[dsptin])
+  // ctx.args[3] = current_iteration  (from ${current_iteration}) — e.g. "0086"
+  // ctx.args[4] = contractPrefix1    (from ${contractPrefix1})  — e.g. "3001"
+  // ctx.args[5] = contractPrefix2    (from ${contractPrefix2})  — e.g. "3011"
+  // ctx.args[6] = rbeTinPrefix       (from ${rbeTinPrefix})     — e.g. "RBETIN000"
+  // ctx.args[7] = "contract_id1"     (from $[contract_id1])
+  // ctx.args[8] = "contract_id2"     (from $[contract_id2])
+  // ctx.args[9] = "rbe_tin"          (from $[rbe_tin])
 
   const npiVarName = ctx.args[0];
   const ppidVarName = ctx.args[1];
   const dsptinVarName = ctx.args[2];
   const currentIteration = ctx.args[3];
-  const contractId1VarName = ctx.args[4];
-  const contractId2VarName = ctx.args[5];
-  const rbeTinVarName = ctx.args[6];
+  const contractPrefix1 = ctx.args[4];
+  const contractPrefix2 = ctx.args[5];
+  const rbeTinPrefix = ctx.args[6];
+  const contractId1VarName = ctx.args[7];
+  const contractId2VarName = ctx.args[8];
+  const rbeTinVarName = ctx.args[9];
 
   if (!npiVarName || !ppidVarName || !dsptinVarName) {
     throw new Error(
@@ -54,11 +60,17 @@ export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) 
   const ppidId = 'PPID' + randomSuffix();
   const dsptinId = 'DSPTIN' + randomSuffix();
 
-  // Generate contract IDs and rbe_tin from current_iteration
-  // String concatenation: '3001' + '0082' = '30010082' (NOT numeric addition)
-  const contractId1 = '3001' + currentIteration;   // e.g. "30010082"
-  const contractId2 = '3011' + currentIteration;   // e.g. "30110082"
-  const rbeTin = 'RBETIN000' + currentIteration;   // e.g. "RBETIN0000082"
+  // Validate prefixes
+  if (!contractPrefix1 || !contractPrefix2 || !rbeTinPrefix) {
+    throw new Error(
+      'Contract prefixes required. Ensure contractPrefix1, contractPrefix2, and rbeTinPrefix are set in test data.'
+    );
+  }
+
+  // Generate contract IDs and rbe_tin from prefix (test data) + current_iteration
+  const contractId1 = contractPrefix1 + currentIteration;   // e.g. "3001" + "0086" = "30010086"
+  const contractId2 = contractPrefix2 + currentIteration;   // e.g. "3011" + "0086" = "30110086"
+  const rbeTin = rbeTinPrefix + currentIteration;            // e.g. "RBETIN000" + "0086" = "RBETIN0000086"
 
   // Store random IDs in runtime variables
   ctx.setVariable(npiVarName, npiId);
