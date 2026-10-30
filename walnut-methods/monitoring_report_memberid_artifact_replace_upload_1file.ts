@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Monitoring_Report_MemberID Generate Replace ActualFile Artifact Upload 1 File
- * description: Generate unique member ID, replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch] using dsptin $[dsptin] and rbe_tin $[rbe_tin]
+ * description: Generate unique member ID, replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} {{rbe_ppid}} {{provider_tin}} {{ppid}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch] using dsptin $[dsptin] and rbe_tin $[rbe_tin] and rbeppid $[rbeppid]
  * actionType: custom_monitoring_report_memberid_artifact_replace_upload_1file
  * context: shared
  * modules: path, fs, child_process
@@ -21,7 +21,8 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
   // ctx.args[5] = "memberId" (from $[memberId]) — runtime variable name to store generated ID
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
   // ctx.args[7] = "dsptin" (from $[dsptin]) — runtime variable name for dsp_one_tin replacement
-  // ctx.args[8] = "rbe_tin" (from $[rbe_tin]) — runtime variable name for rbe_tin replacement
+  // ctx.args[8]  = "rbe_tin" (from $[rbe_tin]) — runtime variable name for rbe_tin replacement
+  // ctx.args[9]  = "rbeppid" (from $[rbeppid]) — runtime variable name for rbe_ppid/provider_tin/ppid replacement
 
   const artifactRef = ctx.args[0];
   const host = ctx.args[1];
@@ -32,6 +33,7 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
   const batchVarName = ctx.args[6];
   const dsptinVarName = ctx.args[7];
   const rbeTinVarName = ctx.args[8];
+  const rbeppidVarName = ctx.args[9];
 
   // Step 1: Generate a unique ICMEM ID (format: ICMEM-{4 digits}{4 uppercase letters})
   // Example: ICMEM-1902SRXT
@@ -46,9 +48,10 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
   // Store the generated member ID as a runtime variable for use in subsequent steps
   ctx.setVariable(memberIdVarName, memberId);
 
-  // Read runtime variables for dsp_one_tin and rbe_tin replacements
+  // Read runtime variables for dsp_one_tin, rbe_tin and rbeppid replacements
   const dsptinValue = ctx.getVariable(dsptinVarName);
   const rbeTinValue = ctx.getVariable(rbeTinVarName);
+  const rbeppidValue = ctx.getVariable(rbeppidVarName);
 
   ctx.log('dsptin variable name: ' + dsptinVarName + ', value: ' + dsptinValue);
   ctx.log('rbe_tin variable name: ' + rbeTinVarName + ', value: ' + rbeTinValue);
@@ -58,6 +61,9 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
   }
   if (!rbeTinValue) {
     ctx.warn('Runtime variable $[' + rbeTinVarName + '] is empty or not set — {{rbe_tin}} placeholders will be replaced with empty string');
+  }
+  if (!rbeppidValue) {
+    ctx.warn('Runtime variable $[' + rbeppidVarName + '] is empty or not set — {{rbe_ppid}}/{{provider_tin}}/{{ppid}} placeholders will be replaced with empty string');
   }
 
   const remoteDirectory = '/TO_AVER/';
@@ -112,6 +118,27 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
     ctx.log('Replaced ' + rbeTinReplacedCount + ' {{rbe_tin}} placeholder(s) with ' + rbeTinValue);
   } else {
     ctx.warn('No {{rbe_tin}} placeholders found in artifact');
+  }
+
+  // Replace all occurrences of {{rbe_ppid}} with the rbeppid runtime variable value
+  const rbePpidReplacedCount = (updatedContent.match(/\{\{rbe_ppid\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{rbe_ppid\}\}/g, rbeppidValue || '');
+  if (rbePpidReplacedCount > 0) {
+    ctx.log('Replaced ' + rbePpidReplacedCount + ' {{rbe_ppid}} placeholder(s) with ' + rbeppidValue);
+  }
+
+  // Replace all occurrences of {{provider_tin}} with the rbeppid runtime variable value
+  const providerTinReplacedCount = (updatedContent.match(/\{\{provider_tin\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{provider_tin\}\}/g, rbeppidValue || '');
+  if (providerTinReplacedCount > 0) {
+    ctx.log('Replaced ' + providerTinReplacedCount + ' {{provider_tin}} placeholder(s) with ' + rbeppidValue);
+  }
+
+  // Replace all occurrences of {{ppid}} with the rbeppid runtime variable value
+  const ppidReplacedCount = (updatedContent.match(/\{\{ppid\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{ppid\}\}/g, rbeppidValue || '');
+  if (ppidReplacedCount > 0) {
+    ctx.log('Replaced ' + ppidReplacedCount + ' {{ppid}} placeholder(s) with ' + rbeppidValue);
   }
 
   // Build filename: strip any existing timestamp from original, append new shifted timestamp
