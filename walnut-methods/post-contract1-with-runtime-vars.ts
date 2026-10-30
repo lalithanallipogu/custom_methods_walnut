@@ -29,20 +29,20 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
     );
   }
 
-  // Map {{placeholder}} names in the contract JSON to Aver runtime variable names
-  // Aver generates: contractid, rbetin, dsptin, rbeppid, rbenpi
-  // JSON uses:      {{contract_id}}, {{rbe_tin}}, {{dsptin}}, {{rbe_ppid}}, {{rbe_npi}}
+  // Map {{placeholder}} names in the contract JSON to runtime variable names
+  // generate-runtime-ids.ts sets: contract_id1, contract_id2, rbe_tin, dsptin, rbeppid, rbenpi
+  // JSON uses: {{contract_id}}, {{rbe_tin}}, {{dsptin}}, {{rbe_ppid}}, {{rbe_npi}}
   const placeholderMap: Record<string, string> = {
-    'contract_id': 'contractid',    // Aver step 3: Join "3001${current_iteration}"
-    'rbe_tin': 'rbetin',            // Aver step 5: Create Variable
-    'rbe_npi': 'rbenpi',            // Aver step 8: Generate Unique ID
-    'rbe_ppid': 'rbeppid',          // Aver step 7: Generate Unique ID
-    'dsptin': 'dsptin',             // Aver step 6: Generate Unique ID (same name)
+    'contract_id': 'contract_id1',  // set by generate-runtime-ids: "3001" + current_iteration
+    'rbe_tin': 'rbe_tin',           // set by generate-runtime-ids: "RBETIN000" + current_iteration
+    'rbe_npi': 'rbenpi',            // set by generate-runtime-ids: random
+    'rbe_ppid': 'rbeppid',          // set by generate-runtime-ids: random
+    'dsptin': 'dsptin',             // set by generate-runtime-ids: random
     'dsp_one_tin': 'dsptin',        // alias — same value as {{dsptin}}
     'run_package_filename': 'runpackage_qa',  // Aver step 11: run package filename
   };
 
-  // Resolve all {{placeholder}} in the request body using the Aver variable mapping
+  // Resolve all {{placeholder}} in the request body using the runtime variable mapping
   requestBodyRaw = requestBodyRaw.replace(/\{\{([^}]+)\}\}/g, (_match: string, placeholder: string) => {
     const averVarName = placeholderMap[placeholder] || placeholder;
     const value = ctx.getVariable(averVarName);
