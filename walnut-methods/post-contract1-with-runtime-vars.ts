@@ -35,6 +35,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
   const placeholderMap: Record<string, string> = {
     'contract_id': 'contract_id1',  // set by generate-runtime-ids: "3001" + current_iteration
     'rbe_tin': 'rbe_tin',           // set by generate-runtime-ids: "RBETIN000" + current_iteration
+    'provider_tin': 'rbe_tin',      // same runtime var as rbe_tin
     'rbe_npi': 'rbenpi',            // set by generate-runtime-ids: random
     'rbe_ppid': 'rbeppid',          // set by generate-runtime-ids: random
     'dsptin': 'dsptin',             // set by generate-runtime-ids: random

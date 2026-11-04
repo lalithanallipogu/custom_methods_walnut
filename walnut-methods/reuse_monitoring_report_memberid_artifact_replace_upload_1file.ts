@@ -107,6 +107,15 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
     ctx.warn('No {{rbe_tin}} placeholders found in artifact');
   }
 
+  // Replace all occurrences of {{provider_tin}} with the rbe_tin runtime variable value
+  const providerTinReplacedCount = (updatedContent.match(/\{\{provider_tin\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{provider_tin\}\}/g, rbeTinValue || '');
+  if (providerTinReplacedCount > 0) {
+    ctx.log('Replaced ' + providerTinReplacedCount + ' {{provider_tin}} placeholder(s) with ' + rbeTinValue);
+  } else {
+    ctx.warn('No {{provider_tin}} placeholders found in artifact');
+  }
+
   // Step 3: Build filename with shifted timestamp (2720 days forward)
   // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext
   const fileNow = new Date();

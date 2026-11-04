@@ -75,6 +75,7 @@ export async function postContractWithRuntimeVars(ctx: WalnutApiContext) {
   const valueMap: Record<string, string> = {
     'contract_id': contractId,
     'rbe_tin': rbetin,
+    'provider_tin': rbetin,
     'dsptin': dsptin || '',
     'dsp_one_tin': dsptin || '',
     'rbe_npi': rbenpi || '',

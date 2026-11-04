@@ -2,7 +2,7 @@ import type { WalnutBaseContext } from './walnut';
 
 /** @walnut_method
  * name: Ortho Monitoring Generate Runtime IDs
- * description: Generate random NPI, PPID and DSPTIN IDs with [A-Z,0-9] suffix, storing them in $[rbenpi] $[rbeppid] $[dsptin] and generate contract IDs from ${current_iteration} storing in $[contract_id1] $[contract_id2] $[rbe_tin]
+ * description: Generate random NPI, PPID and DSPTIN IDs with [A-Z,0-9] suffix, storing them in $[rbenpi] $[rbeppid] $[dsptin] and generate contract IDs from ${current_iteration} storing in $[contract_id1] $[contract_id2] $[rbe_tin] $[rbe2tin]
  * actionType: custom_ortho_monitoring_generate_runtime_ids
  * context: shared
  * needsLocator: false
@@ -16,6 +16,7 @@ export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) 
   // ctx.args[4] = "contract_id1"     (from $[contract_id1])
   // ctx.args[5] = "contract_id2"     (from $[contract_id2])
   // ctx.args[6] = "rbe_tin"          (from $[rbe_tin])
+  // ctx.args[7] = "rbe2tin"          (from $[rbe2tin])
 
   const npiVarName = ctx.args[0];
   const ppidVarName = ctx.args[1];
@@ -24,6 +25,7 @@ export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) 
   const contractId1VarName = ctx.args[4];
   const contractId2VarName = ctx.args[5];
   const rbeTinVarName = ctx.args[6];
+  const rbe2TinVarName = ctx.args[7];
 
   if (!npiVarName || !ppidVarName || !dsptinVarName) {
     throw new Error(
@@ -58,6 +60,7 @@ export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) 
   const contractId1 = '3001' + currentIteration;   // e.g. "3001" + "0094" = "30010094"
   const contractId2 = '3011' + currentIteration;   // e.g. "3011" + "0094" = "30110094"
   const rbeTin = 'RBETIN000' + currentIteration;   // e.g. "RBETIN000" + "0094" = "RBETIN0000094"
+  const rbe2Tin = 'RBE2TIN00' + currentIteration;   // e.g. "RBE2TIN00" + "0094" = "RBE2TIN000094"
 
   // Store random IDs in runtime variables
   ctx.setVariable(npiVarName, npiId);
@@ -76,6 +79,10 @@ export async function orthoMonitoringGenerateRuntimeIds(ctx: WalnutBaseContext) 
   if (rbeTinVarName) {
     ctx.setVariable(rbeTinVarName, rbeTin);
     ctx.log('Generated RBE TIN:       ' + rbeTin + ' -> $[' + rbeTinVarName + ']');
+  }
+  if (rbe2TinVarName) {
+    ctx.setVariable(rbe2TinVarName, rbe2Tin);
+    ctx.log('Generated RBE2 TIN:      ' + rbe2Tin + ' -> $[' + rbe2TinVarName + ']');
   }
 
   ctx.log('Generated NPI ID:    ' + npiId + '  -> $[' + npiVarName + ']');

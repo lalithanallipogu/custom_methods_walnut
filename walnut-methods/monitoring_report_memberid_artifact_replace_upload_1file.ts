@@ -114,6 +114,15 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
     ctx.warn('No {{rbe_tin}} placeholders found in artifact');
   }
 
+  // Replace all occurrences of {{provider_tin}} with the rbe_tin runtime variable value
+  const providerTinReplacedCount = (updatedContent.match(/\{\{provider_tin\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{provider_tin\}\}/g, rbeTinValue || '');
+  if (providerTinReplacedCount > 0) {
+    ctx.log('Replaced ' + providerTinReplacedCount + ' {{provider_tin}} placeholder(s) with ' + rbeTinValue);
+  } else {
+    ctx.warn('No {{provider_tin}} placeholders found in artifact');
+  }
+
   // Build filename: strip any existing timestamp from original, append new shifted timestamp
   // Timestamp is shifted 2720 days forward from today
   // Format: baseName_YYYYMMDDHHmmss_epochMillis.ext
