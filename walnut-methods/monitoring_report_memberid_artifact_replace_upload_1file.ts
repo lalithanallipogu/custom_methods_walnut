@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Monitoring_Report_MemberID Generate Replace ActualFile Artifact Upload 1 File
- * description: Generate unique member ID, replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} {{provider_tin}} {{provider2_tin}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch] using dsptin $[dsptin] and rbe_tin $[rbe_tin] and rbe2tin $[rbe2tin]
+ * description: Generate unique member ID, replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} {{provider_tin}} {{provider2_tin}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} storing ID in $[memberId] and batch in $[batch] using dsptin $[dsptin] and rbe_tin $[rbe_tin] and rbe2tin $[rbe_tin2]
  * actionType: custom_monitoring_report_memberid_artifact_replace_upload_1file
  * context: shared
  * modules: path, fs, child_process
@@ -22,7 +22,7 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
   // ctx.args[6] = "batch" (from $[batch]) — runtime variable name to store batch timestamp
   // ctx.args[7] = "dsptin" (from $[dsptin]) — runtime variable name for dsp_one_tin replacement
   // ctx.args[8] = "rbe_tin" (from $[rbe_tin]) — runtime variable name for rbe_tin replacement
-  // ctx.args[9] = "rbe2tin" (from $[rbe2tin]) — runtime variable name for rbe2tin (provider2_tin) replacement
+  // ctx.args[9] = "rbe_tin2" (from $[rbe_tin2]) — runtime variable name for rbe_tin2 (provider2_tin) replacement
 
   const artifactRef = ctx.args[0];
   const host = ctx.args[1];
@@ -55,7 +55,7 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
 
   ctx.log('dsptin variable name: ' + dsptinVarName + ', value: ' + dsptinValue);
   ctx.log('rbe_tin variable name: ' + rbeTinVarName + ', value: ' + rbeTinValue);
-  ctx.log('rbe2tin variable name: ' + rbe2TinVarName + ', value: ' + rbe2TinValue);
+  ctx.log('rbe_tin2 variable name: ' + rbe2TinVarName + ', value: ' + rbe2TinValue);
 
   if (!dsptinValue) {
     ctx.warn('Runtime variable $[' + dsptinVarName + '] is empty or not set — {{dsp_one_tin}} placeholders will be replaced with empty string');
@@ -127,7 +127,7 @@ export async function monitoringReportMemberIdArtifactReplaceUpload1File(ctx: Wa
     ctx.warn('No {{provider_tin}} placeholders found in artifact');
   }
 
-  // Replace all occurrences of {{provider2_tin}} with the rbe2tin runtime variable value
+  // Replace all occurrences of {{provider2_tin}} with the rbe_tin2 runtime variable value
   const provider2TinReplacedCount = (updatedContent.match(/\{\{provider2_tin\}\}/g) || []).length;
   updatedContent = updatedContent.replace(/\{\{provider2_tin\}\}/g, rbe2TinValue || '');
   if (provider2TinReplacedCount > 0) {
