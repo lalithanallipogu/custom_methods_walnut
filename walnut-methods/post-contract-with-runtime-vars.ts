@@ -161,7 +161,7 @@ export async function postContractWithRuntimeVars(ctx: WalnutApiContext) {
   ctx.log('Final body id field: ' + JSON.stringify(body.id) + ' (type: ' + typeof body.id + ')');
   ctx.log('POST ' + url);
 
-  const response = await ctx.post(url, body, { headers });
+  const response = await ctx.post(url, body, { headers, timeout: 120 });
   ctx.log('Response status: ' + response.status);
   ctx.log('Response body: ' + JSON.stringify(response.body).substring(0, 500));
   ctx.assertStatus(response, 200);
