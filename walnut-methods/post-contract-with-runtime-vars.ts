@@ -83,6 +83,7 @@ export async function postContractWithRuntimeVars(ctx: WalnutApiContext) {
     'rbe_ppid': rbeppid || '',
     'ppid': rbeppid || '',
     'run_package_filename': runPackageFilename || '',
+    'runpackage': runPackageFilename || '',
   };
 
   // Resolve all {{placeholder}} in the request body

@@ -43,6 +43,7 @@ export async function postContract1WithRuntimeVars(ctx: WalnutApiContext) {
     'dsptin': 'dsptin',             // set by generate-runtime-ids: random
     'dsp_one_tin': 'dsptin',        // alias — same value as {{dsptin}}
     'run_package_filename': 'runpackage_qa',  // Aver step 11: run package filename
+    'runpackage': 'runpackage_qa',           // alias — same value as {{run_package_filename}}
   };
 
   // Resolve all {{placeholder}} in the request body using the runtime variable mapping
