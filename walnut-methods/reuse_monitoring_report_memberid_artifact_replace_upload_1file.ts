@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 
 /** @walnut_method
  * name: Reuse Monitoring_Report MemberID Replace ActualFile Artifact Upload 1 File
- * description: Reuse generated member ID $[memberId], replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} using batch $[batch] and dsptin $[dsptin] and rbe_tin $[rbe_tin]
+ * description: Reuse generated member ID $[memberId], replace {{member_id}} {{dsp_one_tin}} {{rbe_tin}} {{provider_tin}} {{provider2_tin}} in artifact ${ActualFileArtifact} and upload to /TO_AVER/ via SFTP host ${sftphost} port ${sftpport} user ${sftpusername} password ${sftppassword} using batch $[batch] and dsptin $[dsptin] and rbe_tin $[rbe_tin] and rbe2tin $[rbe2tin]
  * actionType: custom_reuse_monitoring_report_memberid_artifact_replace_upload_1file
  * context: shared
  * modules: path, fs, child_process
@@ -22,6 +22,7 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
   // ctx.args[6] = "batch" (from $[batch]) — reads the batch value stored by the generate step
   // ctx.args[7] = "dsptin" (from $[dsptin]) — runtime variable name for dsp_one_tin replacement
   // ctx.args[8] = "rbe_tin" (from $[rbe_tin]) — runtime variable name for rbe_tin replacement
+  // ctx.args[9] = "rbe2tin" (from $[rbe2tin]) — runtime variable name for rbe2tin (provider2_tin) replacement
 
   const memberId = ctx.getVariable(ctx.args[0]);
   const artifactRef = ctx.args[1];
@@ -32,6 +33,7 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
   const batch = ctx.getVariable(ctx.args[6]);
   const dsptinVarName = ctx.args[7];
   const rbeTinVarName = ctx.args[8];
+  const rbe2TinVarName = ctx.args[9];
 
   if (!memberId) {
     throw new Error(
@@ -43,9 +45,11 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
   // Read runtime variables for dsp_one_tin and rbe_tin replacements
   const dsptinValue = ctx.getVariable(dsptinVarName);
   const rbeTinValue = ctx.getVariable(rbeTinVarName);
+  const rbe2TinValue = ctx.getVariable(rbe2TinVarName);
 
   ctx.log('dsptin variable name: ' + dsptinVarName + ', value: ' + dsptinValue);
   ctx.log('rbe_tin variable name: ' + rbeTinVarName + ', value: ' + rbeTinValue);
+  ctx.log('rbe2tin variable name: ' + rbe2TinVarName + ', value: ' + rbe2TinValue);
 
   if (!dsptinValue) {
     ctx.warn('Runtime variable $[' + dsptinVarName + '] is empty or not set — {{dsp_one_tin}} placeholders will be replaced with empty string');
@@ -114,6 +118,15 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
     ctx.log('Replaced ' + providerTinReplacedCount + ' {{provider_tin}} placeholder(s) with ' + rbeTinValue);
   } else {
     ctx.warn('No {{provider_tin}} placeholders found in artifact');
+  }
+
+  // Replace all occurrences of {{provider2_tin}} with the rbe2tin runtime variable value
+  const provider2TinReplacedCount = (updatedContent.match(/\{\{provider2_tin\}\}/g) || []).length;
+  updatedContent = updatedContent.replace(/\{\{provider2_tin\}\}/g, rbe2TinValue || '');
+  if (provider2TinReplacedCount > 0) {
+    ctx.log('Replaced ' + provider2TinReplacedCount + ' {{provider2_tin}} placeholder(s) with ' + rbe2TinValue);
+  } else {
+    ctx.warn('No {{provider2_tin}} placeholders found in artifact');
   }
 
   // Step 3: Build filename with shifted timestamp (2720 days forward)

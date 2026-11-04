@@ -76,6 +76,7 @@ export async function postContractWithRuntimeVars(ctx: WalnutApiContext) {
     'contract_id': contractId,
     'rbe_tin': rbetin,
     'provider_tin': rbetin,
+    'provider2_tin': ctx.getVariable('rbe2tin') || '',
     'dsptin': dsptin || '',
     'dsp_one_tin': dsptin || '',
     'rbe_npi': rbenpi || '',
