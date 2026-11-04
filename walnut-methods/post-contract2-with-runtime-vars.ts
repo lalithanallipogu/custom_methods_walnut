@@ -39,6 +39,7 @@ export async function postContract2WithRuntimeVars(ctx: WalnutApiContext) {
     'provider2_tin': 'rbe_tin2',     // set by generate-runtime-ids: "RBE2TIN00" + current_iteration
     'rbe_npi': 'rbenpi',            // set by generate-runtime-ids: random
     'rbe_ppid': 'rbeppid',          // set by generate-runtime-ids: random
+    'ppid': 'rbeppid',              // alias — same value as {{rbe_ppid}}
     'dsptin': 'dsptin',             // set by generate-runtime-ids: random
     'dsp_one_tin': 'dsptin',        // alias — same value as {{dsptin}}
     'run_package_filename': 'runpackage_qa',  // Aver step 11: run package filename

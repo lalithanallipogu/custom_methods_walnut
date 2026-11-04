@@ -81,6 +81,7 @@ export async function postContractWithRuntimeVars(ctx: WalnutApiContext) {
     'dsp_one_tin': dsptin || '',
     'rbe_npi': rbenpi || '',
     'rbe_ppid': rbeppid || '',
+    'ppid': rbeppid || '',
     'run_package_filename': runPackageFilename || '',
   };
 
