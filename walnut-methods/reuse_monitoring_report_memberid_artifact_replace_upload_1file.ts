@@ -166,47 +166,15 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
 
   const nodeScript = [
     'const Client = require(process.env.SFTP_MODULE);',
-    'const net = require("net");',
+    'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
-    'const MAX_RETRIES = 3;',
-    'const RETRY_DELAY = 5000;',
-    'const TCP_TIMEOUT = 15000;',
-    '',
-    'function tcpProbe(host, port, timeout) {',
-    '  return new Promise((resolve, reject) => {',
-    '    const sock = net.createConnection({ host, port });',
-    '    const timer = setTimeout(() => { sock.destroy(); reject(new Error("TCP connect to " + host + ":" + port + " timed out after " + (timeout/1000) + "s")); }, timeout);',
-    '    sock.on("connect", () => { clearTimeout(timer); sock.destroy(); resolve(); });',
-    '    sock.on("error", (e) => { clearTimeout(timer); reject(new Error("TCP connect to " + host + ":" + port + " failed: " + e.message)); });',
-    '  });',
+    'async function run() {',
+    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
+    '  await sftp.put(args.local, args.remote);',
+    '  console.log("Upload successful: " + args.remote);',
+    '  await sftp.end();',
     '}',
-    '',
-    'async function attempt(n) {',
-    '  console.log("Attempt " + n + "/" + MAX_RETRIES + " — probing " + args.host + ":" + args.port + "...");',
-    '  await tcpProbe(args.host, args.port, TCP_TIMEOUT);',
-    '  console.log("TCP reachable, starting SFTP...");',
-    '  const sftp = new Client();',
-    '  try {',
-    '    await sftp.connect({',
-    '      host: args.host, port: args.port,',
-    '      username: args.username, password: args.password,',
-    '      readyTimeout: 15000, retries: 0,',
-    '      keepaliveInterval: 5000, keepaliveCountMax: 3',
-    '    });',
-    '    await sftp.put(args.local, args.remote);',
-    '    console.log("Upload successful: " + args.remote);',
-    '    await sftp.end();',
-    '  } catch (e) {',
-    '    try { await sftp.end(); } catch (_) {}',
-    '    if (n < MAX_RETRIES) {',
-    '      console.log("Attempt " + n + " failed (" + e.message + "), retrying in " + (RETRY_DELAY/1000) + "s...");',
-    '      await new Promise(r => setTimeout(r, RETRY_DELAY));',
-    '      return attempt(n + 1);',
-    '    }',
-    '    throw e;',
-    '  }',
-    '}',
-    'attempt(1).catch(e => { console.error(e.message); process.exit(1); });',
+    'run().catch(e => { console.error(e.message); process.exit(1); });',
   ].join('\n');
 
   const scriptArgs = JSON.stringify({
@@ -220,7 +188,7 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
     const nmDir = path.join(__dirname, 'node_modules');
     const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
     fs.writeFileSync(tmpScript, nodeScript);
-    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 120000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
+    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 180000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
     if (result.error) throw new Error('Node.js execution error: ' + result.error.message);
     if (result.status !== 0) throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     ctx.log('Successfully uploaded file to ' + remotePath);
