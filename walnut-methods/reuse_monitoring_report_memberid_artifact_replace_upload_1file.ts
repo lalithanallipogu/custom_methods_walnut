@@ -166,16 +166,32 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
 
   const nodeScript = [
     'const Client = require(process.env.SFTP_MODULE);',
+    'const net = require("net");',
     'const args = JSON.parse(process.argv[2]);',
     'const MAX_RETRIES = 3;',
     'const RETRY_DELAY = 5000;',
+    'const TCP_TIMEOUT = 15000;',
+    '',
+    'function tcpProbe(host, port, timeout) {',
+    '  return new Promise((resolve, reject) => {',
+    '    const sock = net.createConnection({ host, port });',
+    '    const timer = setTimeout(() => { sock.destroy(); reject(new Error("TCP connect to " + host + ":" + port + " timed out after " + (timeout/1000) + "s")); }, timeout);',
+    '    sock.on("connect", () => { clearTimeout(timer); sock.destroy(); resolve(); });',
+    '    sock.on("error", (e) => { clearTimeout(timer); reject(new Error("TCP connect to " + host + ":" + port + " failed: " + e.message)); });',
+    '  });',
+    '}',
+    '',
     'async function attempt(n) {',
+    '  console.log("Attempt " + n + "/" + MAX_RETRIES + " — probing " + args.host + ":" + args.port + "...");',
+    '  await tcpProbe(args.host, args.port, TCP_TIMEOUT);',
+    '  console.log("TCP reachable, starting SFTP...");',
     '  const sftp = new Client();',
     '  try {',
     '    await sftp.connect({',
     '      host: args.host, port: args.port,',
     '      username: args.username, password: args.password,',
-    '      readyTimeout: 30000, retries: 2, retry_minTimeout: 3000',
+    '      readyTimeout: 30000, retries: 2, retry_minTimeout: 3000,',
+    '      keepaliveInterval: 10000, keepaliveCountMax: 3',
     '    });',
     '    await sftp.put(args.local, args.remote);',
     '    console.log("Upload successful: " + args.remote);',
@@ -204,7 +220,7 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
     const nmDir = path.join(__dirname, 'node_modules');
     const sftpModPath = path.join(nmDir, ['ssh2', 'sftp', 'client'].join('-'));
     fs.writeFileSync(tmpScript, nodeScript);
-    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 300000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
+    const result = spawnSync('node', [tmpScript, scriptArgs], { timeout: 120000, encoding: 'utf-8', env: { ...process.env, SFTP_MODULE: sftpModPath } });
     if (result.error) throw new Error('Node.js execution error: ' + result.error.message);
     if (result.status !== 0) throw new Error('SFTP upload failed: ' + (result.stderr || result.stdout));
     ctx.log('Successfully uploaded file to ' + remotePath);
