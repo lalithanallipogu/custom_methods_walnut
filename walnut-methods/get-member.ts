@@ -52,7 +52,7 @@ export async function getMember(ctx: WalnutApiContext) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     ctx.log('Attempt ' + attempt + '/' + maxRetries + ' — POST ' + url + ' with body: ' + JSON.stringify(body));
 
-    const response = await ctx.post(url, body, { headers });
+    const response = await ctx.post(url, body, { headers, timeout: 120 });
 
     ctx.log('Attempt ' + attempt + ' — Status: ' + response.status + ' ' + response.statusText);
     ctx.log('Response body: ' + JSON.stringify(response.body));

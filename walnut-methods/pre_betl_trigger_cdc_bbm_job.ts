@@ -54,7 +54,7 @@ export async function preBetlTriggerCdcBbmJob(ctx: WalnutApiContext) {
 
   ctx.log('POST ' + url + ' with body: ' + JSON.stringify(body));
 
-  const response = await ctx.post(url, body, { headers });
+  const response = await ctx.post(url, body, { headers, timeout: 120 });
   ctx.assertStatus(response, 200);
 
   ctx.log('CDC BBM job triggered successfully. Status: ' + response.status);

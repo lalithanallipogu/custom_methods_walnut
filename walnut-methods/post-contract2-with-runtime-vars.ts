@@ -90,7 +90,7 @@ export async function postContract2WithRuntimeVars(ctx: WalnutApiContext) {
   ctx.log('POST ' + url);
   ctx.log('Body: ' + JSON.stringify(body).substring(0, 500) + '...');
 
-  const response = await ctx.post(url, body, { headers });
+  const response = await ctx.post(url, body, { headers, timeout: 120 });
   ctx.assertStatus(response, 200);
 
   ctx.log('Contract 2 POST successful. Status: ' + response.status);
