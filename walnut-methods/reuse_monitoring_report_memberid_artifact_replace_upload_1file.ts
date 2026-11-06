@@ -169,7 +169,7 @@ export async function reuseMonitoringReportMemberIdArtifactReplaceUpload1File(ct
     'const sftp = new Client();',
     'const args = JSON.parse(process.argv[2]);',
     'async function run() {',
-    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password });',
+    '  await sftp.connect({ host: args.host, port: args.port, username: args.username, password: args.password, readyTimeout: 30000, retries: 2, retry_minTimeout: 3000 });',
     '  await sftp.put(args.local, args.remote);',
     '  console.log("Upload successful: " + args.remote);',
     '  await sftp.end();',
